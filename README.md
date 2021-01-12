@@ -112,9 +112,7 @@ Each VS project is designed to be stand alone,
 built with no (or preferably minimal) external dependencies.
 
 Each prject is unique so make sure to review the README.md and LICENSE.md of each project before installation,
-to ensure your system and the project features meet the desired needs
-
-All projects are contained within the meta PHAR project vs_vs56_0_1_1.phar
+to ensure your system and the project features meet the desired needs.
 
 
 ----------------------------------------------------------------
