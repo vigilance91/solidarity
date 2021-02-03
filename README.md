@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
 
-# Copyright (C) Tyler R. Drury 01-10-2021, All Rights Reserved
+# Copyright (C) Tyler R. Drury 03-01-2021, All Rights Reserved
 
 ----------------------------------------------------------------
 
@@ -39,6 +39,7 @@ an operation has a desired affect.
 * BytesConstraints.sol - bytes32 utilities library for verifying bytes32 values using requrie
 * uint256Constraints.sol - uint256 utilities library for verifying uint256 values using requrie
 * int256Constraints.sol - int256 utilities library for verifying int256 values using requrie
+
 
 ### /utils/
 
@@ -125,6 +126,19 @@ Additional projects to come.
 
 ## Before Starting
 
+Either use the Remix.com IDE for rapid prototyping and testing or
+Download and install:
+
+* [Ganache]() - a local testnetwork for developing using a private blockchain
+* [Geth]() - a local Ethereum node, for use with Ganache
+* [Truffle]() - application for easily compiling, deploying and testing blockchain applications
+
+If unfamiliar with these tools, a full, indepth tutorial
+can be found on the official VS developer's site [here][3].
+
+Once ready to go, either clone the repository (or install the most recent stable version via NPM) if developing locally,
+or simply import the code directly from the repository, if using Remix.
+
 This project has the following directories structure
 
 * **/_output** - directory for logging console output and errors durring exection of tools
@@ -156,7 +170,7 @@ which requires a locally running node and private blockchain to test (using Gana
 Each [VS project][2] is designed to be stand alone,
 built with no (or preferably minimal) external dependencies.
 
-Each project is unique so make sure to review the README.md and LICENSE.md of each project before use or installation,
+Each project is unique, so make sure to review the README.md and LICENSE.md of each project before use or installation,
 to ensure your system and the project features meet the desired requirements.
 
 This project's only dependancy is [OpenZeppelin][4] and is imported externally
