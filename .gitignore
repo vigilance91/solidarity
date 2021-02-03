@@ -8,4 +8,8 @@ Doxyfile
 /node_modules
 /_tests
 /_output
+/ico
+/finance
+/secrets
+/core
 SETUP.md
