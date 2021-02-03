@@ -33,11 +33,12 @@ such as ensuring values are within expected ranges or to ensure
 an operation has a desired affect.
 
 * LogicConstraints - library for trivial boolean require statements, usable by almost any project that uses require
-* UnitConstraints - constrain values of wei to be with an expected range or a specific value
-* AddressConstraints.sol - address utilities library for verifying address variables using requrie, such as if the address is null or equal to other addresses
-* StringConstraints.sol - string utilities library for verifying string variables using requrie
-* BytesConstraints.sol - string utilities library for verifying string variables using requrie
-
+* UnitConstraints - constrain values of wei to be within an arbitrary range or a specific denomination
+* AddressConstraints.sol - address utilities library for verifying address values using requrie, such as if the address is null or equal to other addresses
+* StringConstraints.sol - string utilities library for verifying string values using requrie
+* BytesConstraints.sol - bytes32 utilities library for verifying bytes32 values using requrie
+* uint256Constraints.sol - uint256 utilities library for verifying uint256 values using requrie
+* int256Constraints.sol - int256 utilities library for verifying int256 values using requrie
 
 ### /utils/
 
