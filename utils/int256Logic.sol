@@ -77,24 +77,29 @@ library int256Logic
         int256 lhs,
         int256 rhs
     ) public pure
+        returns(bool)
     {
         return lhs > rhs;
     }
     function greaterThanOrEqualTo(
         int256 lhs,
         int256 rhs
-    ) public pure{
+    ) public pure
+        returns(bool)
+    {
         return lhs >= rhs;
     }
     function greaterThanZero(
         int256 lhs
     ) public pure
+        returns(bool)
     {
         return greaterThan(lhs, ZERO);
     }
     function greaterThanOrEqualToZero(
         int256 lhs
     ) public pure
+        returns(bool)
     {
         return greaterThanOrEqualTo(lhs, ZERO);
     }
@@ -105,6 +110,7 @@ library int256Logic
         int256 lhs,
         int256 rhs
     ) public pure
+        returns(bool)
     {
         return lhs < rhs;
     }
@@ -112,25 +118,36 @@ library int256Logic
         int256 lhs,
         int256 rhs
     ) public pure
+        returns(bool)
     {
         return lhs <= rhs;
     }
     function lessThanZero(
         int256 lhs
     ) public pure
+        returns(bool)
     {
         return lessThan(lhs, ZERO);
     }
     function lessThanOrEqualToZero(
         int256 lhs
     ) public pure
+        returns(bool)
     {
         return lessThanOrEqualTo(lhs, ZERO);
     }
-    //function lessThanMax(int256 lhs) public pure{
-        //lessThan(lhs, 0xFF);
+    //function lessThanMax(
+        //int256 lhs
+    //) public pure
+        //returns(bool)
+    //{
+        //return lessThan(lhs, 0xFF);
     //}
-    //function greaterThanMin(int256 lhs) public pure{
+    //function greaterThanMin(
+        //int256 lhs
+    //) public pure
+        //returns(bool)
+    //{
         //greaterThan(lhs, 0xFF);
     //}
 }

@@ -66,19 +66,23 @@ library uint256Logic
         uint256 lhs,
         uint256 rhs
     ) public pure
+        returns(bool)
     {
         return lhs > rhs;
     }
     function greaterThanOrEqualTo(
         uint256 lhs,
         uint256 rhs
-    ) public pure{
+    ) public pure
+        returns(bool)
+    {
         return lhs >= rhs;
     }
     function lessThan(
         uint256 lhs,
         uint256 rhs
     ) public pure
+        returns(bool)
     {
         return lhs < rhs;
     }
@@ -86,6 +90,7 @@ library uint256Logic
         uint256 lhs,
         uint256 rhs
     ) public pure
+        returns(bool)
     {
         return lhs <= rhs;
     }
@@ -95,10 +100,15 @@ library uint256Logic
     function greaterThanZero(
         uint256 lhs
     ) public pure
+        returns(bool)
     {
         return greaterThan(lhs, 0);
     }
-    //function lessThanMax(uint256 lhs) public pure{
-        //lessThan(lhs, 0xFF);
+    //function lessThanMax(
+        //uint256 lhs
+    //) public pure
+        //returns(bool)
+    //{
+        //return lessThan(lhs, 0xFF);
     //}
 }
