@@ -15,8 +15,8 @@ library uint256Constraints
     using uint256Logic for uint256;
     
     function requireEqual(
-        int256 lhs,
-        int256 rhs
+        uint256 lhs,
+        uint256 rhs
     )public pure
     {
         LogicConstraints.requireTrue(
@@ -25,8 +25,8 @@ library uint256Constraints
     }
     
     function requireNotEqual(
-        int256 lhs,
-        int256 rhs
+        uint256 lhs,
+        uint256 rhs
     )public pure
     {
         LogicConstraints.requireTrue(
