@@ -9,54 +9,61 @@ import "https://github.com/vigilance91/solidarity/utils/StringLogic.sol";
 /// @author Tyler R. Drury - 3/1/2021, All Rights Reserved
 /// @dev trivial utilities for constraining the state of the EVM (using require) for
 /// Solidity's string type, reverting on failure.
-library StringContraints
+library StringConstraints
 {
     //using LogicConstraints for bool;
-    //using StringLogic for string;
+    //using LogicConstraints for bool;
+    using StringLogic for string;
     
     function requireEqual(
         string memory lhs,
         string memory rhs
-    )public pure{
+    )public pure
+    {
         //lhs.equal(rhs).requireTrue();
-        LogicConstraints.requireTrue(StringLogic.equal(lhs,rhs));
+        LogicConstraints.requireTrue(lhs.equal(rhs));
     }
     
     function requireNotEqual(
         string memory lhs,
         string memory rhs
-    )public pure{
+    )public pure
+    {
         //lhs.notEqual(rhs).requireTrue();
-        LogicConstraints.requireTrue(StringLogic.notEqual(lhs,rhs));
+        LogicConstraints.requireTrue(lhs.notEqual(rhs));
     }
     
     function requireEmpty(
         string memory lhs
-    )public pure{
+    )public pure
+    {
         //lhs.empty().requireTrue();
-        LogicConstraints.requireTrue(StringLogic.empty(lhs));
+        LogicConstraints.requireTrue(lhs.empty());
     }
     
     function requireNotEmpty(
         string memory lhs
-    )public pure{
+    )public pure
+    {
         //lhs.notEmpty(rhs).requireTrue();
-        LogicConstraints.requireTrue(StringLogic.notEmpty(lhs));
+        LogicConstraints.requireTrue(lhs.notEmpty());
     }
     
     function requireNotEmptyAndNotEqual(
         string memory lhs,
         string memory rhs
-    )public pure{
+    )public pure
+    {
         //lhs.notEmptyAndNotEqual(rhs).requireTrue();
-        LogicConstraints.requireTrue(StringLogic.notEmptyAndNotEqual(lhs,rhs));
+        LogicConstraints.requireTrue(lhs.notEmptyAndNotEqual(rhs));
     }
     
     function requireNotEmptyAndAreEqual(
         string memory lhs,
         string memory rhs
-    )public pure{
+    )public pure
+    {
         //lhs.notEmptyAndAreEqual(rhs).requireTrue();
-        LogicConstraints.requireTrue(StringLogic.notEmptyAndAreEqual(lhs,rhs));
+        LogicConstraints.requireTrue(lhs.notEmptyAndAreEqual(rhs));
     }
 }

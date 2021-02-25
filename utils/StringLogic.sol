@@ -14,6 +14,8 @@ import "https://github.com/vigilance91/solidarity/utils/Bytes32Logic.sol";
 library StringLogic
 {
     //using Bytes32Logic for bytes32;
+    string public constant EMPTY = "";
+    bytes32 public constant EMPTY_HASH = keccak256(bytes(""));
     /**
      * compare string hashes using XOR, rather than iteratively compare each element in strings
      * not only is this appraoch generally faster for larger strings but is also NOT vulnerable to timing attacks
@@ -23,7 +25,9 @@ library StringLogic
     function equal(
         string memory lhs,
         string memory rhs
-    )public pure returns(bool){
+    )public pure
+        returns(bool)
+    {
         return Bytes32Logic.equal(
             keccak256(bytes(lhs)),
             keccak256(bytes(rhs))
@@ -33,7 +37,9 @@ library StringLogic
     function notEqual(
         string memory lhs,
         string memory rhs
-    )public pure returns(bool){
+    )public pure
+        returns(bool)
+    {
         return Bytes32Logic.notEqual(
             keccak256(bytes(lhs)),
             keccak256(bytes(rhs))
@@ -42,26 +48,32 @@ library StringLogic
     
     function empty(
         string memory lhs
-    )public pure returns(bool){
+    )public pure
+        returns(bool)
+    {
         return Bytes32Logic.equal(
             keccak256(bytes(lhs)),
-            keccak256(bytes(""))
+            EMPTY_HASH
         );
     }
     
     function notEmpty(
         string memory lhs
-    )public pure returns(bool){
+    )public pure
+        returns(bool)
+    {
         return Bytes32Logic.notEqual(
             keccak256(bytes(lhs)),
-            keccak256(bytes(""))
+            EMPTY_HASH
         );
     }
     
     function notEmptyAndNotEqual(
         string memory lhs,
         string memory rhs
-    )public pure returns(bool){
+    )public pure
+        returns(bool)
+    {
         return notEmpty(
             lhs
         ) && notEmpty(
@@ -72,7 +84,9 @@ library StringLogic
     function notEmptyAndAreEqual(
         string memory lhs,
         string memory rhs
-    )public pure returns(bool){
+    )public pure
+        returns(bool)
+    {
         return notEmpty(
             lhs
         ) && notEmpty(

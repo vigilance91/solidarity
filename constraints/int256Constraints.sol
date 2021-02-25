@@ -6,7 +6,7 @@ import "https://github.com/vigilance91/solidarity/constraints/LogicConstraints.s
 import "https://github.com/vigilance91/solidarity/utils/int256Logic.sol";
 
 /// @title int256 Contraints
-/// @author Tyler R. Drury - 3/1/2021, ALl Rights Reserved
+/// @author Tyler R. Drury - 3/1/2021, All Rights Reserved
 /// @dev trivial utilities for constraining the state of the EVM (using require),
 /// for arithmetic operations on int256 types, reverting EVM state on failure.
 library int256Constraints

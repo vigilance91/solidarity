@@ -9,7 +9,7 @@ pragma solidity ^0.6.2;
 */
 
 /// @title Bytes32 Logic Utilities
-/// @author Tyler R. Drury - 3/1/2021, ALl Rights Reserved
+/// @author Tyler R. Drury - 3/1/2021, All Rights Reserved
 /// @notice This library provides trivial functions for the bytes32 data type not provided natively by Solidity.
 /// @dev This library is NOT vulnerable to timing attacks and thus,
 /// is highly recommended as it is designed and intended for use in cryptographically secure applications,
@@ -20,29 +20,58 @@ pragma solidity ^0.6.2;
 /// sequentially performing an equality check on each element
 library Bytes32Logic
 {
-    function equal(bytes32 lhs, bytes32 rhs) internal pure returns(bool){
+    //bytes32 public constant EMPTY = bytes32("");
+    
+    function equal(
+        bytes32 lhs,
+        bytes32 rhs
+    ) internal pure
+        returns(bool)
+    {
         return xor(lhs, rhs) == 0;
     }
-    function notEqual(bytes32 lhs, bytes32 rhs) internal pure returns(bool){
+    function notEqual(
+        bytes32 lhs,
+        bytes32 rhs
+    ) internal pure
+        returns(bool)
+    {
         return xor(lhs, rhs) != 0;
     }
     //function requireSecretFormat(string memory secret) public pure{
         //require(secret.length >= 8, "secret must be at least 8 characters long");
         //require(secret ..., "invalid secret characters");
     //}
-    function and(bytes32 lhs, bytes32 rhs)internal pure returns(bytes32){
+    function and(
+        bytes32 lhs,
+        bytes32 rhs
+    )internal pure
+        returns(bytes32)
+    {
         return lhs & rhs;
     }
-    function or(bytes32 lhs, bytes32 rhs)internal pure returns(bytes32){
+    function or(
+        bytes32 lhs,
+        bytes32 rhs
+    )internal pure
+        returns(bytes32)
+    {
         return lhs | rhs;
     }
-    function xor(bytes32 lhs, bytes32 rhs)internal pure returns(bytes32){
+    function xor(
+        bytes32 lhs,
+        bytes32 rhs
+    )internal pure
+        returns(bytes32)
+    {
         return lhs ^ rhs;
     }
     
-     function empty(
+    function empty(
         bytes32 lhs
-    )public pure returns(bool){
+    )public pure
+        returns(bool)
+    {
         return Bytes32Logic.equal(
             lhs,
             bytes32("")
@@ -51,7 +80,9 @@ library Bytes32Logic
     
     function notEmpty(
         bytes32 lhs
-    )public pure returns(bool){
+    )public pure
+        returns(bool)
+    {
         return Bytes32Logic.notEqual(
             lhs,
             bytes32("")
@@ -61,7 +92,9 @@ library Bytes32Logic
     function notEmptyAndNotEqual(
         bytes32 lhs,
         bytes32 rhs
-    )public pure returns(bool){
+    )public pure
+        returns(bool)
+    {
         return notEmpty(
             lhs
         ) && notEmpty(
@@ -72,7 +105,9 @@ library Bytes32Logic
     function notEmptyAndAreEqual(
         bytes32 lhs,
         bytes32 rhs
-    )public pure returns(bool){
+    )public pure
+        returns(bool)
+    {
         return notEmpty(
             lhs
         ) && notEmpty(
