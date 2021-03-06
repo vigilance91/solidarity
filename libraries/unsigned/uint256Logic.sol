@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
-pragma solidity >=0.6.2 <0.8.0;
+pragma solidity >=0.6.4 <0.8.0;
 
-/// @title uint256 Logic Utilities
+/// @title uint256 Logic Library
 /// @author Tyler R. Drury - 19/2/2021, All Rights Reserved
 /// @notice trivial library for logical or bitwise operations on uint256 not provided natively by Solidity.
 library uint256Logic

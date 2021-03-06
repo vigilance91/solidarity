@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
-pragma solidity ^0.6.2;
+pragma solidity >=0.6.4 <0.8.0;
 
 /**
  * todo create struct or contract for a mapping of addresses to byte32, for user account passwords!
@@ -8,7 +8,7 @@ pragma solidity ^0.6.2;
  * however, internal libraries do not need to be deployed, only included with the contracts that use them
 */
 
-/// @title Bytes32 Logic Utilities
+/// @title Bytes32 Logic Library
 /// @author Tyler R. Drury - 3/1/2021, All Rights Reserved
 /// @notice This library provides trivial functions for the bytes32 data type not provided natively by Solidity.
 /// @dev This library is NOT vulnerable to timing attacks and thus,

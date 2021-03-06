@@ -1,17 +1,17 @@
 // SPDX-License-Identifier: Apache-2.0
 
-pragma solidity >=0.6.2 <0.8.0;
+pragma solidity >=0.6.4 <0.8.0;
 
-import "https://github.com/vigilance91/solidarity/constraints/LogicConstraints.sol";
-import "https://github.com/vigilance91/solidarity/utils/int256Logic.sol";
+import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/signed/int256Logic.sol";
 
-/// @title int256 Contraints
+/// @title int256 Contraints Library
 /// @author Tyler R. Drury - 3/1/2021, All Rights Reserved
 /// @dev trivial utilities for constraining the state of the EVM (using require),
 /// for arithmetic operations on int256 types, reverting EVM state on failure.
 library int256Constraints
 {
-    //using LogicConstraints for bool;
+    using LogicConstraints for bool;
     using int256Logic for int256;
     
     function requireEqual(
@@ -19,8 +19,8 @@ library int256Constraints
         int256 rhs
     )public pure
     {
-        LogicConstraints.requireTrue(
-            lhs.equal(rhs)
+        lhs.equal(rhs).requireTrue(
+            'not equal'
         );
     }
     
@@ -29,16 +29,16 @@ library int256Constraints
         int256 rhs
     )public pure
     {
-        LogicConstraints.requireTrue(
-            lhs.notEqual(rhs)
+        lhs.notEqual(rhs).requireTrue(
+            'equal'
         );
     }
     function requireNotEqualToZero(
         int256 lhs
     )public pure
     {
-        LogicConstraints.requireTrue(
-            lhs.notEqualToZero()
+        lhs.notEqualToZero().requireTrue(
+            'equals 0'
         );
     }
     //require lhs & rhs is not 0
@@ -78,8 +78,8 @@ library int256Constraints
         int256 rhs
     ) public pure
     {
-        LogicConstraints.requireTrue(
-            lhs.greaterThan(rhs)
+        lhs.greaterThan(rhs).requireTrue(
+            //''
         );
     }
     function requireGreaterThanOrEqualTo(
@@ -87,24 +87,24 @@ library int256Constraints
         int256 rhs
     ) public pure
     {
-        LogicConstraints.requireTrue(
-            lhs.greaterThanOrEqualTo(rhs)
+        lhs.greaterThanOrEqualTo(rhs).requireTrue(
+            //''
         );
     }
     function requireGreaterThanZero(
         int256 lhs
     ) public pure
     {
-        LogicConstraints.requireTrue(
-            lhs.greaterThanZero()
+        lhs.greaterThanZero().requireTrue(
+            //''
         );
     }
     function requireGreaterThanOrEqualToZero(
         int256 lhs
     ) public pure
     {
-        LogicConstraints.requireTrue(
-            lhs.greaterThanOrEqualToZero()
+        lhs.greaterThanOrEqualToZero().requireTrue(
+            //''
         );
     }
     /**
@@ -115,8 +115,8 @@ library int256Constraints
         int256 rhs
     ) public pure
     {
-        LogicConstraints.requireTrue(
-            lhs.lessThan(rhs)
+        lhs.lessThan(rhs).requireTrue(
+            //''
         );
     }
     function requireLessThanOrEqualTo(
@@ -124,24 +124,24 @@ library int256Constraints
         int256 rhs
     ) public pure
     {
-        LogicConstraints.requireTrue(
-            lhs.lessThanOrEqualTo(rhs)
+        lhs.lessThanOrEqualTo(rhs).requireTrue(
+            //''
         );
     }
     function requireLessThanZero(
         int256 lhs
     ) public pure
     {
-        LogicConstraints.requireTrue(
-            lhs.lessThanZero()
+        lhs.lessThanZero().requireTrue(
+            //'greater than or equal to 0'
         );
     }
     function requireLessThanOrEqualToZero(
         int256 lhs
     ) public pure
     {
-        LogicConstraints.requireTrue(
-            lhs.lessThanOrEqualToZero()
+        lhs.lessThanOrEqualToZero().requireTrue(
+            //'greater than 0'
         );
     }
     //function requireLessThanMax(int256 lhs) public pure{

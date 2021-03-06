@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
-pragma solidity >=0.6.2 <0.8.0;
+pragma solidity >=0.6.4 <0.8.0;
 
-import "https://github.com/vigilance91/solidarity/constraints/LogicConstraints.sol";
-import "https://github.com/vigilance91/solidarity/utils/AddressLogic.sol";
+import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/address/AddressLogic.sol";
 
 /// @title Address Contraints
 /// @author Tyler R. Drury - 3/1/2021, All Rights Reserved
