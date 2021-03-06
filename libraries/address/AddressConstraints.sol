@@ -11,7 +11,7 @@ import "https://github.com/vigilance91/solidarity/libraries/address/AddressLogic
 /// for address types, reverting on failure.
 library AddressConstraints
 {
-    using LogicalConstraints for bool;
+    using LogicConstraints for bool;
     
     using AddressLogic for address;
     
