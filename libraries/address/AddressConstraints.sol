@@ -11,73 +11,67 @@ import "https://github.com/vigilance91/solidarity/libraries/address/AddressLogic
 /// for address types, reverting on failure.
 library AddressConstraints
 {
-    //using LogicalConstraints for bool;
+    using LogicalConstraints for bool;
+    
     using AddressLogic for address;
     
-    //address public constant NULL = address(0);
-    
-    //function equal(
-        //address lhs,
-        //address rhs
-    //) public pure{
-        //(lhs == rhs).requireTrue("addresses are not equal");
-        //LogicConstraints.requireTrue(
-            //lhs.equal(rhs),
-            "addresses are not equal"
-        //);
-    //}
-    function notEqual(
+    function requireEqual(
         address lhs,
         address rhs
-    ) public pure{
-        //(lhs != rhs).requireTrue("addresses are equal");
-        LogicConstraints.requireTrue(
-            lhs.notEqual(rhs),
+    ) public pure
+    {
+        lhs.equal(rhs).requireTrue(
+            "addresses are not equal"
+        );
+    }
+    function requireNotEqual(
+        address lhs,
+        address rhs
+    ) public pure
+    {
+        lhs.notEqual(rhs).requireTrue(
             "addresses are equal"
         );
     }
     
     function requireIsNull(
         address account
-    ) public pure{
-        //(account != NULL).requireTrue("address is not null");
-        LogicConstraints.requireTrue(
-            account.isNull(),
-            "address is not null"
+    ) public pure
+    {
+        account.isNull().requireTrue(
+            "address not null"
         );
     }
     function isNotNull(
         address account
-    ) public pure{
-        //(account != NULL).requireTrue("address is null");
-        LogicConstraints.requireTrue(
-            account.isNotNull(),
+    ) public pure
+    {
+        account.isNotNull().requireTrue(
             "address null"
         );
     }
     function notEqualAndNotNull(
         address lhs,
         address rhs
-    ) public pure{
-        /// isNotNull(lhs, "addressesNotEqual: lhs argument can not be null");
-        /// isNotNull(rhs, "addressesNotEqual: rhs argument can not be null");
-        
-        //(lhs != NULL && rhs != NULL).requireTrue("address is null");
-        LogicConstraints.requireTrue(
-            lhs.isNotNull() && rhs.isNotNull(),
-            "address null"
-        );
+    ) public pure
+    {
+        isNotNull(lhs);
+        isNotNull(rhs);
         notEqual(lhs, rhs);
     }
     function notMsgSender(
-        address account
-    ) public view{
-        notEqualAndNotNull(msg.sender, account);
+        address rhs
+    ) public view
+    {
+        notEqualAndNotNull(msg.sender, rhs);
     }
+    //deprecated, obsolete by method, notEualAndNotNull
     function notThisAndNotNull(
         address self,
         address account
-    ) public pure{
+    ) public pure
+    {
+        isNotNull(self);
         isNotNull(account);
         notEqual(self, account);
     }
@@ -85,7 +79,8 @@ library AddressConstraints
         address self,
         address lhs,
         address rhs
-    ) public pure{
+    ) public pure
+    {
         notThisAndNotNull(self,lhs);
         notThisAndNotNull(self,rhs);
         notEqual(lhs, rhs);
