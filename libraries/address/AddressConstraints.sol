@@ -42,7 +42,7 @@ library AddressConstraints
             "address not null"
         );
     }
-    function isNotNull(
+    function requireNotNull(
         address account
     ) public pure
     {
@@ -50,42 +50,42 @@ library AddressConstraints
             "address null"
         );
     }
-    function notEqualAndNotNull(
+    function requireNotEqualAndNotNull(
         address lhs,
         address rhs
     ) public pure
     {
-        isNotNull(lhs);
-        isNotNull(rhs);
-        notEqual(lhs, rhs);
+        requireNotNull(lhs);
+        requireNotNull(rhs);
+        requireNotEqual(lhs, rhs);
     }
-    function notMsgSender(
+    function requireNotMsgSender(
         address rhs
     ) public view
     {
-        notEqualAndNotNull(msg.sender, rhs);
+        requireNotEqualAndNotNull(msg.sender, rhs);
     }
     //deprecated, obsolete by method, notEualAndNotNull
-    function notThisAndNotNull(
+    function requireNotThisAndNotNull(
         address self,
         address account
     ) public pure
     {
-        isNotNull(self);
-        isNotNull(account);
-        notEqual(self, account);
+        requireNotNull(self);
+        requireNotNull(account);
+        requireNotEqual(self, account);
     }
-    function addressesNotThisAndNotNull(
+    function requireAddressesNotThisAndNotNull(
         address self,
         address lhs,
         address rhs
     ) public pure
     {
-        notThisAndNotNull(self,lhs);
-        notThisAndNotNull(self,rhs);
-        notEqual(lhs, rhs);
+        requireNotThisAndNotNull(self,lhs);
+        requireNotThisAndNotNull(self,rhs);
+        requireNotEqual(lhs, rhs);
     }
-    //function notThisAndNotNullArray(
+    //function requireNotThisAndNotNullArray(
         //address self,
         //address[] memory container
     //) public pure{
