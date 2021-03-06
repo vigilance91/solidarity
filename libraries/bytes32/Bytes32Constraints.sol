@@ -13,7 +13,7 @@ import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol
 /// which require constraining the state of the EVM for Bytes32 types, reverting on failure.
 library Bytes32Constraints
 {
-    //using LogicConstraints for bool;
+    using LogicConstraints for bool;
     using Bytes32Logic for bytes32;
     
     function requireEqual(
@@ -21,8 +21,8 @@ library Bytes32Constraints
         bytes32 rhs
     ) internal pure
     {
-        LogicConstraints.requireTrue(
-            lhs.equal(rhs)
+        lhs.equal(rhs).requireTrue(
+            //''
         );
     }
     function requireNotEqual(
@@ -30,41 +30,44 @@ library Bytes32Constraints
         bytes32 rhs
     ) internal pure
     {
-        LogicConstraints.requireTrue(
-            lhs.notEqual(rhs)
+        lhs.notEqual(rhs).requireTrue(
+            //''
         );
     }
     function requireEmpty(
         bytes32 lhs
-    )internal pure{
-        LogicConstraints.requireTrue(
-            lhs.empty()
+    )internal pure
+    {
+        lhs.empty().requireTrue(
+            //''
         );
     }
-    
     function requireNotEmpty(
         bytes32 lhs
-    )internal pure{
-        LogicConstraints.requireTrue(
-            lhs.notEmpty()
+    )internal pure
+    {
+        lhs.notEmpty().requireTrue(
+            //''
         );
     }
     
     function requireNotEmptyAndNotEqual(
         bytes32 lhs,
         bytes32 rhs
-    )internal pure{
-        LogicConstraints.requireTrue(
-            lhs.notEmptyAndNotEqual(rhs)
+    )internal pure
+    {
+        lhs.notEmptyAndNotEqual(rhs).requireTrue(
+            //''
         );
     }
     
     function requireNotEmptyAndAreEqual(
         bytes32 lhs,
         bytes32 rhs
-    )internal pure{
-        LogicConstraints.requireTrue(
-            lhs.notEmptyAndAreEqual(rhs)
+    )internal pure
+    {
+        lhs.notEmptyAndAreEqual(rhs).requireTrue(
+            //''
         );
     }
 }

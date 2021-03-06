@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: Apache-2.0
 
-pragma solidity >=0.6.2 <0.8.0;
+pragma solidity >=0.6.4 <0.8.0;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/math/SafeMath.sol";
 
 import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
 import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256Constraints.sol";
 
-/// @title Safe Transaction
+/// @title Safe Transaction Library
 /// @author Tyler R. Drury - 3/1/2021, All Rights Reserved
 /// @dev library for performing financial transactions with pre and post logic checks to ensure state
 library SafeTransaction
@@ -17,17 +17,18 @@ library SafeTransaction
     
     using LogicConstraints for bool;
     
-    //function requireNonzero(
+    //modifier _requireNonzero(
         //uint256 value
-    //)public pure
+    //)internal
     //{
-        //require(value != 0, "value must not be 0");
+        //value.requireGreaterThanZero();
     //}
     /// @dev inert, returns the resulting balance of a withdraw of arg amount from arg from
     function withdraw(
         uint256 accountBalance,
         uint256 amount
     ) public pure
+        //_requireNonzero(amount)
         returns(uint256 res)
     {
         amount.requireGreaterThanZero();
@@ -49,6 +50,7 @@ library SafeTransaction
         uint256 accountBalance,
         uint256 amount
     ) public pure
+        //_requireNonzero(amount)
         returns(uint256 res)
     {
         amount.requireGreaterThanZero();
@@ -68,7 +70,6 @@ library SafeTransaction
     ) public pure
         returns(bool)
     {
-        //requireNonzero(amount);
         withdraw(fromBalance, amount);
         deposit(toBalance, amount);
         return true;
@@ -84,12 +85,13 @@ library SafeTransaction
         uint256 amount
     ) public pure
     {
-        require(transact(
+        transact(
             fromBalance,
             toBalance,
             amount
-        ));
-        //'txn failed'
+        ).requireTrue(
+            //'txn failed'
+        );
     }
     /**
     /// @dev remove amount from all entries in array,

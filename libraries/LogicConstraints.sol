@@ -2,7 +2,7 @@
 
 pragma solidity >=0.6.2 <0.8.0;
 
-/// @title Logic Contraints
+/// @title Logic Contraints Library
 /// @author Tyler R. Drury - 3/1/2021, All Rights Reserved
 /// @dev trivial utilities for constraining the state of the EVM (using require),
 /// for logical operations, reverting EVM state on failure.
@@ -20,6 +20,7 @@ library LogicConstraints
     {
         require(!b);    //"must be false"
     }
+    //overload for error reporting string
     function requireTrue(
         bool b,
         string memory message

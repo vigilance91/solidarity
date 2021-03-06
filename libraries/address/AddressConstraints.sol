@@ -21,7 +21,7 @@ library AddressConstraints
     ) public pure
     {
         lhs.equal(rhs).requireTrue(
-            "addresses are not equal"
+            "addresses not equal"
         );
     }
     function requireNotEqual(
@@ -30,7 +30,7 @@ library AddressConstraints
     ) public pure
     {
         lhs.notEqual(rhs).requireTrue(
-            "addresses are equal"
+            "addresses equal"
         );
     }
     
@@ -50,10 +50,50 @@ library AddressConstraints
             "address null"
         );
     }
+    
+    /**
+    *note library internal modifiers cna not be call externally
+    
+    modifier _notNull(
+        address lhs
+    )internal
+    {
+        requireNotNull(lhs);
+        _;
+    }
+    modifier _notNull(
+        address lhs,
+        address rhs
+    )internal
+    {
+        requireNotNull(lhs);
+        requireNotNull(rhs);
+        _;
+    }
+    
+    //modifier _isNull(
+        //address lhs
+    //)internal
+    //{
+        //requireIsNull(lhs);
+        //_;
+    //}
+    //modifier _isNull(
+        //address lhs,
+        //address rhs
+    //)internal
+    //{
+        //requireIsNull(lhs);
+        //requireIsNull(rhs);
+        //_;
+    //}
+    */
+    
     function requireNotEqualAndNotNull(
         address lhs,
         address rhs
     ) public pure
+        //_requireNotNull(lhs,rhs)
     {
         requireNotNull(lhs);
         requireNotNull(rhs);
@@ -62,6 +102,7 @@ library AddressConstraints
     function requireNotMsgSender(
         address rhs
     ) public view
+        //_requireNotNull(rhs)
     {
         requireNotEqualAndNotNull(msg.sender, rhs);
     }
@@ -70,6 +111,7 @@ library AddressConstraints
         address self,
         address account
     ) public pure
+        //_requireNotNull(self,rhs)
     {
         requireNotNull(self);
         requireNotNull(account);
@@ -80,10 +122,13 @@ library AddressConstraints
         address lhs,
         address rhs
     ) public pure
+        //_requireNotNull(lhs, rhs)
     {
         requireNotThisAndNotNull(self,lhs);
         requireNotThisAndNotNull(self,rhs);
         requireNotEqual(lhs, rhs);
+        //requireNotEqual(self, lhs);
+        //requireNotEqual(self, rhs);
     }
     //function requireNotThisAndNotNullArray(
         //address self,
