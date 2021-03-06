@@ -2,7 +2,7 @@
 
 pragma solidity >=0.6.4 <0.8.0;
 
-/// @title Solidity Address Logic Utilities
+/// @title Solidity Address Logic Library
 /// @author Tyler R. Drury - 18/2/2021, All Rights Reserved
 /// @notice trivial library for logical or bitwise operations on addresses not provided natively by Solidity.
 library AddressLogic
@@ -42,7 +42,7 @@ library AddressLogic
     function isNotNull(
         address lhs
     )public pure 
-        eturns(bool)
+        returns(bool)
     {
         return notEqual(
             lhs,
