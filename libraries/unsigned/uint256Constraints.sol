@@ -76,7 +76,7 @@ library uint256Constraints
             //''
         );
     }
-    function requireGreaterThanOrEqualTo(
+    function requireGreaterThanOrEqual(
         uint256 lhs,
         uint256 rhs
     ) public pure
@@ -105,7 +105,7 @@ library uint256Constraints
             //''
         );
     }
-    function requireLessThanOrEqualTo(
+    function requireLessThanOrEqual(
         uint256 lhs,
         uint256 rhs
     ) public pure

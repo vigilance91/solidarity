@@ -39,8 +39,8 @@ library SafeTransaction
         
         res = accountBalance.sub(amount);
         
-        //res.requireLessThan(accountBalance);
-        require(res < accountBalance, "new balance must be less than previous");
+        res.requireLessThan(accountBalance);
+        //require(res < accountBalance, "new balance must be less than previous");
         
         //autmatically returns res
         //return res;
