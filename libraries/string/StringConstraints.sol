@@ -50,7 +50,7 @@ library StringConstraints
         string memory lhs
     )public pure
     {
-        lhs.notEmpty(rhs).requireTrue(
+        lhs.notEmpty().requireTrue(
             'empty'
         );
         //LogicConstraints.requireTrue(lhs.notEmpty());
