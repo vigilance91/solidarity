@@ -11,7 +11,7 @@ import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256ToSt
 library bytes32ToString
 {
     using uint256ToString for uint256;
-    using Secure for string;
+    using stringUtilities for string;
     
     /**
      * string encodings (decimal, hexadecimal, octal etc)

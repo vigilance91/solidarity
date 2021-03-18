@@ -14,8 +14,8 @@ import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256ToSt
 library addressToString
 {   
     using uint256ToString for uint256;
-    using Secure for string;
-    using bytes32... for bytes32;
+    using stringUtilities for string;
+    //using bytes32... for bytes32;
     
     /**
     *string encodings (decimal, hexadecimal, octal etc)
