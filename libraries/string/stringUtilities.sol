@@ -107,16 +107,4 @@ library stringUtilities
     //{
         //return hashSignature(lhs) ^ hashSignature(rhs) == 0;
     //}
-    
-    function saltAndHashSigniture(
-        string memory salt,
-        address adr
-    ) public pure
-        returns(bytes4)
-    {
-        return bytes4(saltAndHash(
-            salt,
-            adr
-        ));
-    }
 }
