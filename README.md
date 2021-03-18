@@ -1,12 +1,12 @@
 ----------------------------------------------------------------
 
-# Copyright (C) Tyler R. Drury 03-01-2021, All Rights Reserved
+# Copyright © Tyler R. Drury 03-01-2021, All Rights Reserved
 
 ----------------------------------------------------------------
 
-# [Solidarity][1]
+# [Solidarity][1]™
 
-**Solidarity** contains common solidity (.sol) files, including
+**Solidarity™** contains common solidity (.sol) files, including
 
 * contracts
 * interfaces
@@ -17,80 +17,83 @@ which are commonly used in developing smart contracts or decentralized applicati
 These include:
 
 
-### /core/
+### /interfaces/
 
-Fundemental libraries, useful for almost any project
+External interfaces for use by other contracts.
 
-* Core.sol - core constraints
-* Exists - abstract base contract for verifying contract state and other related functions such as safely destroy a contract using selfdestruct, which almost every other contract should derive from
-
-
-### /constraints/
-
-Common utilitiy libraries consisting of wrappers around Solidity's require statement,
-used for reducing gas costs and also constraining the state of the EVM,
-such as ensuring values are within expected ranges or to ensure
-an operation has a desired affect.
-
-* LogicConstraints - library for trivial boolean require statements, usable by almost any project that uses require
-* UnitConstraints - constrain values of wei to be within an arbitrary range or a specific denomination
-* AddressConstraints.sol - address utilities library for verifying address values using requrie, such as if the address is null or equal to other addresses
-* StringConstraints.sol - string utilities library for verifying string values using requrie
-* BytesConstraints.sol - bytes32 utilities library for verifying bytes32 values using requrie
-* uint256Constraints.sol - uint256 utilities library for verifying uint256 values using requrie
-* int256Constraints.sol - int256 utilities library for verifying int256 values using requrie
+* iSecrets - generaic interface for arbitrary secrets
+* iOwnableSecrets - generaic interface for secrets, which can be owned by an external address
+* iCompound - interface for a contract which support compounding of asset values
+* 
 
 
-### /utils/
+### /libraries/
 
-Common utilitiy libraries, useful for almost any project
+Convenience libraries for use with various data-types, structs and/or contracts
+to extend their functionality.
 
-* Units.sol - library for common units and their conversions
-* StringUtilities.sol - string utilities library for common string operations, such as concatenation and
-* BytesUtilities.sol - bytes utilities library for various logical operations, such as masking
+This directory generally contains code for:
+
+* Logic - convenience library for logical operations for operators such as ==, !=, >, <, >=, <=
+* Math - arithmetic operation library for overloads, +, -, *, \/, %, etc, of various data types with appropriate sanity checks, usually based on Logic
+* Constraints - constrain the state of the EVM based on various conditions, such as those defined in Logic or Math libraries
+* utils - utility functions which do not fit into any of the previous categories
 
 
-### /finance/
+### /contracts/
 
-Common operations related to finance,
-include Safe Transactions and calculating compound interest
+Common smart contracts (usually using libraries and implementing interfaces as appropriate),
+for such as:
 
-* SafeTransaction.sol - Extending [OpenZeppelin][4]'s SafeMath by adding functions specifically for performing basic financial transactions (with sanity checks) such as for making deposits or withdraw to/from accounts
+* secrets - secrets known only to the address owner, which can be used for identity verification or for other applications
+* Finance - performaing financial transactions, such as deposit, withdraw and transaction between addresses
+* mint - 
+* democracy - decentralized democratization
+* proxy - proxies of other contracts
+
+
+### /contracts/finance/
+
+Common contracts related to finance
+
 * SafePayable.sol - trivial contract for safely performing payment operations
 * Compound.sol - library for calculating compound interest
-* iCompoundInterest.sol - external interface for a contract with implements calculating compound interest based on Compound.sol
 
 
-### /secrets/
+### /contracts/secrets/
 
-structures, libraries and contracts for storing secure secrets
+Contracts for storing arbitrary secure secrets on the blockchain
 
 * HashedSecretMap - a library for common operations performed on mapping of bytes32 hashes to Secrets
 * AddressSecretMap - a library for common operations performed on mapping of addresses to Secrets, for holding private account information
 * OwnableSecrets - a base contract which contains a HashedSecretMap for holding secrets for the owner and/or administrators of a contract, with and AddressSecretMap for holding registered user secrets
-* ExternalOwnableSecrets - fully realized external interface for OwnableSecretsMap contract, can be used directly in projects source or proxied (using OwnableSecretsProxy) from this address 0x0000, on the mainnet, 0x0000 on the Ropsten test network or 0x0000 on the __ test network
+* ExternalOwnableSecrets - fully realized external interface for OwnableSecretsMap contract, can be used directly in projects source or proxied (using OwnableSecretsProxy) from:
+    * 0x0000 on the mainnet
+    * 0x0000 on the Rinkeby testnet
+    * 0x000 on the Ropsten test network or
+    * 0x0000 on the Kovan test network
 
 
-### /mints/
+### /contracts/mints/
 
 Fully realized contracts derived from [OpenZeppelin][4]'s Token Mint types (including ERC20, ERC721, ERC777 and ERC1155), which also inherit from the Gas Station Network (reducing overall gas expenditures of transaction execution)
 
 
-### /payment/
+### /contracts/finance/payment/
 
 Stand alone contracts deriving from [OpenZeppelin][4]'s payment classes for fully realized uni-directional, bi-directional and other payment channel types,
 which support escrow behaviour and other similar functionality,
 directed and facilitating the exchange of value or assets between a producer and consumer(s)
 
 
-### /auction/
+### /contracts/finance/auction/
 
 Extending payment and secrets contracts for fully realized, secure Auctions and Auction Houses,
 where users can freely exchange assets using various auction style contracts,
 without the need for an external 3rd-party exchange, such as binance or coinbase
 
 
-### /vote/
+### /contracts/democracy/
 
 Common use cases for secure voting mechanisms (including delegation),
 which are implemented on the Vigilance Network for decentralized governance of the project and establishing
@@ -101,10 +104,10 @@ NFT voting for equity holders regarding corporate policies/decisions,
 where 1 token repressents 1 vote and users can supply multiple NFT to express their voting rights (which are NOT consumed but refunded upon completion of voting)
 
 
-### /proxy/
+### /contracts/proxy/
 
 Deriving from [OpenZeppelin][4]'s Proxy contracts,
-these are specialized contracts for proxying other [Solidarity][1] contracts,
+these are specialized contracts for proxying other [Solidarity][1]™ contracts,
 such as:
 
 * ICO/CrowdFunding contracts
@@ -192,7 +195,7 @@ and participate in the open-source community.
 
 ## License
 
-Solidarity is released under the Apache 2.0 License.
+Solidarity™ is released under the Apache 2.0 License.
 
 See [LICENSE](https://github.com/vigilance91/solidarity/LICENSE.md) file for more details.
 
