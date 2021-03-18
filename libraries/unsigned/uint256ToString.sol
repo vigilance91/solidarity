@@ -3,7 +3,7 @@
 pragma solidity >=0.6.4 <0.8.0;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/math/SafeMath.sol";
-import "import "https://github.com/vigilance91/solidarity/libraries/string/stringUtilities.sol";
+import "https://github.com/vigilance91/solidarity/libraries/string/stringUtilities.sol";
 //import "./abiEncode.sol";
 
 /// @title Uint256 To String Utilities
