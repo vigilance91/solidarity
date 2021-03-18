@@ -16,7 +16,7 @@ library uint256ToString
 {
     using SafeMath for uint256;
     
-    using Secure for string;
+    using stringUtilities for string;
     
     //uint8 public constant ASCII_NUMBERS_START = 0x30;
     //uint8 public constant ASCII_NUMBERS_END = 0x39;
