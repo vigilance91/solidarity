@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 pragma solidity >=0.6.4 <0.8.0;
+pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/libraries/bytes32/Bytes32Logic.sol";
 import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
@@ -30,7 +31,7 @@ library Bytes32Constraints
         bytes32 rhs
     ) internal pure
     {
-        lhs.notEqual(rhs).requireTrue(
+        lhs.equal(rhs).requireFalse(
             //''
         );
     }
@@ -46,7 +47,7 @@ library Bytes32Constraints
         bytes32 lhs
     )internal pure
     {
-        lhs.notEmpty().requireTrue(
+        lhs.empty().requireFalse(
             //''
         );
     }

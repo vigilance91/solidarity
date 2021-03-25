@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 pragma solidity >=0.6.4 <0.8.0;
+pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
 //import "https://github.com/vigilance91/solidarity/constraints/AddressConstraints.sol";

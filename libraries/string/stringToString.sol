@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 pragma solidity >=0.6.4 <0.8.0;
+pragma experimental ABIEncoderV2;
 
 //import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/math/SafeMath.sol";
 import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256ToString.sol";

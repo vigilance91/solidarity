@@ -20,7 +20,7 @@ library int256Constraints
     )public pure
     {
         lhs.equal(rhs).requireTrue(
-            'not equal'
+            //'not equal'
         );
     }
     
@@ -29,8 +29,8 @@ library int256Constraints
         int256 rhs
     )public pure
     {
-        lhs.notEqual(rhs).requireTrue(
-            'equal'
+        lhs.equal(rhs).requireFalse(
+            //'equal'
         );
     }
     function requireNotEqualToZero(

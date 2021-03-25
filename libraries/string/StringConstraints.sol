@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 pragma solidity >=0.6.4 <0.8.0;
+pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
 import "https://github.com/vigilance91/solidarity/libraries/string/StringLogic.sol";
@@ -20,7 +21,7 @@ library StringConstraints
     )public pure
     {
         lhs.equal(rhs).requireTrue(
-            'not equal'
+            //'not equal'
         );
         //LogicConstraints.requireTrue(lhs.equal(rhs));
     }
@@ -30,8 +31,8 @@ library StringConstraints
         string memory rhs
     )public pure
     {
-        lhs.notEqual(rhs).requireTrue(
-            'equal'
+        lhs.equal(rhs).requireFalse(
+            //'equal'
         );
         //LogicConstraints.requireTrue(lhs.notEqual(rhs));
     }
@@ -41,7 +42,7 @@ library StringConstraints
     )public pure
     {
         lhs.empty().requireTrue(
-            'not empty'
+            //'not empty'
         );
         //LogicConstraints.requireTrue(lhs.empty());
     }
@@ -51,7 +52,7 @@ library StringConstraints
     )public pure
     {
         lhs.notEmpty().requireTrue(
-            'empty'
+            //'empty'
         );
         //LogicConstraints.requireTrue(lhs.notEmpty());
     }
@@ -61,8 +62,7 @@ library StringConstraints
         string memory rhs
     )public pure
     {
-        lhs.notEmptyAndNotEqual(rhs).requireTrue(
-        );
+        lhs.notEmptyAndNotEqual(rhs).requireTrue();
         //LogicConstraints.requireTrue(lhs.notEmptyAndNotEqual(rhs));
     }
     
@@ -71,8 +71,7 @@ library StringConstraints
         string memory rhs
     )public pure
     {
-        lhs.notEmptyAndAreEqual(rhs).requireTrue(
-        );
+        lhs.notEmptyAndAreEqual(rhs).requireTrue();
         //LogicConstraints.requireTrue(lhs.notEmptyAndAreEqual(rhs));
     }
 }

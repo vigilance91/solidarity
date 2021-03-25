@@ -21,7 +21,7 @@ library AddressConstraints
     ) public pure
     {
         lhs.equal(rhs).requireTrue(
-            "addresses not equal"
+            //"addresses not equal"
         );
     }
     function requireNotEqual(
@@ -29,8 +29,8 @@ library AddressConstraints
         address rhs
     ) public pure
     {
-        lhs.notEqual(rhs).requireTrue(
-            "addresses equal"
+        lhs.equal(rhs).requireFalse(
+            //"addresses equal"
         );
     }
     
@@ -39,7 +39,7 @@ library AddressConstraints
     ) public pure
     {
         account.isNull().requireTrue(
-            "address not null"
+            //"address not null"
         );
     }
     function requireNotNull(
@@ -47,7 +47,7 @@ library AddressConstraints
     ) public pure
     {
         account.isNotNull().requireTrue(
-            "address null"
+            //"address null"
         );
     }
     
