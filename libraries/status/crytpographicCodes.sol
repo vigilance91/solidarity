@@ -7,7 +7,7 @@ pragma experimental ABIEncoderV2;
 //0xC* TBD - Currently unspecified. (Full range reserved)
 //0xD* TBD - Currently unspecified. (Full range reserved)
 
-/// @title Cryptographic Error Code Library
+/// @title Cryptographic Status Code Library
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 25/3/2021, All Rights Reserved
 //0xE* Encryption, Identity & Proofs, actions around signatures, cryptography, signing, and application-level authentication.
 //The meta code 0xEF is often used to signal a payload describing the algorithm or process used.

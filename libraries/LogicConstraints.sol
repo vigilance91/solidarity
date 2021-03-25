@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
-pragma solidity >=0.6.2 <0.8.0;
+pragma solidity >=0.6.4 <0.8.0;
+pragma experimental ABIEncoderV2;
+
+import "https://github.com/vigilance91/solidarity/libraries/status/generalCodes.sol";
+import "https://github.com/vigilance91/solidarity/libraries/status/logicCodes.sol";
 
 /// @title Logic Contraints Library
 /// @author Tyler R. Drury - 3/1/2021, All Rights Reserved
@@ -12,13 +16,13 @@ library LogicConstraints
         bool b
     ) public pure
     {
-        require(b); //'must be true'
+        require(b, logicCodes.NOT_EQUAL);
     }
     function requireFalse(
         bool b
     ) public pure
     {
-        require(!b);    //"must be false"
+        require(!b, logicCodes.NOT_EQUAL);
     }
     //overload for error reporting string
     function requireTrue(
@@ -38,7 +42,7 @@ library LogicConstraints
     function alwaysRevert(
     )public pure
     {
-        require(false);
+        require(false, generalCodes.NOT_APPLICABLE);
     }
     function alwaysRevert(
         string memory message

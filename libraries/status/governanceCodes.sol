@@ -3,7 +3,7 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-/// @title Governances Error Code Library
+/// @title Governances Status Code Library
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 25/3/2021, All Rights Reserved
 /// 0x3* Negotiation & Governance, very broadly the flow of such transactions.
 /// Note that “other party” may be more than one actor (not necessarily the sender).

@@ -3,7 +3,7 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-/// @title Logic Error Code Library
+/// @title Logic Status Code Library
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 25/3/2021, All Rights Reserved
 /// 0x2* Find, Inequalities & Range, broadly intended for finding and matching.
 /// Data lookups and order matching are two common use cases

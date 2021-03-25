@@ -8,7 +8,7 @@ pragma experimental ABIEncoderV2;
 //0x8* TBD - Currently unspecified. (Full range reserved)
 //0x9* TBD - Currently unspecified. (Full range reserved)
 
-/// @title Application Specific Error Code Library
+/// @title Application Specific Status Code Library
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 25/3/2021, All Rights Reserved
 /// 0xA* Application-Specific Codes, contracts may have special states that they need to signal.
 /// This proposal only outlines the broadest meanings, but implementers may have very specific meanings for each,

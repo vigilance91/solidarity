@@ -3,7 +3,7 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-/// @title 
+/// @title Off-Chain Status Code Library
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 25/3/2021, All Rights Reserved
 //0xF* Off-Chain, for off-chain actions. Much like th 0x0*: Generic range, 0xF* is very general, and does little to modify the reason.
 //Among other things, the meta code 0xFF may be used to describe what the off-chain process is.
