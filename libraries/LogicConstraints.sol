@@ -42,7 +42,7 @@ library LogicConstraints
     function alwaysRevert(
     )public pure
     {
-        require(false, generalCodes.NOT_APPLICABLE);
+        require(false, generalCodes.INAPPLICABLE);
     }
     function alwaysRevert(
         string memory message
