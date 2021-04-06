@@ -3,8 +3,8 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/libraries/status/generalCodes.sol";
-import "https://github.com/vigilance91/solidarity/libraries/status/logicCodes.sol";
+import "https://github.com/vigilance91/solidarity/EIP/StatusCodes/generalCodes.sol";
+import "https://github.com/vigilance91/solidarity/EIP/StatusCodes/logicCodes.sol";
 
 /// @title Logic Contraints Library
 /// @author Tyler R. Drury - 3/1/2021, All Rights Reserved
