@@ -11,4 +11,17 @@ Doxyfile
 /ico
 /secrets
 /core
+/ERC/ERC223
+/ERC/ERC1363
+/ERC/ERC2309
+/ERC/ERC1820
+/ERC/ERC3156
+/EIP/EIP/Allowance
+/EIP/EIP/AssetExchange
+/EIP/EIP/Diamond
+/EIP/EIP/FundStreaming
+/EIP/EIP/GasStationNetwork
+/EIP/EIP/MulticlassToken
+/EIP/EIP/TokenizedStock
+/EIP/EIP/Voting
 SETUP.md
