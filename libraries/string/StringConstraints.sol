@@ -5,6 +5,7 @@ pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
 import "https://github.com/vigilance91/solidarity/libraries/string/StringLogic.sol";
+//import "https://github.com/vigilance91/solidarity/libraries/string/stringUtilities.sol";
 
 /// @title String Contraints Library
 /// @author Tyler R. Drury - 3/1/2021, All Rights Reserved
@@ -15,13 +16,17 @@ library StringConstraints
     using LogicConstraints for bool;
     using StringLogic for string;
     
+    //using stringUtilities for string;
+    
+    //string private constant LIB_NAME = 'stringConstraints: ';
+    
     function requireEqual(
         string memory lhs,
         string memory rhs
     )public pure
     {
         lhs.equal(rhs).requireTrue(
-            //'not equal'
+            //LIB_NAME.concatenate('not equal')
         );
         //LogicConstraints.requireTrue(lhs.equal(rhs));
     }
@@ -32,7 +37,7 @@ library StringConstraints
     )public pure
     {
         lhs.equal(rhs).requireFalse(
-            //'equal'
+            //LIB_NAME.concatenate('equal')
         );
         //LogicConstraints.requireTrue(lhs.notEqual(rhs));
     }
@@ -42,7 +47,7 @@ library StringConstraints
     )public pure
     {
         lhs.empty().requireTrue(
-            //'not empty'
+            //LIB_NAME.concatenate('not empty')
         );
         //LogicConstraints.requireTrue(lhs.empty());
     }
@@ -52,7 +57,7 @@ library StringConstraints
     )public pure
     {
         lhs.notEmpty().requireTrue(
-            //'empty'
+            //LIB_NAME.concatenate('empty')
         );
         //LogicConstraints.requireTrue(lhs.notEmpty());
     }
@@ -62,7 +67,9 @@ library StringConstraints
         string memory rhs
     )public pure
     {
-        lhs.notEmptyAndNotEqual(rhs).requireTrue();
+        lhs.notEmptyAndNotEqual(rhs).requireTrue(
+            //LIB_NAME.concatenate('(lhs not empty || rhs nor empty) || lhs == rhs')
+        );
         //LogicConstraints.requireTrue(lhs.notEmptyAndNotEqual(rhs));
     }
     
@@ -71,7 +78,9 @@ library StringConstraints
         string memory rhs
     )public pure
     {
-        lhs.notEmptyAndAreEqual(rhs).requireTrue();
+        lhs.notEmptyAndAreEqual(rhs).requireTrue(
+            //LIB_NAME.concatenate('(lhs not empty || rhs nor empty) || lhs != rhs')')
+        );
         //LogicConstraints.requireTrue(lhs.notEmptyAndAreEqual(rhs));
     }
 }

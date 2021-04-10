@@ -6,10 +6,11 @@ pragma experimental ABIEncoderV2;
 //import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/math/SafeMath.sol";
 import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256ToString.sol";
 //import "./abiEncode.sol";
-
+/// 
 /// @title String To String Utilities
-/// @author Tyler R. Drury - 17/3/2021, All Rights Reserved
+/// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 17/3/2021, All Rights Reserved
 /// @notice trivial functions for concatenating strings with various other data types
+/// 
 library stringToString
 {
     using uint256ToString for uint256;

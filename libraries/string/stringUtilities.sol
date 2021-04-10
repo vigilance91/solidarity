@@ -23,9 +23,9 @@ library stringUtilities
     function concatenate(
         string memory lhs,
         string memory rhs
-    ) public pure
-        returns(string memory)
-    {
+    )public pure returns(
+        string memory
+    ){
         LogicConstraints.requireTrue(
             lhs.notEmpty() && rhs.notEmpty(),
             "empty string"
@@ -38,9 +38,9 @@ library stringUtilities
     function concatenate(
         string memory lhs,
         bytes32 rhs
-    ) public pure
-        returns(string memory)
-    {
+    )public pure returns(
+        string memory
+    ){
         LogicConstraints.requireTrue(
             lhs.notEmpty(), //&& rhs.notEmpty(),
             //ErrorString.empty
@@ -53,18 +53,18 @@ library stringUtilities
     */
     function hash(
         string memory self
-    )public pure
-        returns(bytes32)
-    {
+    )public pure returns(
+        bytes32
+    ){
         return keccak256(bytes(self));
     }
     /// todo change to concatenateAndHash
     function saltAndHash(
         string memory lhs,
         string memory rhs
-    )public pure
-        returns(bytes32)
-    {
+    )public pure returns(
+        bytes32
+    ){
         //salting empty string is point and a waste of gas
         LogicConstraints.requireTrue(
             lhs.notEmpty() && rhs.notEmpty(),
@@ -80,9 +80,9 @@ library stringUtilities
     /// the return of this function is considered that function's selector by the EVM
     function hashSignature(
         string memory self
-    )public pure
-        returns(bytes4)
-    {
+    )public pure returns(
+        bytes4
+    ){
         //LogicConstraints.requireTrue(
             //lhs.notEmpty(),
             //"empty string"
@@ -103,9 +103,47 @@ library stringUtilities
     //function hashSignatureEquals(
         //string memory lhs,
         //string memory rhs
-    //)public pure
-        //returns(bool)
-    //{
+    //)public pure returns(
+        //bool
+    //){
         //return hashSignature(lhs) ^ hashSignature(rhs) == 0;
     //}
+    
+    /**
+    /// abi endcode does not currently work as intended
+    /// @return the hashed value of lhs + rhs, as a string instead of bytes32
+    function hashAsString(
+        string memory self
+    )public pure returns(
+        string memory
+    ){
+        return string(
+            abi.encodePacked(
+                keccak256(bytes(self))
+            )
+        );
+    }
+    /// @return the hashed value of lhs + rhs, as a string instead of bytes32
+    function saltAndHashAsString(
+        string memory lhs,
+        string memory rhs
+    )public pure returns(
+        string memory
+    ){
+        //salting empty string is point and a waste of gas
+        LogicConstraints.requireTrue(
+            lhs.notEmpty() && rhs.notEmpty(),
+            "empty string"
+        );
+        
+        return string(
+            abi.encodePacked(
+                saltAndHash(
+                    lhs,
+                    rhs
+                )
+            )
+        );
+    }
+    */
 }

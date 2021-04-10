@@ -4,13 +4,14 @@ pragma solidity >=0.6.4 <0.8.0;
 
 import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256ToString.sol";
 //import "./abiEncode.sol";
-
+/// 
 /// @title Address To String Utilities
-/// @author Tyler R. Drury - 12/1/2021, All Rights Reserved
+/// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 12/1/2021, All Rights Reserved
 /// @notice trivial functions for converting address types to strings,
 /// and/or combining uint256 and address types, which are not provided natively by Solidity.
 /// These operations may consume relatively large amount of gas due to string operations, looping and repeated calls to abi.encodePacked,
 /// however they can be used to securely salt then hash an address for use as a key in a mapping without directly exposing the client's address on the blockchain
+/// 
 library addressToString
 {   
     using uint256ToString for uint256;

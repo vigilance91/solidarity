@@ -17,13 +17,17 @@ library Bytes32Constraints
     using LogicConstraints for bool;
     using Bytes32Logic for bytes32;
     
+    //using stringUtilities for string;
+    
+    //string private constant LIB_NAME = 'bytes32Constraints: ';
+    
     function requireEqual(
         bytes32 lhs,
         bytes32 rhs
     ) internal pure
     {
         lhs.equal(rhs).requireTrue(
-            //''
+            //LIB_NAME.concatenate('lhs != rhs');
         );
     }
     function requireNotEqual(
@@ -32,7 +36,7 @@ library Bytes32Constraints
     ) internal pure
     {
         lhs.equal(rhs).requireFalse(
-            //''
+            //LIB_NAME.concatenate('lhs == rhs');
         );
     }
     function requireEmpty(
@@ -40,7 +44,7 @@ library Bytes32Constraints
     )internal pure
     {
         lhs.empty().requireTrue(
-            //''
+            //LIB_NAME.concatenate('lhs != 0x0')
         );
     }
     function requireNotEmpty(
@@ -48,7 +52,7 @@ library Bytes32Constraints
     )internal pure
     {
         lhs.empty().requireFalse(
-            //''
+            //LIB_NAME.concatenate('lhs == 0x0')
         );
     }
     
@@ -58,7 +62,7 @@ library Bytes32Constraints
     )internal pure
     {
         lhs.notEmptyAndNotEqual(rhs).requireTrue(
-            //''
+            //LIB_NAME.concatenate('(lhs == 0x0 || rhs == 0x0) || lhs == rhs');
         );
     }
     
@@ -68,7 +72,7 @@ library Bytes32Constraints
     )internal pure
     {
         lhs.notEmptyAndAreEqual(rhs).requireTrue(
-            //''
+            //LIB_NAME.concatenate('(lhs == 0x0 || rhs == 0x0) || lhs != rhs');
         );
     }
 }

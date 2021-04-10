@@ -1,22 +1,28 @@
 // SPDX-License-Identifier: Apache-2.0
 
 pragma solidity >=0.6.4 <0.8.0;
+pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/libraries/bytes32/Bytes32Logic.sol";
-
+//import "https://github.com/vigilance91/solidarity/libraries/libraries/stringUtils.sol";
+/// 
 /// @title String Logic Library
-/// @author Tyler R. Drury - 3/1/2021, All Rights Reserved
+/// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 3/1/2021, All Rights Reserved
 /// @notice trivial functions for logical operations on strings not provided natively by Solidity.
 /// @dev The official Ethereum StringUtils library (found here https://github.com/ethereum/dapp-bin/blob/master/library/stringUtils.sol) is vulnerable to timing attacks!
-/// it is NOT recommend for use, ever, for any reason.
+/// it is NOT recommend for use, ever, for any reason
+/// 
 /// This library, on the otherhand, is NOT vulnerable to timing attacks and thus,
-/// is recommended as an alternative as it is designed and intended for use in cryptographically secure applications.
+/// is recommended as an alternative as it is designed and intended for use in cryptographically secure applications
+///
 library StringLogic
 {
     //using Bytes32Logic for bytes32;
+    //using stringUtils for string;
     
+    //string private constant LIB_NAME = " stringLogic: ";
     string public constant EMPTY = "";
-    bytes32 public constant EMPTY_HASH = keccak256(bytes(""));
+    bytes32 public constant EMPTY_HASH = keccak256(bytes(""));  //''.hash();
     /**
      * compare string hashes using XOR, rather than iteratively compare each element in strings
      * not only is this appraoch generally faster for larger strings but is also NOT vulnerable to timing attacks
@@ -29,8 +35,9 @@ library StringLogic
         string memory rhs
     )internal
     {
-        require(
+        LogicConstraints.requireTrue(
             notEmpty(lhs) && notEmpty(rhs)
+            'empty' //LIB_NAME.concatenate('empty')
         );
         _;
     }
@@ -41,8 +48,8 @@ library StringLogic
     )public pure
         returns(bool)
     {
-        //return keccak256(bytes(lhs)).equal(
-            //keccak256(bytes(rhs))
+        //return lhs.hash().equal(
+            //rhs.hash()
         //);
         
         return Bytes32Logic.equal(
@@ -57,8 +64,8 @@ library StringLogic
     )public pure
         returns(bool)
     {
-        //return keccak256(bytes(lhs)).notEqual(
-            //keccak256(bytes(rhs))
+        //return lhs.hash().notEqual(
+            //rhs.hash()
         //);
         return Bytes32Logic.notEqual(
             keccak256(bytes(lhs)),
@@ -71,7 +78,7 @@ library StringLogic
     )public pure
         returns(bool)
     {
-        //return keccak256(bytes(lhs)).equal(EMPTY_HASH);
+        //return lhs.hash().equal(EMPTY_HASH);
         return Bytes32Logic.equal(
             keccak256(bytes(lhs)),
             EMPTY_HASH
@@ -83,7 +90,7 @@ library StringLogic
     )public pure
         returns(bool)
     {
-        //return keccak256(bytes(lhs)).notEqual(EMPTY_HASH);
+        //return lhs.hash().notEqual(EMPTY_HASH);
         
         return Bytes32Logic.notEqual(
             keccak256(bytes(lhs)),
@@ -127,7 +134,12 @@ library StringLogic
         //_notEmpty(lhs,rhs)
         //returns(string memory)
     //{
-        //return string(bytes(lhs) ^ bytes(rhs));
+        //bytes lb = bytes(lhs);
+        //bytes rb = bytes(rhs);
+        
+        //lb.requireLengthEqual(rb);
+        
+        //return string(lb ^ rb);
     //}
     //function and(
         //string memory lhs,
@@ -135,8 +147,13 @@ library StringLogic
     //)public
         //_notEmpty(lhs,rhs)
         //returns(string memory)
-    {
-        //return string(bytes(lhs) & bytes(rhs));
+    //{
+        //bytes lb = bytes(lhs);
+        //bytes rb = bytes(rhs);
+        
+        //lb.requireLengthEqual(rb);
+        
+        //return string(lb & rb);
     //}
     //function or(
         //string memory lhs,
@@ -145,7 +162,21 @@ library StringLogic
         //_notEmpty(lhs,rhs)
         //returns(string memory)
     {
-        //return string(bytes(lhs) | bytes(rhs));
+        //bytes lb = bytes(lhs);
+        //bytes rb = bytes(rhs);
+        
+        //lb.requireLengthEqual(rb);
+        
+        //return string(bytes(lb) | bytes(rb));
+    //}
+    //function not(
+        //string memory self
+    //)public
+        //returns(string memory)
+    {
+        notEmpty(self);
+        
+        //return string(!bytes(self));
     //}
     */   
 }

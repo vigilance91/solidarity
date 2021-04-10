@@ -6,7 +6,7 @@ import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol
 import "https://github.com/vigilance91/solidarity/libraries/signed/int256Logic.sol";
 
 /// @title int256 Contraints Library
-/// @author Tyler R. Drury - 3/1/2021, All Rights Reserved
+/// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 3/1/2021, All Rights Reserved
 /// @dev trivial utilities for constraining the state of the EVM (using require),
 /// for arithmetic operations on int256 types, reverting EVM state on failure.
 library int256Constraints
@@ -14,13 +14,15 @@ library int256Constraints
     using LogicConstraints for bool;
     using int256Logic for int256;
     
+    //string private constant LIB_NAME = " int256Constraints: ";
+    
     function requireEqual(
         int256 lhs,
         int256 rhs
     )public pure
     {
         lhs.equal(rhs).requireTrue(
-            //'not equal'
+            //LIB_NAME
         );
     }
     
@@ -30,7 +32,7 @@ library int256Constraints
     )public pure
     {
         lhs.equal(rhs).requireFalse(
-            //'equal'
+            //LIB_NAME    //.concatenate('equal')
         );
     }
     function requireNotEqualToZero(
@@ -38,7 +40,7 @@ library int256Constraints
     )public pure
     {
         lhs.notEqualToZero().requireTrue(
-            'equals 0'
+            //LIB_NAME    //.concatenate('equals 0')
         );
     }
     //require lhs & rhs is not 0
@@ -48,7 +50,8 @@ library int256Constraints
     //) public pure
     //{
         //LogicConstraints.requireTrue(
-            //lhs.and(rhs) != 0
+            //lhs.and(rhs) != 0,
+            ////LIB_NAME    //.concatenate('');
         //);
     //}
     //require lhs | rhs is not 0
@@ -59,6 +62,7 @@ library int256Constraints
     //{
         //LogicConstraints.requireTrue(
             //lhs.or(rhs) != 0
+            ////LIB_NAME    //.concatenate('');
         //);
     //}
     //function requireXor(
@@ -68,6 +72,7 @@ library int256Constraints
     //{
         //LogicConstraints.requireTrue(
             //lhs.xor(rhs) == 0
+            ////LIB_NAME    //.concatenate('');
         //);
     //}
     /**
@@ -79,7 +84,7 @@ library int256Constraints
     ) public pure
     {
         lhs.greaterThan(rhs).requireTrue(
-            //''
+            //LIB_NAME    //.concatenate("lhs not great than rhs")
         );
     }
     function requireGreaterThanOrEqual(
@@ -88,7 +93,7 @@ library int256Constraints
     ) public pure
     {
         lhs.greaterThanOrEqualTo(rhs).requireTrue(
-            //''
+            //LIB_NAME    //.concatenate("lhs < rhs"
         );
     }
     function requireGreaterThanZero(
@@ -96,7 +101,7 @@ library int256Constraints
     ) public pure
     {
         lhs.greaterThanZero().requireTrue(
-            //''
+            //LIB_NAME    //.concatenate('');
         );
     }
     function requireGreaterThanOrEqualToZero(
@@ -104,7 +109,7 @@ library int256Constraints
     ) public pure
     {
         lhs.greaterThanOrEqualToZero().requireTrue(
-            //''
+            //LIB_NAME    //.concatenate('');
         );
     }
     /**
@@ -116,7 +121,7 @@ library int256Constraints
     ) public pure
     {
         lhs.lessThan(rhs).requireTrue(
-            //''
+            //LIB_NAME    //.concatenate('');
         );
     }
     function requireLessThanOrEqual(
@@ -125,7 +130,7 @@ library int256Constraints
     ) public pure
     {
         lhs.lessThanOrEqualTo(rhs).requireTrue(
-            //''
+            //LIB_NAME    //.concatenate('');
         );
     }
     function requireLessThanZero(
@@ -133,7 +138,7 @@ library int256Constraints
     ) public pure
     {
         lhs.lessThanZero().requireTrue(
-            //'greater than or equal to 0'
+            //LIB_NAME    //.concatenate('greater than or equal to 0');
         );
     }
     function requireLessThanOrEqualToZero(
@@ -141,7 +146,7 @@ library int256Constraints
     ) public pure
     {
         lhs.lessThanOrEqualToZero().requireTrue(
-            //'greater than 0'
+            //LIB_NAME    //.concatenate(''greater than 0');
         );
     }
     //function requireLessThanMax(int256 lhs) public pure{

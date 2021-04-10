@@ -12,6 +12,10 @@ library BytesConstraints
 {
     using LogicConstraints for bool;
     using BytesLogic for bytes;
+    
+    //using stringUtilities for string;
+    
+    //string private constant LIB_NAME = 'bytesConstraints: ';
     /**
     function requireEqual(
         bytes lhs,
@@ -37,7 +41,7 @@ library BytesConstraints
     )internal pure
     {
         lhs.empty().requireTrue(
-            "not empty"
+            "not empty"     //LIB_NAME.concatenate('not empty')
         );
     }
     function requireNotEmpty(
@@ -45,7 +49,7 @@ library BytesConstraints
     )internal pure
     {
         lhs.notEmpty().requireTrue(
-            "empty"
+            "empty"     //LIB_NAME.concatenate('empty')
         );
     }
     
@@ -55,7 +59,7 @@ library BytesConstraints
     )internal pure
     {
         lhs.notEmptyAndNotEqual(rhs).requireTrue(
-            //'not empty'
+            //'not empty'   //LIB_NAME.concatenate('(lhs empty || rhs empty) || lhs == rhs')
         );
     }
     
@@ -65,7 +69,7 @@ library BytesConstraints
     )internal pure
     {
         lhs.notEmptyAndAreEqual(rhs).requireTrue(
-            //''
+            //LIB_NAME.concatenate('(lhs empty || rhs empty) || lhs != rhs')
         );
     }
 }
