@@ -72,8 +72,11 @@ library mixinERC173
     )internal
     {
         //prevent assignment to owner if account is already owner
-        owner().requireNotEqual(newOwner);
-        storageERC173().owner.emitTransferOwnership(newOwner);
+        addres owner O = owner();
+        
+        O.requireNotEqual(newOwner);
+        O.emitTransferOwnership(newOwner);
+        
         storageERC173().owner = newOwner;
     }
     function renounceOwnership(

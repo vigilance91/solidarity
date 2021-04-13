@@ -93,7 +93,7 @@ abstract contract ERC173 is Context,
         return mixinERC173.owner();
     }
     function ownerPayable(
-    )public view returns(
+    )internal view returns(
         address payable
     ){
         return mixinERC173.ownerPayable();
@@ -123,8 +123,6 @@ abstract contract ERC173 is Context,
         newOwner.requireNotNull(
             //_CONTRACT_NAME.concatenate("transferOwnership")
         );
-        //new owner can not be current owner
-        _requireNotOwner(newOwner);
         //contract can not own itself
         _requireNotThis(newOwner);
         

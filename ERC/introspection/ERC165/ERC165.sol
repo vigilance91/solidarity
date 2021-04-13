@@ -3,8 +3,8 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/ERC/ERC165/iERC165.sol";
-import "https://github.com/vigilance91/solidarity/ERC/ERC165/mixinERC165.sol";
+import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/iERC165.sol";
+import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/mixinERC165.sol";
 ///
 /// @title ERC-165 Compliant Interface Support Introspection Contract Implementation
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 5/4/2021, All Rights Reserved
