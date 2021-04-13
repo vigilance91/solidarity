@@ -5,7 +5,7 @@ pragma experimental ABIEncoderV2;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/math/SafeMath.sol";
 
-import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256Contraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256Constraints.sol";
 import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/eventsTokenSupply.sol";
 ///
 /// @title Token Supply Mixin Library
@@ -17,7 +17,7 @@ library mixinTokenSupply
 {
     using SafeMath for uint256;
     
-    using uint256Contraints for uint256;
+    using uint256Constraints for uint256;
     
     using eventsTokenSupply for uint256;
     
