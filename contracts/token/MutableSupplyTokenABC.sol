@@ -16,7 +16,7 @@ abstract contract MutableSupplyTokenABC is MutableTokenSupplyABC
         string memory name,
         string memory symbol,
         uint256 initialSupply
-    )internal MutableSupplyTokenABC(
+    )internal MutableTokenSupplyABC(
         name,
         symbol,
         initialSupply
