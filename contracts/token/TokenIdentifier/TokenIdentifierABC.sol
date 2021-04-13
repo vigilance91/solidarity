@@ -5,8 +5,8 @@ pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
 
-import "./iTokenIdentifier.sol";
-import "./mixinTokenIdentifier.sol";
+import "https://github.com/vigilance91/solidarity/contracts/token/TokenIdentifier/iTokenIdentifier.sol";
+import "https://github.com/vigilance91/solidarity/contracts/token/TokenIdentifier/mixinTokenIdentifier.sol";
 ///
 /// @title Token Intentifier ABC
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 3/1/2021, All Rights Reserved
