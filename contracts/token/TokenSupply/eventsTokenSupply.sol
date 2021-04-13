@@ -42,7 +42,7 @@ library eventsTokenSupply
         emit SetTotalSupply(
             currentSupply,
             newSupply,
-            block,timestamp,
+            block.timestamp,
             block.number
         );
     }
@@ -57,7 +57,7 @@ library eventsTokenSupply
             currentSupply,
             amountBy,
             newSupply,
-            block,timestamp,
+            block.timestamp,
             block.number
         );
     }
@@ -71,7 +71,7 @@ library eventsTokenSupply
             currentSupply,
             amountBy,
             newSupply,
-            block,timestamp,
+            block.timestamp,
             block.number
         );
     }
