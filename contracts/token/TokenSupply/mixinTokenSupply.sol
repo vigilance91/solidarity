@@ -17,7 +17,7 @@ library mixinTokenSupply
 {
     using SafeMath for uint256;
     
-    uinsg uint256Contraints for uint256;
+    using uint256Contraints for uint256;
     
     using eventsTokenSupply for uint256;
     
