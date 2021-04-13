@@ -26,7 +26,7 @@ abstract contract StaticTokenSupplyABC is iStaticTokenSupply
     }
     /// @dev See {iERC20-totalSupply}
     function totalSupply(
-    )public view returns(
+    )public view override returns(
         uint256
     ){
         return mixinTokenSupply.totalSupply();

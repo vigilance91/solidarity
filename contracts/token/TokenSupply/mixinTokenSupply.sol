@@ -61,7 +61,7 @@ library mixinTokenSupply
         
         storageTokenSupply().totalSupply = newSupply;
         
-        previousSupply.emitSetSupply(newSupply);
+        previousSupply.emitSetTotalSupply(newSupply);
         
         return newSupply;
     }
