@@ -4,9 +4,9 @@ pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/contracts/token/TokenIdentifier/TokenIdentifierABC.sol";
-import "https://github.com/vigilance91/solidarity/contracts/token/StaticSupplyABC.sol";
+import "https://github.com/vigilance91/solidarity/contracts/token/StaticSupplyTokenABC.sol";
 
-//interface iMutableSupplyToken is iTokenIdentifier,
+//interface iMutableSupplyToken is iStaticSupplyToken,
     //iMutableTokenSupply
 //{
     //
