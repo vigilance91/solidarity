@@ -2,8 +2,6 @@
 
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
-
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/math/SafeMath.sol";
 ///
 /// @title Token Supply Events Library
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 3/1/2021, All Rights Reserved

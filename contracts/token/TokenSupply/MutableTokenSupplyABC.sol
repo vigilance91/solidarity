@@ -3,7 +3,6 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/MutableTokenSupply/iMutableTokenSupply.sol";
 import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/StaticTokenSupply/StaticTokenSupplyABC.sol";
 ///
 /// @title Mutable Token Supply Abstract Base Contract
@@ -11,14 +10,12 @@ import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/St
 /// @dev provide fully realized, mutable, token supply mechanics to derived contracts
 ///
 abstract contract MutableTokenSupplyABC is StaticTokenSupplyABC
-    iMutableTokenSupply
 {   
     constructor(
         uint256 totalSupply
     )internal StaticTokenSupplyABC(totalSupply)
     {
     }
-    /// @dev See {iERC20-totalSupply}
     function _setTotalSupply(
         uint256 newSupply
     )internal
@@ -27,15 +24,15 @@ abstract contract MutableTokenSupplyABC is StaticTokenSupplyABC
         //_requireTotalSupplyGreaterThanZero();
     }
     
-    function increaseTotalSupply(
+    function _increaseTotalSupply(
         uint256 amountBy
-    )public virtual override
+    )internal
     {
         mixinTokenSupply.increaseTotalSupply(amountBy);
     }
-    function decreaseTotalSupply(
+    function _decreaseTotalSupply(
         uint256 amountBy
-    )public virtual override
+    )internal
     {
         mixinTokenSupply.decreaseTotalSupply(amountBy);
         //token supply should never be 0
