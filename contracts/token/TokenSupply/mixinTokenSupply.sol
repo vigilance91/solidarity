@@ -81,7 +81,7 @@ library mixinTokenSupply
         
         assert(previousSupply < newSupply);
         
-        previousSupply.emitIncreaseSupply(amountBy, newSupply);
+        previousSupply.emitIncreaseTotalSupply(amountBy, newSupply);
         
         //return newSupply;
     }
@@ -104,7 +104,7 @@ library mixinTokenSupply
         
         assert(previousSupply > newSupply);
         
-        previousSupply.emitDecreaseSupply(amountBy, newSupply);
+        previousSupply.emitDecreaseTotalSupply(amountBy, newSupply);
         //return newSupply;
     }
     
