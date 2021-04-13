@@ -26,7 +26,7 @@ abstract contract StaticTokenSupplyABC is iStaticTokenSupply
     }
     /// @dev See {iERC20-totalSupply}
     function totalSupply(
-    )public view override returns(
+    )public view returns(
         uint256
     ){
         return mixinTokenSupply.totalSupply();
@@ -37,14 +37,14 @@ abstract contract StaticTokenSupplyABC is iStaticTokenSupply
     // >
     function _totalSupplyGreaterThan(
         uint256 amount
-    )internal view override returns(
+    )internal view returns(
         bool
     ){
         return totalSupply().greaterThan(amount);
     }
     // > 0
     function _totalSupplyGreaterThanZero(
-    )internal view override returns(
+    )internal view returns(
         bool
     ){
         return totalSupply().greaterThan(0);
@@ -52,7 +52,7 @@ abstract contract StaticTokenSupplyABC is iStaticTokenSupply
     // >=
     function _totalSupplyGreaterThanOrEqual(
         uint256 amount
-    )internal view override returns(
+    )internal view returns(
         bool
     ){
         return totalSupply().greaterThanOrEqual(amount);
@@ -60,7 +60,7 @@ abstract contract StaticTokenSupplyABC is iStaticTokenSupply
     // <
     function _totalSupplyLessThan(
         uint256 amount
-    )internal view override returns(
+    )internal view returns(
         bool
     ){
         return totalSupply().lessThan(amount);
@@ -68,7 +68,7 @@ abstract contract StaticTokenSupplyABC is iStaticTokenSupply
     // <=
     function _totalSupplyLessThanOrEqual(
         uint256 amount
-    )internal view override returns(
+    )internal view returns(
         bool
     ){
         return totalSupply().lessThanOrEqual(amount);
@@ -105,7 +105,7 @@ abstract contract StaticTokenSupplyABC is iStaticTokenSupply
     // <
     function _requireTotalSupplyLessThan(
         uint256 amount
-    )public
+    )internal
     {
         _totalSupplyLessThan(amount).requireTrue(
             //""
@@ -114,7 +114,7 @@ abstract contract StaticTokenSupplyABC is iStaticTokenSupply
     // <=
     function _requireTotalSupplyLessThanOrEqual(
         uint256 amount
-    )public
+    )internal
     {
         _totalSupplyLessThanOrEqual(amount).requireTrue(
             //""
