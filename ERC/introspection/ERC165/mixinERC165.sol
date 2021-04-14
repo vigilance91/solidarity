@@ -3,7 +3,7 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/eventsERC165.sol";
+//import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/eventsERC165.sol";
 ///
 /// @title Mixin for the ERC-165 Interface Library
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 24/3/2021, All Rights Reserved
@@ -11,7 +11,7 @@ import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/event
 library mixinERC165
 {
     //using LogicConstraints for bool;
-    using eventsERC165 for bytes4;
+    //using eventsERC165 for bytes4;
     
     bytes32 internal constant STORAGE_SLOT = keccak256("ERC-165.mixin.storage");
     //string internal constant _LIB_NAME = ' mixinERC165: ';

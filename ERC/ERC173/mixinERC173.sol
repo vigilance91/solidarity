@@ -72,7 +72,7 @@ library mixinERC173
     )internal
     {
         //prevent assignment to owner if account is already owner
-        addres owner O = owner();
+        address owner O = owner();
         
         O.requireNotEqual(newOwner);
         O.emitTransferOwnership(newOwner);

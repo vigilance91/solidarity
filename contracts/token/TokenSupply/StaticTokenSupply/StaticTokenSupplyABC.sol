@@ -81,7 +81,7 @@ abstract contract StaticTokenSupplyABC is iStaticTokenSupply
     // >
     function _requireTotalSupplyGreaterThan(
         uint256 amount
-    )internal
+    )internal view
     {
         _totalSupplyGreaterThan(amount).requireTrue(
             //""
@@ -89,7 +89,7 @@ abstract contract StaticTokenSupplyABC is iStaticTokenSupply
     }
     // > 0
     function _requireTotalSupplyGreaterThanZero(
-    )internal
+    )internal view
     {
         _totalSupplyGreaterThanZero().requireTrue(
             //""
@@ -98,7 +98,7 @@ abstract contract StaticTokenSupplyABC is iStaticTokenSupply
     // >=
     function _requireTotalSupplyGreaterThanOrEqual(
         uint256 amount
-    )internal
+    )internal view
     {
         _totalSupplyGreaterThanOrEqual(amount).requireTrue(
             //""
@@ -107,7 +107,7 @@ abstract contract StaticTokenSupplyABC is iStaticTokenSupply
     // <
     function _requireTotalSupplyLessThan(
         uint256 amount
-    )internal
+    )internal view
     {
         _totalSupplyLessThan(amount).requireTrue(
             //""
@@ -116,7 +116,7 @@ abstract contract StaticTokenSupplyABC is iStaticTokenSupply
     // <=
     function _requireTotalSupplyLessThanOrEqual(
         uint256 amount
-    )internal
+    )internal view
     {
         _totalSupplyLessThanOrEqual(amount).requireTrue(
             //""
