@@ -13,6 +13,8 @@ import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256Cons
 ///
 abstract contract StaticTokenSupplyABC is iStaticTokenSupply
 {
+    using LogicConstraints for bool;
+    
     using uint256Logic for uint256;
     using uint256Constraints for uint256;
     //set the total supply on construction, then never change it
