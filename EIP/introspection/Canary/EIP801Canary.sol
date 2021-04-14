@@ -3,8 +3,8 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/EIP/EIP801/eventsEIP801.sol";
-import "https://github.com/vigilance91/solidarity/EIP/EIP801/EIP801.sol";
+import "https://github.com/vigilance91/solidarity/EIP/introspection/Canary/eventsEIP801.sol";
+import "https://github.com/vigilance91/solidarity/EIP/introspection/Canary/EIP801.sol";
 
 import "https://github.com/vigilance91/solidarity/ERC/ERC173/ERC173Ownable.sol";
 

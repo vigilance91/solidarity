@@ -6,7 +6,7 @@ pragma experimental ABIEncoderV2;
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/math/SafeMath.sol";
 
 import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
-import "https://github.com/vigilance91/solidarity/EIP/EIP801/eventsEIP801.sol";
+import "https://github.com/vigilance91/solidarity/EIP/introspection/Canary/eventsEIP801.sol";
 ///
 /// @title Mixin Library for EIP-801 Canary Standard
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 5/4/2021, All Rights Reserved
