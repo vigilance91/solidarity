@@ -42,7 +42,7 @@ library blockNumberConstraints
         uint rhs
     )public pure
     {
-        block.number.requireLessThanOrEqualTo(rhs);
+        block.number.requireLessThanOrEqual(rhs);
     }
     /**
     * trivial not very useful

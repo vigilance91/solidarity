@@ -41,7 +41,7 @@ library nowConstraints
         uint rhs
     )public pure
     {
-        block.timestamp.requireLessThanOrEqualTo(rhs);
+        block.timestamp.requireLessThanOrEqual(rhs);
     }
     //function requireLessThanMax(uint lhs) public pure{
         //requireLessThan(lhs, 0xFF);
