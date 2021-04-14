@@ -84,7 +84,7 @@ library uint256Constraints
         uint256 rhs
     ) public pure
     {
-        lhs.greaterThanOrEqualTo(rhs).requireTrue(
+        lhs.greaterThanOrEqual(rhs).requireTrue(
             //LIB_NAME
         );
     }
@@ -113,7 +113,7 @@ library uint256Constraints
         uint256 rhs
     ) public pure
     {
-        lhs.lessThanOrEqualTo(rhs).requireTrue(
+        lhs.lessThanOrEqual(rhs).requireTrue(
             //LIB_NAME
         );
     }

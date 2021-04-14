@@ -92,7 +92,7 @@ library int256Constraints
         int256 rhs
     ) public pure
     {
-        lhs.greaterThanOrEqualTo(rhs).requireTrue(
+        lhs.greaterThanOrEqual(rhs).requireTrue(
             //LIB_NAME    //.concatenate("lhs < rhs"
         );
     }
@@ -129,7 +129,7 @@ library int256Constraints
         int256 rhs
     ) public pure
     {
-        lhs.lessThanOrEqualTo(rhs).requireTrue(
+        lhs.lessThanOrEqual(rhs).requireTrue(
             //LIB_NAME    //.concatenate('');
         );
     }

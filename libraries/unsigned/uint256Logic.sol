@@ -70,7 +70,7 @@ library uint256Logic
     {
         return lhs > rhs;
     }
-    function greaterThanOrEqualTo(
+    function greaterThanOrEqual(
         uint256 lhs,
         uint256 rhs
     ) public pure
@@ -86,7 +86,7 @@ library uint256Logic
     {
         return lhs < rhs;
     }
-    function lessThanOrEqualTo(
+    function lessThanOrEqual(
         uint256 lhs,
         uint256 rhs
     ) public pure

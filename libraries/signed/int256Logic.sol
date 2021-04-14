@@ -81,7 +81,7 @@ library int256Logic
     {
         return lhs > rhs;
     }
-    function greaterThanOrEqualTo(
+    function greaterThanOrEqual(
         int256 lhs,
         int256 rhs
     ) public pure
@@ -101,7 +101,7 @@ library int256Logic
     ) public pure
         returns(bool)
     {
-        return greaterThanOrEqualTo(lhs, ZERO);
+        return greaterThanOrEqual(lhs, ZERO);
     }
     /**
      * Less Than < operatiors
@@ -114,7 +114,7 @@ library int256Logic
     {
         return lhs < rhs;
     }
-    function lessThanOrEqualTo(
+    function lessThanOrEqual(
         int256 lhs,
         int256 rhs
     ) public pure
@@ -134,7 +134,7 @@ library int256Logic
     ) public pure
         returns(bool)
     {
-        return lessThanOrEqualTo(lhs, ZERO);
+        return lessThanOrEqual(lhs, ZERO);
     }
     //function lessThanMax(
         //int256 lhs
