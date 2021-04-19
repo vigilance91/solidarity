@@ -5,7 +5,8 @@ pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/contracts/token/ERC20/SafeERC20Token.sol";
 
-inferface iERC20Burnable is iERC20
+/**
+interface iERC20Burnable is iERC20
 {
     function burn(
         uint256 amount
@@ -16,6 +17,8 @@ inferface iERC20Burnable is iERC20
         uint256 amount
     )external;
 }
+*/
+
 ///
 /// @title Safe ERC20 Burnable Token
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 3/1/2021, All Rights Reserved
