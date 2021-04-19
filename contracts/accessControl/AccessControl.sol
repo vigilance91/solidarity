@@ -38,7 +38,7 @@ import "https://github.com/vigilance91/solidarity/libraries/address/AddressConst
 /// 
 /// Further modification to this software is permitted,
 /// only in respects to the terms specified by the MIT license and must cite the original author, OpenZeppelin,
-/// as well as Vigilance <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil)
+/// as well as Vigilance
 ///
 /// For more information please visit OpenZeppelin's documentation at:
 ///     https://docs.openzeppelin.com/contracts/3.x/
@@ -126,7 +126,7 @@ abstract contract AccessControl is Context,
     function _roleAt(
         bytes32 role
     )internal view returns(
-        RoleData storage
+        mixinAccessControl.RoleData storage
     ){
         return _readOnlyRoles()[role];
     }
@@ -357,7 +357,7 @@ abstract contract AccessControl is Context,
         address account
     )public virtual override
     {
-        account.requireEquals(
+        account.requireEqual(
             _msgSender()
             //"AccessControl: can only renounce roles for self"
         );
@@ -390,7 +390,7 @@ abstract contract AccessControl is Context,
         bytes32 adminRole
     )internal virtual
     {
-        mapping(bytes32=>RoleData) storage mr = _mutableRoles();
+        mapping(bytes32=>mixinAccessControl.RoleData) storage mr = _mutableRoles();
         
         role.emitRoleAdminChanged(
             mr[role].adminRole,
