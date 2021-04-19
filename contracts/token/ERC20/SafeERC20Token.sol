@@ -61,7 +61,7 @@ abstract contract SafeERC20Token is ERC20Token,
         
         _requireCanReceiveERC20(recipient);
         
-        iERC20(token).transfer(address(this), recipient, amount);
+        iERC20(token).transfer(recipient, amount);
         
         _requireOnERC20Received(recipient, address(this), amount);
     }
