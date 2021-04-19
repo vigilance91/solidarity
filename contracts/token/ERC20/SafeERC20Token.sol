@@ -78,7 +78,7 @@ abstract contract SafeERC20Token is ERC20Token,
     //  - reverts if `to` is NULL or is a contract which does not implement ERC165 AND iERC20Receiver
     //
     function _safeTransferTo(
-        address to
+        address to,
         uint256 amount
     )internal
     {
