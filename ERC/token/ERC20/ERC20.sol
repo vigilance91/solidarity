@@ -411,7 +411,10 @@ contract ERC20 is Context,
             AddressLogic.NULL,
             amount
         );
-
+        
+        //uint256 previousSupply = totalSupply();
+        //uint256 previousBalance = balanceOf(account);
+        
         mixinERC20.setBalanceOf(
             account,
             balanceOf(account).sub(
@@ -420,8 +423,12 @@ contract ERC20 is Context,
             )
         );
         
+        //balanceOf(account).requireLessThan(previousBalance);
+        
         //_setTotalSupply(totalSupply().sub(amount));
         _decreaseTotalSupply(amount);
+        
+        //totalSupply().requireLessThan(previousSupply);
         
         account.emitTransfer(
             AddressLogic.NULL,
