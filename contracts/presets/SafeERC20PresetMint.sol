@@ -27,7 +27,7 @@ import "https://github.com/vigilance91/solidarity/contracts/token/ERC20/SafeERC2
 /// which will let it grant both minter and pauser roles to other accounts
 ///
 contract SafeERC20PresetMint is SafeERC20BurnableToken,
-    AccessControl  //ERC20AccessControlToken
+    AccessControl,  //ERC20AccessControlToken
     Pausable
 {
     using Address for address;
