@@ -7,7 +7,7 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contr
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/utils/Address.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/GSN/Context.sol";
 
-import "https://github.com/vigilance91/solidarity/contracts/accessControl/eventsAccesControl.sol";
+import "https://github.com/vigilance91/solidarity/contracts/accessControl/eventsAccessControl.sol";
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/iAccessControl.sol";
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/mixinAccessControl.sol";
 ///
@@ -90,7 +90,7 @@ abstract contract AccessControl is Context,
     using EnumerableSet for EnumerableSet.AddressSet;
     using Address for address;
     
-    using AdminRoleEvents for bytes32;
+    using eventsAccesControl for bytes32;
     
     using LogicConstraints for bool;
     using AddressConstraints for address;
