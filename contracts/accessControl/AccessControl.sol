@@ -90,7 +90,7 @@ abstract contract AccessControl is Context,
     using EnumerableSet for EnumerableSet.AddressSet;
     using Address for address;
     
-    using eventsAccesControl for bytes32;
+    using eventsAccessControl for bytes32;
     
     using LogicConstraints for bool;
     using AddressConstraints for address;
