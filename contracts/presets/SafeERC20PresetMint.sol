@@ -6,7 +6,7 @@ pragma experimental ABIEncoderV2;
 import "https://github.com/vigilance91/solidarity/contracts/Pausable.sol";
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/AccessControl.sol";
 
-import "https://github.com/vigilance91/solidarity/contracts/token/ERC20/SafeERC20Burnable.sol";
+import "https://github.com/vigilance91/solidarity/contracts/token/ERC20/SafeERC20BurnableToken.sol";
 ///
 /// @title Safe ERC20 Preset Mint
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 19/4/2021, All Rights Reserved
