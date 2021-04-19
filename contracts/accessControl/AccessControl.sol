@@ -10,6 +10,8 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contr
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/eventsAccessControl.sol";
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/iAccessControl.sol";
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/mixinAccessControl.sol";
+
+import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
 ///
 /// @title Access Control
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 19/4/2021, All Rights Reserved
