@@ -5,7 +5,7 @@ pragma experimental ABIEncoderV2;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/GSN/Context.sol";
 
-//import "https://github.com/vigilance91/solidarity/contracts/token/MutableSupplyTokenABC.sol";
+import "https://github.com/vigilance91/solidarity/contracts/token/MutableSupplyTokenABC.sol";
 
 import "https://github.com/vigilance91/solidarity/ERC/token/ERC20/iERC20.sol";
 import "https://github.com/vigilance91/solidarity/ERC/token/ERC20/mixinERC20.sol";
