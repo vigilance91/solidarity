@@ -318,6 +318,7 @@ abstract contract AccessControl is Context,
         //onlyDefaultAdminOrRoleAdmin
     {
         _requireHasAdminRole(role, _msgSender());
+        _requireNotHasRole(role,account);
         
         _grantRole(role, account);
     }
@@ -338,7 +339,8 @@ abstract contract AccessControl is Context,
         //address sender = _msgSender();
         //sender.requireNotEqual(account);
         _requireHasAdminRole(role, _msgSender());
-
+        _requireHasRole(role,account);
+        
         _revokeRole(role, account);
     }
     ///
@@ -403,8 +405,6 @@ abstract contract AccessControl is Context,
         address account
     )private
     {
-        _requireNotHasRole(role,account);
-        
         if(_mutableRoles()[role].members.add(account)){
             role.emitRoleGranted(
                 account,
@@ -417,8 +417,6 @@ abstract contract AccessControl is Context,
         address account
     )private
     {
-        _requireHasRole(role,account);
-        
         if(_mutableRoles()[role].members.remove(account)){
             role.emitRoleRevoked(
                 account,
