@@ -23,7 +23,7 @@ abstract contract ERC20Token is EIP801Canary,
     constructor(
         string memory name,
         string memory symbol
-    )internal Canary()
+    )internal EIP801Canary()
         ERC20(name, symbol)
     {
         _registerInterface(type(iERC20).interfaceId);
