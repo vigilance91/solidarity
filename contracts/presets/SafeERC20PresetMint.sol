@@ -54,7 +54,7 @@ contract SafeERC20PresetMint is SafeERC20BurnableToken,
             name,
             symbol
         )
-        Pauseable()
+        Pausable()
     {
         address sender = _msgSender();
         
