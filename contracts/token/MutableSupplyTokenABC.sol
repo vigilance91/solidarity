@@ -10,16 +10,18 @@ import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/Mu
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 3/1/2021, All Rights Reserved
 /// @dev Abstract Base Contract for a token with a dynamic supply
 ///
-abstract contract MutableSupplyTokenABC is MutableTokenSupplyABC
+abstract contract MutableSupplyTokenABC is TokenIdentifierABC,
+    MutableTokenSupplyABC
 {
     constructor(
         string memory name,
         string memory symbol,
         uint256 initialSupply
-    )internal MutableTokenSupplyABC(
-        name,
-        symbol,
-        initialSupply
-    ){
+    )internal
+        TokenIdentifierABC(name,symbol)
+        MutableTokenSupplyABC(
+            initialSupply
+        )
+    {
     }
 }
