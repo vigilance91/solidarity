@@ -108,7 +108,7 @@ abstract contract SafeERC20BurnableToken is SafeERC20Token
         );
         
         A.requireGreaterThanZero(
-            'zero allowance available'
+            //'zero allowance available'
         );
         A.requireGreaterThanOrEqual(amount);
         
