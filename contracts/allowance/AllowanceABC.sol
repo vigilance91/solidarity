@@ -70,7 +70,7 @@ abstract contract AllowanceABC is Context,
         address spender
     )internal
     {
-        mixinAllowance.revokeAllowance(owner, spender);
+        mixinAllowance.revoke(owner, spender);
     }
     ///
     /// @dev See {mixinAllowance.approve}
@@ -113,7 +113,7 @@ abstract contract AllowanceABC is Context,
     )internal virtual returns(
         uint256
     ){
-        return mixinAllowance().increaseAllowance(
+        return mixinAllowance.increaseAllowance(
             owner,
             spender,
             addedValue
@@ -132,7 +132,7 @@ abstract contract AllowanceABC is Context,
     )public virtual returns(
         uint256
     ){
-        return mixinAllowance().decreaseAllowance(
+        return mixinAllowance.decreaseAllowance(
             owner,
             spender,
             subtractedValue
