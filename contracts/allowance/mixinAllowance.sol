@@ -5,7 +5,7 @@ pragma experimental ABIEncoderV2;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/math/SafeMath.sol";
 
-import ""https://github.com/vigilance91/solidarity/EIP/token/allowance/eventsAllowance.sol";"
+import "https://github.com/vigilance91/solidarity/EIP/token/allowance/eventsAllowance.sol";
 
 import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
 import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256Constraints.sol";
@@ -20,8 +20,11 @@ library mixinAllowance
     using eventsAllowance for address;
     //using stringUtilities for string;
     
+    //using EnumerableMap for EnumerableMap.Map;
+    
     struct AllowanceStorage{
         mapping(address=>mapping(address=>uint256)) allowances;
+        //mapping(address=>mapping(address=>EnumerableMap.Map)) nonces;
     }
     
     bytes32 internal constant STORAGE_SLOT = keccak256("VSN.allownace.mixin.storage");
@@ -47,6 +50,12 @@ library mixinAllowance
     ){
         return storageAllowance().allowances;
     }
+    //function nonces(
+    //)internal view returns(
+        //mapping(address=>mapping(address=>EnumerableMap.Map)) storage
+    //){
+        //return storageAllowance().nonces;
+    //}
     function allowancesAt(
         address account
     )internal view returns(
@@ -56,6 +65,15 @@ library mixinAllowance
         
         return allowances()[account];
     }
+    //function noncesAt(
+        //address owner
+    //)internal view returns(
+        //EnumerableMap storage //mapping(address=>bytes32[]) storage
+    //){
+        //owner.requireNotNull();
+        //
+        //return nonces()[owner];
+    //}
     function allowanceFor(
         address owner,
         address spender
@@ -68,15 +86,72 @@ library mixinAllowance
         
         return allowances()[owner][spender];
     }
+    /**
+    function currentNonceFor(
+        address owner,
+        address spender
+    )internal view returns(
+        bytes32
+    ){
+        owner.requireNotNullAndNotEqual(spender);
+        
+        bytes32[] memory N = nonces()[owner][spender];
+        
+        return N[N.length.sub(1)];
+    }
+    function nonceCount(
+        address owner,
+        address spender
+    )internal view returns(
+        uint256
+    ){
+        return noncesAt(owner,spender).length;
+    }
+    function nonceAlreadyUsed(
+        address owner,
+        address spender
+    )internal view returns(
+        bool
+    ){
+        //bytes32[] memory N = nonces()[owner][spender];
+        //
+        //return N[N.length.sub(1)];
+        
+        //bytes32 nonce = owner.hexadecimal().saltAndHash(
+            //spender.hexadecimal().concatenate(
+                //nonceCount(owner, spender).add(1).hexadecimal()
+            //)
+        //);
+        //
+        //return nonce()[owner][spender].contains(nonce) == true;
+    }
+    */
     ///
     ///setters
     ///
+    /**
+    function incrementNonce(
+        address owner,
+        address spender
+    )internal
+    {
+        nonces()[owner][spender].push(
+            owner.hexadecimal().saltAndHash(
+                spender.hexadecimal().concatenate(
+                    nonceCount(owner, spender).add(1).hexadecimal()
+                )
+            )
+        );
+    }
+    */
     function setAllowanceFor(
         address owner,
         address spender,
         uint256 newAllowance
     )internal
     {
+        //requireNonce... 
+        
         //prevent redundant setting of allowance
         allowanceFor(owner,spender).requireNotEqual(
             newAllowance
@@ -84,6 +159,8 @@ library mixinAllowance
         );
         
         allowances()[owner][spender] = newAllowance;
+        
+        //incrementNonce(owner,spender);
     }
     /// @dev spender must have no allowance (an allowance of 0) to approve
     function approve(
