@@ -6,6 +6,7 @@ pragma experimental ABIEncoderV2;
 //import "../TokenIdentifier/iTokenIdentifier.sol";
 ///
 /// @dev Interface for the ERC20 standard
+/// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 3/4/2021, All Rights Reserved
 ///
 interface iERC20
     ////iTokenIdentifier
