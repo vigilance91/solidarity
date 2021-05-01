@@ -86,6 +86,15 @@ abstract contract AllowanceABC is Context,
     ){
         return _approve(_msgSender(), spender, amount);
     }
+    /// @dev convenience wrapper to get the curent available ETH allowance
+    /// approved by this contract for `spender`
+    function thisEthAllowanceFor(
+        address spender
+    )public view virtual returns(
+        uint256
+    ){
+        return mixinAllowance.allowanceFor(address(this),spender);
+    }
     ///
     /// Additional Requirements:
     ///     - `spender` cannot be null
