@@ -189,7 +189,9 @@ library mixinAllowance
         address spender
     )internal
     {
-        allowanceFor(owner,spender).requireGreaterThanZero();
+        uint256 A = allowanceFor(owner,spender);
+        
+        A.requireGreaterThanZero();
         //cannot revoke allowance if none is set
         setAllowanceFor(
             owner,
@@ -199,7 +201,7 @@ library mixinAllowance
         //assert(allowanceFor(owner,spender) == 0);
         owner.emitRevokeAllowance(
             spender,
-            amount
+            A
         );
     }
     //for internal use only, to increase an allowance externally,
