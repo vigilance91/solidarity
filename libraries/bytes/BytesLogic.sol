@@ -8,6 +8,12 @@ pragma solidity >=0.6.4 <0.8.0;
  * however, internal libraries do not need to be deployed, only included with the contracts that use them
 */
 
+//note: this causes an error if bytes is above 127, (beyond human readable ASCII range)
+//function concat(bytes1 lhs, string memory rhs)public pure returns(string memory){
+    //string memory s = string(abi.encode(lhs));
+    //return string(abi.encodePacked(s, rhs));
+//}
+
 /// @title Bytes Logic Library
 /// @author Tyler R. Drury - 4/3/2021, All Rights Reserved
 /// @notice trivial functions for the bytes data type not provided natively by Solidity.
@@ -94,34 +100,34 @@ library BytesLogic
     //function char(
         //bytes lhs
         //uint256 index
-    //)public pure
-        //returns(byte)
-    //{
+    //)internal pure returns(
+        //bool
+    //){
         //require(index < lhs.length,'index out of bounds');
         //return lhs[index];
     //}
     function empty(
         bytes lhs
-    )public pure
-        returns(bool)
-    {
+    )internal pure returns(
+        bool
+    ){
         return lhs == EMPTY
     }
     
     function notEmpty(
         bytes lhs
-    )public pure
-        returns(bool)
-    {
+    )internal pure returns(
+        bool
+    ){
         return lhs != EMPTY
     }
     /**
     function notEmptyAndNotEqual(
         bytes lhs,
         bytes rhs
-    )public pure
-        returns(bool)
-    {
+    )public pure returns(
+        bool
+    ){
         return notEmpty(
             lhs
         ) && notEmpty(
@@ -132,9 +138,9 @@ library BytesLogic
     function notEmptyAndAreEqual(
         bytes lhs,
         bytes rhs
-    )public pure
-        returns(bool)
-    {
+    )public pure returns(
+        bool
+    ){
         return notEmpty(
             lhs
         ) && notEmpty(

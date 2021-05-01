@@ -22,10 +22,20 @@ library frameworkSafeERC20
     using frameworkERC165 for address;
     //using frameworkERC173 for address;
     
+    //string private constant _NAME = ' frameworkSafeERC20: ';
+    
     bytes private constant _ERC20_RECEIVE_SIGNATURE = abi.encodeWithSignature('canReceiveERC20()');
     bytes4 private constant _iERC20_RECEIVER_ID = type(iERC20Receiver).interfaceId;
     bytes4 public constant _ERC20_RECEIVED = iERC20Receiver.onERC20Received.selector;
     
+    function _requireSupportsInterface(
+        address target
+    )private
+    {
+        target.supportsInterface(_iERC20_RECEIVER_ID).requireTrue(
+            'contract does not implement iERC20Receiver'
+        );
+    }
     function canReceiveERC20(
         address target
     )public view returns(
@@ -38,14 +48,12 @@ library frameworkSafeERC20
             return true;
         }
         
-        target.supportsInterface(_iERC20_RECEIVER_ID).requireTrue(
-            'contract does not implement iERC20Receiver'
-        );
+        _requireSupportsInterface(target);
         
         (bool success, bytes memory result) = target.staticcall(
             _ERC20_RECEIVE_SIGNATURE
         );
-        success.requireTrue('safeERC20: staticcall failed');
+        success.requireTrue('staticcall failed');
         
         (ret) = abi.decode(result, (bool));
     }
@@ -63,9 +71,7 @@ library frameworkSafeERC20
             return true;
         }
         
-        recipient.supportsInterface(_iERC20_RECEIVER_ID).requireTrue(
-            'contract does not implement iERC20Receiver'
-        );
+        _requireSupportsInterface(target);
         
         (bool success, bytes memory result) = recipient.call(
             abi.encodeWithSignature(

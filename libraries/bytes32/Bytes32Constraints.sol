@@ -24,7 +24,7 @@ library Bytes32Constraints
     function requireEqual(
         bytes32 lhs,
         bytes32 rhs
-    ) internal pure
+    )public pure
     {
         lhs.equal(rhs).requireTrue(
             //LIB_NAME.concatenate('lhs != rhs');
@@ -33,7 +33,7 @@ library Bytes32Constraints
     function requireNotEqual(
         bytes32 lhs,
         bytes32 rhs
-    ) internal pure
+    )public pure
     {
         lhs.equal(rhs).requireFalse(
             //LIB_NAME.concatenate('lhs == rhs');
@@ -41,7 +41,7 @@ library Bytes32Constraints
     }
     function requireEmpty(
         bytes32 lhs
-    )internal pure
+    )public pure
     {
         lhs.empty().requireTrue(
             //LIB_NAME.concatenate('lhs != 0x0')
@@ -49,7 +49,7 @@ library Bytes32Constraints
     }
     function requireNotEmpty(
         bytes32 lhs
-    )internal pure
+    )public pure
     {
         lhs.empty().requireFalse(
             //LIB_NAME.concatenate('lhs == 0x0')
@@ -59,7 +59,7 @@ library Bytes32Constraints
     function requireNotEmptyAndNotEqual(
         bytes32 lhs,
         bytes32 rhs
-    )internal pure
+    )public pure
     {
         lhs.notEmptyAndNotEqual(rhs).requireTrue(
             //LIB_NAME.concatenate('(lhs == 0x0 || rhs == 0x0) || lhs == rhs');
@@ -69,7 +69,7 @@ library Bytes32Constraints
     function requireNotEmptyAndAreEqual(
         bytes32 lhs,
         bytes32 rhs
-    )internal pure
+    )public pure
     {
         lhs.notEmptyAndAreEqual(rhs).requireTrue(
             //LIB_NAME.concatenate('(lhs == 0x0 || rhs == 0x0) || lhs != rhs');

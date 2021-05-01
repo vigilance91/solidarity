@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 pragma solidity >=0.6.4 <0.8.0;
-
+pragma experimental ABIEncoderV2;
 /**
  * todo create struct or contract for a mapping of addresses to byte32, for user account passwords!
  * libraries with internal functions have to function body injected into all callsites (this increases size and gas cost)
@@ -21,57 +21,70 @@ pragma solidity >=0.6.4 <0.8.0;
 library Bytes32Logic
 {
     //bytes32 public constant EMPTY = bytes32("");
+    //bytes32 public constant EMPTY_HASH = keccak256(EMPTY);
     
     function equal(
         bytes32 lhs,
         bytes32 rhs
-    ) internal pure
-        returns(bool)
-    {
-        return xor(lhs, rhs) == 0;
+    )internal pure returns(
+        bool ret
+    ){
+        //return _xor(lhs, rhs) == 0;
+        assembly{
+            ret := iszero(xor(lhs, rhs))
+        }
     }
     function notEqual(
         bytes32 lhs,
         bytes32 rhs
-    ) internal pure
-        returns(bool)
-    {
-        return xor(lhs, rhs) != 0;
+    )internal pure returns(
+        bool ret
+    ){
+        //return _xor(lhs, rhs) != 0;
+        assembly{
+            ret := not(iszero(xor(lhs, rhs)))
+        }
     }
     //function requireSecretFormat(string memory secret) public pure{
         //require(secret.length >= 8, "secret must be at least 8 characters long");
         //require(secret ..., "invalid secret characters");
     //}
-    function and(
+    function _and(
         bytes32 lhs,
         bytes32 rhs
-    )internal pure
-        returns(bytes32)
-    {
-        return lhs & rhs;
+    )internal pure returns(
+        bytes32 ret
+    ){
+        assembly{
+            ret := and(lhs, rhs)
+        }
     }
-    function or(
+    function _or(
         bytes32 lhs,
         bytes32 rhs
-    )internal pure
-        returns(bytes32)
-    {
-        return lhs | rhs;
+    )internal pure returns(
+        bytes32 ret
+    ){
+        assembly{
+            ret := or(lhs, rhs)
+        }
     }
-    function xor(
+    function _xor(
         bytes32 lhs,
         bytes32 rhs
-    )internal pure
-        returns(bytes32)
-    {
-        return lhs ^ rhs;
+    )internal pure returns(
+        bytes32 ret
+    ){
+        assembly{
+            ret := xor(lhs, rhs)
+        }
     }
     
     function empty(
         bytes32 lhs
-    )public pure
-        returns(bool)
-    {
+    )internal pure returns(
+        bool
+    ){
         return Bytes32Logic.equal(
             lhs,
             bytes32("")
@@ -80,9 +93,9 @@ library Bytes32Logic
     
     function notEmpty(
         bytes32 lhs
-    )public pure
-        returns(bool)
-    {
+    )internal pure returns(
+        bool
+    ){
         return Bytes32Logic.notEqual(
             lhs,
             bytes32("")
@@ -92,26 +105,22 @@ library Bytes32Logic
     function notEmptyAndNotEqual(
         bytes32 lhs,
         bytes32 rhs
-    )public pure
-        returns(bool)
-    {
-        return notEmpty(
-            lhs
-        ) && notEmpty(
-            rhs
-        ) && notEqual(lhs,rhs);
+    )internal pure returns(
+        bool
+    ){
+        return notEmpty(lhs) &&
+            notEmpty(rhs) &&
+            notEqual(lhs,rhs);
     }
     
     function notEmptyAndAreEqual(
         bytes32 lhs,
         bytes32 rhs
-    )public pure
-        returns(bool)
-    {
-        return notEmpty(
-            lhs
-        ) && notEmpty(
-            rhs
-        ) && equal(lhs,rhs);
+    )internal pure returns(
+        bool
+    ){
+        return notEmpty(lhs) &&
+            notEmpty(rhs) && 
+            equal(lhs,rhs);
     }
 }

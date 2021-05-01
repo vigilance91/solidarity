@@ -10,7 +10,7 @@ import "https://github.com/vigilance91/solidarity/libraries/string/StringLogic.s
 /// @title String Contraints Library
 /// @author Tyler R. Drury - 3/1/2021, All Rights Reserved
 /// @dev trivial utilities for constraining the state of the EVM (using require) for
-/// Solidity's string type, reverting on failure.
+/// Solidity's string type, reverting on failure
 library StringConstraints
 {
     using LogicConstraints for bool;

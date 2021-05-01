@@ -19,47 +19,60 @@ library LogicConstraints
     
     function requireTrue(
         bool b
-    ) public pure
+    )internal pure
     {
-        if(!b){
-            require(b, logicCodes.NOT_EQUAL);   //logicCodes.FALSE.concatenate(message));
-        }
+        //assembly{
+            //if(!b){
+                //revert(0,0);
+            //}
+        //}
+        //if(!b){
+        require(b, logicCodes.NOT_EQUAL);   //logicCodes.FALSE.concatenate(message));
+        //}
     }
     function requireFalse(
         bool b
-    ) public pure
+    )internal pure
     {
-        if(b){
-            require(!b, logicCodes.NOT_EQUAL);  //logicCodes.TRUE.concatenate(message));
-        }
+        //assembly{
+            //if(b){
+                //revert(0,0);
+            //}
+        //}
+        //if(b){
+        require(!b, logicCodes.NOT_EQUAL);  //logicCodes.TRUE.concatenate(message));
+        //}
     }
     //overload for error reporting string
     function requireTrue(
         bool b,
         string memory message
-    ) public pure
+    )internal pure
     {
-        if(!b){
-            require(b, message);    //logicCodes.FALSE.concatenate(message));
-        }
+        //if(!b){
+        require(b, message);    //logicCodes.FALSE.concatenate(message));
+        //}
     }
     function requireFalse(
         bool b,
         string memory message
-    ) public pure
+    )internal pure
     {
-        if(b){
-            require(!b, message);   //logicCodes.TRUE.concatenate(message));
-        }
+        //if(b){
+        require(!b, message);   //logicCodes.TRUE.concatenate(message));
+        //}
     }
     function alwaysRevert(
-    )public pure
+    )internal pure
     {
+        //assembly{
+            //revert(0,0);
+        //}
         require(false, generalCodes.INAPPLICABLE);
     }
     function alwaysRevert(
         string memory message
-    )public pure
+    )internal pure
     {
         require(false, message);    //generalCodes.INAPPLICABLE.concatenate(message);
     }

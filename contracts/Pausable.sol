@@ -8,6 +8,16 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contr
 import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
 
 import "https://github.com/vigilance91/solidarity/contracts/eventsPausable.sol";
+
+// interface iPausable
+// {
+    // function pause(
+    // )external;
+    // 
+    // function unpause(
+    // )external;
+// }
+
 ///
 /// @title Pausable Abstract Base Contract
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 20/3/2021

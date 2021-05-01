@@ -45,9 +45,9 @@ library StringLogic
     function equal(
         string memory lhs,
         string memory rhs
-    )public pure
-        returns(bool)
-    {
+    )internal pure returns(
+        bool
+    ){
         //return lhs.hash().equal(
             //rhs.hash()
         //);
@@ -61,9 +61,9 @@ library StringLogic
     function notEqual(
         string memory lhs,
         string memory rhs
-    )public pure
-        returns(bool)
-    {
+    )internal pure returns(
+        bool
+    ){
         //return lhs.hash().notEqual(
             //rhs.hash()
         //);
@@ -75,9 +75,9 @@ library StringLogic
     
     function empty(
         string memory lhs
-    )public pure
-        returns(bool)
-    {
+    )internal pure returns(
+        bool
+    ){
         //return lhs.hash().equal(EMPTY_HASH);
         return Bytes32Logic.equal(
             keccak256(bytes(lhs)),
@@ -87,9 +87,9 @@ library StringLogic
     
     function notEmpty(
         string memory lhs
-    )public pure
-        returns(bool)
-    {
+    )internal pure returns(
+        bool
+    ){
         //return lhs.hash().notEqual(EMPTY_HASH);
         
         return Bytes32Logic.notEqual(
@@ -101,9 +101,9 @@ library StringLogic
     function notEmptyAndNotEqual(
         string memory lhs,
         string memory rhs
-    )public pure
-        //_notEmpty(lhs,rhs)
-        returns(bool)
+    )internal pure returns(
+        bool
+    ) //_notEmpty(lhs,rhs)
     {
         return notEmpty(
             lhs
@@ -115,9 +115,9 @@ library StringLogic
     function notEmptyAndAreEqual(
         string memory lhs,
         string memory rhs
-    )public pure
-        //_notEmpty(lhs,rhs)
-        returns(bool)
+    )internal pure returns(
+        bool
+    ) //_notEmpty(lhs,rhs)
     {
         return notEmpty(
             lhs
@@ -130,9 +130,9 @@ library StringLogic
     //function xor(
         //string memory lhs,
         //string memory rhs
-    //)public
-        //_notEmpty(lhs,rhs)
-        //returns(string memory)
+    //)internal returns(
+        string memory
+    //) _notEmpty(lhs,rhs)
     //{
         //bytes lb = bytes(lhs);
         //bytes rb = bytes(rhs);
@@ -144,9 +144,9 @@ library StringLogic
     //function and(
         //string memory lhs,
         //string memory rhs
-    //)public
-        //_notEmpty(lhs,rhs)
-        //returns(string memory)
+    //)internal returns(
+        string memory
+    //) _notEmpty(lhs,rhs)
     //{
         //bytes lb = bytes(lhs);
         //bytes rb = bytes(rhs);
@@ -158,10 +158,9 @@ library StringLogic
     //function or(
         //string memory lhs,
         //string memory rhs
-    //)public
-        //_notEmpty(lhs,rhs)
-        //returns(string memory)
-    {
+    //)internal returns(string memory
+    //) _notEmpty(lhs,rhs)
+    //{
         //bytes lb = bytes(lhs);
         //bytes rb = bytes(rhs);
         
@@ -171,7 +170,7 @@ library StringLogic
     //}
     //function not(
         //string memory self
-    //)public
+    //)internal
         //returns(string memory)
     {
         notEmpty(self);

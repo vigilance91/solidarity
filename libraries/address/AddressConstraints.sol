@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 pragma solidity >=0.6.4 <0.8.0;
+pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
 import "https://github.com/vigilance91/solidarity/libraries/address/AddressLogic.sol";
@@ -23,7 +24,7 @@ library AddressConstraints
     function requireEqual(
         address lhs,
         address rhs
-    ) public pure
+    )public pure
     {
         bool b = lhs.equal(rhs);
         
@@ -36,7 +37,7 @@ library AddressConstraints
     function requireNotEqual(
         address lhs,
         address rhs
-    ) public pure
+    )public pure
     {
         bool b = lhs.equal(rhs);
         
@@ -49,7 +50,7 @@ library AddressConstraints
     
     function requireIsNull(
         address account
-    ) public pure
+    )public pure
     {
         bool b = account.isNull();
         
@@ -61,7 +62,7 @@ library AddressConstraints
     }
     function requireNotNull(
         address account
-    ) public pure
+    )public pure
     {
         bool b = account.isNotNull();
         
@@ -112,7 +113,7 @@ library AddressConstraints
     function requireNotEqualAndNotNull(
         address lhs,
         address rhs
-    ) public pure
+    )public pure
         //_isNotNull(lhs,rhs)
     {
         requireNotNull(lhs);
@@ -121,7 +122,7 @@ library AddressConstraints
     }
     function requireNotMsgSender(
         address rhs
-    ) public view
+    )public view
         //_isNotNull(rhs)
     {
         requireNotEqualAndNotNull(msg.sender, rhs);
@@ -130,7 +131,7 @@ library AddressConstraints
     function requireNotThisAndNotNull(
         address self,
         address rhs
-    ) public pure
+    )public pure
         //_isNotNull(self,rhs)
     {
         requireNotNull(self);
@@ -141,7 +142,7 @@ library AddressConstraints
         address self,
         address lhs,
         address rhs
-    ) public pure
+    )public pure
         //_isNotNull(lhs, rhs)
     {
         requireNotThisAndNotNull(self,lhs);

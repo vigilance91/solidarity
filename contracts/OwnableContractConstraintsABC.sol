@@ -15,10 +15,30 @@ import "https://github.com/vigilance91/solidarity/contracts/ContractConstraints.
 abstract contract OwnableContractConstraintsABC is ERC173Ownable,
     ContractConstraintsABC
 {
+    using Address for address;
+    
     constructor(
     )internal ERC173Ownable(),
         ContractConstraintsABC()
     {
+    }
+    function _requireOwnerIsContract(
+    )internal view
+    {
+        _requireOwnerNotNull();
+        
+        owner().isContract().requireTrue(
+            'owner must be a contract'
+        );
+    }
+    function _requireOwnerNotContract(
+    )internal view
+    {
+        //_requireOwnerNotNull();
+        
+        owner().isContract().requireFalse(
+            'owner can not be a contract'
+        );
     }
     //revert if owner is NOT null
     function _requireOwnerNull(

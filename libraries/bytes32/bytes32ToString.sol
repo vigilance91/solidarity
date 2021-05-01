@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 pragma solidity >=0.6.4 <0.8.0;
+pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256ToString.sol";
 //import "./abiEncode.sol";
@@ -19,26 +20,26 @@ library bytes32ToString
     /// @return octal formatted string [0-7]
     function octal(
         bytes32 value
-    ) public pure
-        returns(string memory)
-    {
+    )public pure returns(
+        string memory
+    ){
         return uint256(value).octal();
     }
     /// @return decimal formatted string [0-9] (without leading '0x')
     function decimal(
         bytes32 value
-    ) public pure
-        returns(string memory)
-    {
+    )public pure returns(
+        string memory
+    ){
         return uint256(value).decimal();
         
     }
     /// @return hex string [0-F] (without leading '0x')
     function hexadecimal(
         bytes32 value
-    ) public pure
-        returns(string memory)
-    {
+    )public pure returns(
+        string memory
+    ){
         return uint256(value).hexadecimal();
     }
     /**
@@ -58,9 +59,9 @@ library bytes32ToString
     function concatenateAsDecimal(
         bytes32 lhs,
         bytes32 rhs
-    ) public pure
-        returns(string memory)
-    {
+    )public pure returns(
+        string memory
+    ){
         return uint256(lhs).decimal().concatenate(
             uint256(rhs).decimal()
         );
@@ -70,9 +71,9 @@ library bytes32ToString
     function concatenateAsHex(
         bytes32 lhs,
         bytes32 rhs
-    ) public pure
-        returns(string memory)
-    {
+    )public pure returns(
+        string memory
+    ){
         return uint256(lhs).hexadecimal().concatenate(
             uint256(rhs).hexadecimal()
         );
@@ -81,20 +82,33 @@ library bytes32ToString
     function saltAndHash(
         bytes32 lhs,
         bytes32 rhs
-    ) public pure
-        returns(bytes32)
-    {
+    )public pure returns(
+        bytes32
+    ){
         return keccak256(abi.encodePacked(
             lhs,
             rhs
         ));
     }
+    function saltAsOctalAndHash(
+        bytes32 lhs,
+        bytes32 rhs
+    )public pure returns(
+        bytes32
+    ){
+        return keccak256(
+            abi.encodePacked(
+                uint256(lhs).octal(),
+                uint256(rhs).octal()
+            )
+        );
+    }
     function saltAsDecimalAndHash(
         bytes32 lhs,
         bytes32 rhs
-    ) public pure
-        returns(bytes32)
-    {
+    )public pure returns(
+        bytes32
+    ){
         return keccak256(
             abi.encodePacked(
                 uint256(lhs).decimal(),
@@ -105,9 +119,9 @@ library bytes32ToString
     function saltAsHexAndHash(
         bytes32 lhs,
         bytes32 rhs
-    ) public pure
-        returns(bytes32)
-    {
+    )public pure returns(
+        bytes32
+    ){
         return keccak256(
             abi.encodePacked(
                 uint256(lhs).hexadecimal(),

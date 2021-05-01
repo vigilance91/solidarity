@@ -16,7 +16,7 @@ abstract contract ContractConstraintsABC
     using AddressConstraints for address;
     //using SafeMath for uint256;
     //
-    address _this;
+    address internal _this;
     //address payable _thisPayable;
     
     constructor(
@@ -39,10 +39,10 @@ abstract contract ContractConstraintsABC
         LogicContraints.alwaysRevert("fallback() deleted");
     }
     */
-    //function thisPayable(
-    )public returns(
-        address payable
-    ){
+    //function _thisPayable(
+    //)internal returns(
+        //address payable
+    //){
         //return _thisPayable;
         //return payable(_this);
     //}
@@ -80,50 +80,4 @@ abstract contract ContractConstraintsABC
     {
         _this.requireAddressessNotThisAndNotNull(lhs,rhs);
     }
-}
-
-abstract contract OwnableContractConstraintsABC is ERC173Ownable,
-    ContractConstraintsABC
-{
-    constructor(
-    )internal ERC173Ownable(),
-        ContractConstraintsABC()
-    {
-    }
-    //revert if owner is NOT null
-    function _requireOwnerNull(
-    )internal view
-    {
-        _requireNull(owner());
-    }
-    //revert if Owner is null
-    function _requireOwnerNotNull(
-    )internal view
-    {
-        _requireIsNotNull(owner());
-    }
-    //revert on self ownership
-    function _requireOwnerNotThis(
-    )internal view
-    {
-        _requireNotThis(owner());
-    }
-    //revert if owner is self or null
-    function _requireOwnerNotThisAndNotNull(
-    )internal view
-    {
-        _requireNotThisAndNotNull(owner());
-    }
-    //enforce self ownership of contract
-    /**
-    function _requireOwnerIsThisAndNotNull(
-    )internal view
-    {
-        address O = owner();
-        
-        O.requireIsNotNull();
-        
-        _this.requireEqual(O);
-    }
-    */
 }

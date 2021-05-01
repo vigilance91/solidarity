@@ -46,6 +46,16 @@ abstract contract SafeERC20Token is ERC20Token,
         //_registerInterface(type(iERC20Reciever).interfaceId);
         //_registerInterface(type(iSafeERC20Token).interfaceId);
     }
+    //this contract transfers its tokens to some address
+    //thisTransfer(){}
+    //this contract transfers its allowance of tokens to some address
+    //thisTransferFrom(){}
+    //
+    //this contract transfers tokens to some address to a recipient
+    //externalTransfer(){}
+    //this contract transfers its allowance of some other token to a recipient
+    //externalTransferFrom(){}
+    //
     //can be used, for example, if USDT is transfered to this contract address,
     //this contract can then accept the Tether contract address and perform a safe transfer from the external token address,
     //to some other address

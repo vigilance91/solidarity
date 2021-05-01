@@ -17,80 +17,76 @@ which are commonly used in developing smart contracts or decentralized applicati
 These include:
 
 
-### /interfaces/
+### [solidarity/libraries/][7]
 
-External interfaces for use by other contracts.
-
-* iSecrets - generaic interface for arbitrary secrets
-* iOwnableSecrets - generaic interface for secrets, which can be owned by an external address
-* iCompound - interface for a contract which support compounding of asset values
-* 
-
-
-### /libraries/
-
-Convenience libraries for use with various data-types, structs and/or contracts
-to extend their functionality.
+Convenience libraries for use with built-in data types to extend their functionality,
+usable in almost every project.
 
 This directory generally contains code for:
 
-* Logic - convenience library for logical operations for operators such as ==, !=, >, <, >=, <=
-* Math - arithmetic operation library for overloads, +, -, *, \/, %, etc, of various data types with appropriate sanity checks, usually based on Logic
-* Constraints - constrain the state of the EVM based on various conditions, such as those defined in Logic or Math libraries
+* Logic - convenience libraries for logical operations for operators such as ==, !=, >, <, >=, <=
+* Math - arithmetic and/or bitwise operation libraries for overloads, +, -, *, \/, %, etc, of various data types with appropriate sanity checks, usually based on Logic
+* Constraints - libraries which constrains the state of the EVM based on various conditions, such as those defined in Logic or Math libraries
 * utils - utility functions which do not fit into any of the previous categories
 
 
-### /contracts/
+### [solidarity/EIP/][8]
 
-Common smart contracts (usually using libraries and implementing interfaces as appropriate),
-for such as:
+Ethereum Improvement Proposals, contracts for EIPs currently in the final or draft phase,
+under discussion and on track for adoption as a standard ERC including:
 
-* secrets - secrets known only to the address owner, which can be used for identity verification or for other applications
-* Finance - performaing financial transactions, such as deposit, withdraw and transaction between addresses
-* mint - 
+* EIP-1066 Status Codes
+* EIP-801 Canaray
+* EIP-2135 Consumable
+* EIP-2535 Diamond
+* etc
+
+### [solidarity/ERC/][9]
+
+Standardized ERC (Ethereum Request for Comments) contracts, including:
+
+* ERC-165 Interface Support
+* ERC-173 Ownership
+* ERC-1820 Interface Registry contract
+* ERC-926 Address Metadata Registry
+* ERC-20 Fungible Token Standard
+* ERC-721 Non-Fungible Token Standard
+* ERC-1155 Fungible/Non-Fungible Token Standard
+
+### [solidarity/contracts/][10]
+
+Solidarity specific implementations of Common Abstract Base Contracts (ABCs) and fully realized smart contracts,
+which commonly use libraries from */libraries* and implement or extend appropriate interfaces,
+for easy use during development, such as:
+
+* token - implementations for ERC Standard (and some non-standard extensions) Token contracts, including Fixed or Dynamic SUpply ERC20 tokens, ERC-721 Tokens and ERC-11155 tokens
+* accessControl - implementations for various permissions based contracts, including assignable roles
+* finance - performaing financial transactions, such as deposit, withdraw and transaction between addresses
+* presets - Ready to use standardized Token Mints
 * democracy - decentralized democratization
 * proxy - proxies of other contracts
+* etc
 
 
 ### /contracts/finance/
 
-Common contracts related to finance
+Common contracts related to financial operations
 
 * SafePayable.sol - trivial contract for safely performing payment operations
 * Compound.sol - library for calculating compound interest
 
 
-### /contracts/secrets/
+### /contracts/presets/
 
-Contracts for storing arbitrary secure secrets on the blockchain
-
-* HashedSecretMap - a library for common operations performed on mapping of bytes32 hashes to Secrets
-* AddressSecretMap - a library for common operations performed on mapping of addresses to Secrets, for holding private account information
-* OwnableSecrets - a base contract which contains a HashedSecretMap for holding secrets for the owner and/or administrators of a contract, with and AddressSecretMap for holding registered user secrets
-* ExternalOwnableSecrets - fully realized external interface for OwnableSecretsMap contract, can be used directly in projects source or proxied (using OwnableSecretsProxy) from:
-    * 0x0000 on the mainnet
-    * 0x0000 on the Rinkeby testnet
-    * 0x000 on the Ropsten test network or
-    * 0x0000 on the Kovan test network
+Fully realized contracts derived from 's Token Mint types (including ERC20, ERC721, ERC777 and ERC1155), which also inherit from the Gas Station Network (reducing overall gas expenditures of transaction execution)
 
 
-### /contracts/mints/
+### /contracts/token/
 
-Fully realized contracts derived from [OpenZeppelin][4]'s Token Mint types (including ERC20, ERC721, ERC777 and ERC1155), which also inherit from the Gas Station Network (reducing overall gas expenditures of transaction execution)
-
-
-### /contracts/finance/payment/
-
-Stand alone contracts deriving from [OpenZeppelin][4]'s payment classes for fully realized uni-directional, bi-directional and other payment channel types,
+ERC compliant Token StandardsStand alone contracts deriving from [OpenZeppelin][4]'s payment classes for fully realized uni-directional,
+bi-directional and other payment channel types,
 which support escrow behaviour and other similar functionality,
 directed and facilitating the exchange of value or assets between a producer and consumer(s)
-
-
-### /contracts/finance/auction/
-
-Extending payment and secrets contracts for fully realized, secure Auctions and Auction Houses,
-where users can freely exchange assets using various auction style contracts,
-without the need for an external 3rd-party exchange, such as binance or coinbase
 
 
 ### /contracts/democracy/
@@ -111,12 +107,11 @@ these are specialized contracts for proxying other [Solidarity][1]™ contracts,
 such as:
 
 * ICO/CrowdFunding contracts
-* Secrets
-* Token Mints
+* Tokens and Mints
 
 as well as other common contracts, to be used in composition with eachother,
 to form other more robust smart constracts, with minimal gas consumption
-and with the goal to allow dynamically upgradeable contracts while also reduce contract size overhead,
+and with the goal to allow dynamically upgradeable contracts while also further reducing overall contract size overhead,
 allowing for larger, more complex contracts.
 
 
@@ -177,14 +172,14 @@ Each project is unique, so make sure to review the README.md and LICENSE.md of e
 to ensure your system and the project features meet the desired requirements.
 
 This project's only dependancy is [OpenZeppelin][4] and is imported externally
-from the project's Github repository, available [here][5].
+from the project's Github repository, available [here][5], for easy testing using Remix.
 
 
 ----------------------------------------------------------------
 
 ## Getting the Official Project
 
-The most recent, stable release of this project is available via [NPM][] or,
+The most recent, stable release of this project is available for download via [NPM][] or,
 developers wishing to contribute may access the [GitHub repo][1].
 
 We also have a [gitcoin tribe][6] for devlopers who want to keep upto date
@@ -195,7 +190,7 @@ and participate in the open-source community.
 
 ## License
 
-Solidarity™ is released under the Apache 2.0 License.
+[Solidarity][1]™ is released under the Apache-2.0 License.
 
 See [LICENSE](https://github.com/vigilance91/solidarity/LICENSE.md) file for more details.
 
@@ -215,5 +210,9 @@ Authors and contributors are listed in [AUTHORS](https://github.com/vigilance91/
 [4]: https://openzeppelin.com
 [5]: https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts
 [6]: https://gitcoin.com
-[7]: https://
+[7]: https://github.com/vigilance91/solidarity/libraries
+[8]: https://github.com/vigilance91/solidarity/EIP
+[9]: https://github.com/vigilance91/solidarity/ERC
+[10]: https://github.com/vigilance91/solidarity/contracts
+
 

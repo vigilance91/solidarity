@@ -20,7 +20,7 @@ library blockNumberLogic
     /// @return {uint} total number of blocks, in the past, since the current block
     function blockNumberPastDelta(
         uint rhs
-    )public pure returns(
+    )internal pure returns(
         bool
     ){
         //block.number.lessThan(rhs);
@@ -29,7 +29,7 @@ library blockNumberLogic
     /// @return {uint} total number of blocks, in the future, from the current block
     function blockNumberFutureDelta(
         uint lhs
-    )public pure returns(
+    )internal pure returns(
         bool
     ){
         //lhs.requireGreatThan(block.number);
@@ -38,7 +38,7 @@ library blockNumberLogic
     /// @return {bool} (>) operator
     function blockNumberGreaterThan(
         uint rhs
-    )public pure returns(
+    )internal pure returns(
         bool
     ){
         return block.number.greaterThan(rhs);
@@ -46,7 +46,7 @@ library blockNumberLogic
     /// @return {bool} (>=) operator
     function blockNumberGreaterThanOrEqual(
         uint rhs
-    )public pure returns(
+    )internal pure returns(
         bool
     ){
         return block.number.greaterThanOrEqual(rhs);
@@ -54,7 +54,7 @@ library blockNumberLogic
     /// @return {bool} (<) operator
     function blockNumberLessThan(
         uint rhs
-    )public pure returns(
+    )internal pure returns(
         bool
     ){
         return block.number.lessThan(rhs);
@@ -62,7 +62,7 @@ library blockNumberLogic
     /// @return {bool} (<=) operator
     function blockNumberLessThanOrEqual(
         uint rhs
-    )public pure returns(
+    )internal pure returns(
         bool
     ){
         return block.number.lessThanOrEqual(rhs);
@@ -71,14 +71,14 @@ library blockNumberLogic
     /// intentionally omitted, operations not useful or trivial axioms
     ///
     //function blockNumberGreaterThanZero(
-    //) public pure returns(
+    //)internal pure returns(
         //bool
     //){
         //return block.number.greaterThanZero();
     //}
     //function greaterThanMin(
         //uint lhs
-    //) public pure returns(
+    //)internal pure returns(
         //bool
     //){
         //return block.number.requireLessThan(
@@ -87,7 +87,7 @@ library blockNumberLogic
     //}
     //function lessThanMax(
         //uint lhs
-    //) public pure returns(
+    //)internal pure returns(
         //bool
     //){
         //return block.number.requireLessThan(

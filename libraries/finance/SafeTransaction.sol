@@ -13,6 +13,7 @@ import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256Cons
 library SafeTransaction
 {
     using SafeMath for uint256;
+    //using uint256SafeMath for uint256;
     using uint256Constraints for uint256;
     
     using LogicConstraints for bool;
@@ -23,40 +24,42 @@ library SafeTransaction
     //{
         //value.requireGreaterThanZero();
     //}
+    
+    //modifier _requireNonzero(
+        //uint256 amount
+    //){
+        //amount.requireGreaterThanZero();
+    //}
     /// @dev inert, returns the resulting balance of a withdraw of arg amount from arg from
     function withdraw(
         uint256 accountBalance,
         uint256 amount
-    ) public pure
-        //_requireNonzero(amount)
-        returns(uint256 res)
+    )public pure returns(
+        uint256 res
+    ) //_requireNonzero(amount)
     {
         amount.requireGreaterThanZero();
         
         accountBalance.requireGreaterThanZero();
         //require(accountBalance >= amount,"insufficient funds");
-        accountBalance.requireGreaterThanOrEqual(amount);
+        //accountBalance.requireGreaterThanOrEqual(amount);
         
         res = accountBalance.sub(amount);
-        
+        //new balance must be less than previous
         res.requireLessThan(accountBalance);
-        //require(res < accountBalance, "new balance must be less than previous");
-        
-        //autmatically returns res
-        //return res;
     }
     /// @dev inert, return the resulting balance after a despoit of arg amount is made to arg to balance
     function deposit(
         uint256 accountBalance,
         uint256 amount
-    ) public pure
-        //_requireNonzero(amount)
-        returns(uint256 res)
+    )public pure returns(
+        uint256 res
+    ) //_requireNonzero(amount)
     {
         amount.requireGreaterThanZero();
         
         res = accountBalance.add(amount);
-        //require(res > accountBalance,"new balance must be greater than previous balance");
+        //new balance must be greater than previous balance
         res.requireGreaterThan(accountBalance);
         
         //automatically returns res;
@@ -67,9 +70,9 @@ library SafeTransaction
         uint256 fromBalance,
         uint256 toBalance,
         uint256 amount
-    ) public pure
-        returns(bool)
-    {
+    )public pure returns(
+        bool
+    ){
         withdraw(fromBalance, amount);
         deposit(toBalance, amount);
         return true;
@@ -83,7 +86,7 @@ library SafeTransaction
         uint256 fromBalance,
         uint256 toBalance,
         uint256 amount
-    ) public pure
+    )public pure
     {
         transact(
             fromBalance,
@@ -96,12 +99,12 @@ library SafeTransaction
     /**
     /// @dev remove amount from all entries in array,
     /// such as when poker players all contribute a blind to a pot
-    function withdrawArray(
+    function parallelWithdraw(
         uint256[] memory balances,
         uint256 amount
-    )internal pure
-        returns(bool)
-    {
+    )internal pure returns(
+        bool
+    ){
         withdraw(fromBalance, amount);
         deposit(toBalance, amount);
         
@@ -109,12 +112,12 @@ library SafeTransaction
     }
     /// @dev deposit an amount into all entries in array,
     /// such as when paying out equal proportions of some value,
-    function depositArray(
+    function parallelDeposit(
         uint256[] memory balances,
         uint256 amount
-    )internal pure
-        returns(bool)
-    {
+    )internal pure returns(
+        bool
+    ){
         /// for(){
             deposit(toBalance, amount);
         /// }
@@ -126,9 +129,10 @@ library SafeTransaction
         uint256 balance0,
         uint256 balance1,
         uint256 amount
-    ) public pure
-        returns(uint256 newBalance0, uint256 newBalance1)
-    {
+    )public pure returns(
+        uint256 newBalance0,
+        uint256 newBalance1
+    ){
         return (
             withdraw(balance0, amount),
             withdraw(balance1, amount)
@@ -139,9 +143,10 @@ library SafeTransaction
         uint256 balance0,
         uint256 balance1,
         uint256 amount
-    ) public pure
-        returns(uint256 newBalance0, uint256 newBalance1)
-    {
+    )public pure returns(
+        uint256 newBalance0,
+        uint256 newBalance1
+    ){
         return (
             deposit(balance0, amount),
             deposit(balance1, amount)
@@ -152,9 +157,10 @@ library SafeTransaction
         uint256 balance0,
         uint256 balance1,
         uint256 amount
-    ) public pure
-        returns(uint256 newBalance0, uint256 newBalance1)
-    {
+    )public pure returns(
+        uint256 newBalance0,
+        uint256 newBalance1
+    ){
         return (
             transact(balances.payer0, balance.recipient0, amount),
             transact(balances.payer1, balances.recipient1, amount)
@@ -164,9 +170,10 @@ library SafeTransaction
         uint256 balance0,
         uint256 balance1,
         uint256 amount
-    ) public pure
-        returns(uint256 newBalance0, uint256 newBalance1)
-    {
+    )public pure returns(
+        uint256 newBalance0,
+        uint256 newBalance1
+    ){
         require(
             transact(balances.payer0, balance.recipient0, amount) &&
             transact(balances.payer1, balances.recipient1, amount)

@@ -13,6 +13,7 @@ import "https://github.com/vigilance91/solidarity/utils/uint256Constraints.sol";
 library nowConstraints
 {
     //now is same as block.timestamp
+    //using LogicConstraints for bool;
     using uint256Constraints for uint;
     
     //require now greater than (>) `rhs`
