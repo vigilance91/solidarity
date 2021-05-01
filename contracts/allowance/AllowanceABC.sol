@@ -10,7 +10,15 @@ import "https://github.com/vigilance91/solidarity/contracts/allowance/mixinAllow
 ///
 /// @title Allowance Abstract Base Contract
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 1/5/2021, All Rights Reserved
-/// @dev Allowance interface implementation
+/// @dev Allowance interface implementation,
+///
+/// Note:
+///     this implementation is agnostic in regards to implementing transferFrom,
+///     and is the responsibility of the deriving contract to implement other such allowance
+///     related methods themselves, making this ABC versitile and usable for repressenting
+///     not just an allowance of tokens but any value repressented by a uint256 (such as ETH),
+///     and could be used to extend virtually any contract with the capacity for allowances of an arbitrary nature
+///     allowinf for much more rich composition
 ///
 abstract contract AllowanceABC is Context,
     iAllowance

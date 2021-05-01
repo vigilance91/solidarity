@@ -50,7 +50,7 @@ interface iAllowance
     )external returns(
         bool
     );
-    function revoke(
+    function revokeAllowance(
         address spender
     )external;
 }
