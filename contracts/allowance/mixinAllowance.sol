@@ -19,6 +19,7 @@ library mixinAllowance
     using SafeMath for uint256;
     using eventsAllowance for address;
     //using stringUtilities for string;
+    using AddressConstraints for address;
     
     //using EnumerableMap for EnumerableMap.Map;
     
