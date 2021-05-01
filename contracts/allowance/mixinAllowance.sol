@@ -81,7 +81,7 @@ library mixinAllowance
     )internal view returns(
         uint256
     ){
-        owner.requireNotNullAndNotEqual(
+        owner.requireNotEqualAndNotNull(
             spender
         );
         
@@ -94,7 +94,7 @@ library mixinAllowance
     )internal view returns(
         bytes32
     ){
-        owner.requireNotNullAndNotEqual(spender);
+        owner.requireNotEqualAndNotNull(spender);
         
         bytes32[] memory N = nonces()[owner][spender];
         
