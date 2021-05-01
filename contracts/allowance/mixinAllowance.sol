@@ -5,7 +5,7 @@ pragma experimental ABIEncoderV2;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/math/SafeMath.sol";
 
-import "https://github.com/vigilance91/solidarity/EIP/token/allowance/eventsAllowance.sol";
+import "https://github.com/vigilance91/solidarity/contracts/allowance/eventsAllowance.sol";
 
 import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
 import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256Constraints.sol";
