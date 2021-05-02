@@ -226,6 +226,8 @@ contract ERC20 is Context,
     )public virtual override returns(
         bool
     ){
+        address msgSender = _msgSender();
+        
         uint256 A = allowance(
             sender,
             msgSender
@@ -239,8 +241,6 @@ contract ERC20 is Context,
             recipient,
             amount
         );
-        
-        address msgSender = _msgSender();
         
         _approve(
             sender,
@@ -383,6 +383,7 @@ contract ERC20 is Context,
             amount
         );
 
+        //_setBalanceOf(
         mixinERC20.setBalanceOf(
             sender,
             balanceOf(sender).sub(
@@ -401,6 +402,36 @@ contract ERC20 is Context,
         sender.emitTransfer(
             recipient,
             amount
+        );
+    }
+    function _setBalanceOf(
+        address account,
+        uint256 amount
+    )internal
+    {
+        mixinERC20.setBalanceOf(
+            account,
+            amount
+        );
+    }
+    function _increaseBalanceOf(
+        address account,
+        uint256 amountBy
+    )internal
+    {
+        _setBalanceOf(
+            account,
+            balanceOf(account).add(amount)
+        );
+    }
+    function _decreaseBalanceOf(
+        address account,
+        uint256 amountBy
+    )internal
+    {
+        _setBalanceOf(
+            account,
+            balanceOf(account).sub(amount)
         );
     }
     /// 

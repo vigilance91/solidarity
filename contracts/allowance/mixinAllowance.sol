@@ -25,6 +25,7 @@ library mixinAllowance
     //using EnumerableMap for EnumerableMap.Map;
     
     struct AllowanceStorage{
+        uint256 totalAllowanceAvailable;
         mapping(address=>mapping(address=>uint256)) allowances;
         //mapping(address=>mapping(address=>EnumerableMap.Map)) nonces;
     }
@@ -43,9 +44,21 @@ library mixinAllowance
             ret_slot := position
         }
     }
+    function initialize(
+    )internal returns(
+        AllowanceStorage storage ret
+    ){
+        ret = storageAllowance();
+        ret.totalAllowanceAvailable = 0;
+    }
     ///
     ///getters
     ///
+    function totalAllowanceAvailable(
+    )internal view
+    {
+        return storageAllowance().totalAllowanceAvailable;
+    }
     function allowances(
     )internal view returns(
         mapping(address=>mapping(address=>uint256)) storage
@@ -131,6 +144,31 @@ library mixinAllowance
     ///
     ///setters
     ///
+    /// note this is just a counter for bookkeeping and does not do anything or hold any value in and of itself
+    function increaseTotalAllowanceAvailable(
+        uint256 amountBy
+    )internal
+    {
+        amountBy.requireGreaterThanZero();
+        
+        AllowanceStorage storage s = storageAllowance();
+        
+        s.totalAllowanceAvailable = s.totalAllowanceAvailable.add(
+            amountBy
+        );
+    }
+    function decreaseTotalAllowanceAvailable(
+        uint256 amountBy
+    )internal
+    {
+        amountBy.requireGreaterThanZero();
+        
+        AllowanceStorage storage s = storageAllowance();
+        
+        s.totalAllowanceAvailable = s.totalAllowanceAvailable.sub(
+            amountBy
+        );
+    }
     /**
     function incrementNonce(
         address owner,
@@ -146,11 +184,11 @@ library mixinAllowance
         );
     }
     */
-    function setAllowanceFor(
+    function _setAllowanceFor(
         address owner,
         address spender,
         uint256 newAllowance
-    )internal
+    )private
     {
         //requireNonce... 
         
@@ -161,7 +199,6 @@ library mixinAllowance
         );
         
         allowances()[owner][spender] = newAllowance;
-        
         //incrementNonce(owner,spender);
     }
     /// @dev spender must have no allowance (an allowance of 0) to approve
@@ -174,11 +211,12 @@ library mixinAllowance
         //cannot approve an allowance if one is already set
         allowanceFor(owner,spender).requireEqual(0);
         
-        setAllowanceFor(
+        _setAllowanceFor(
             owner,
             spender,
             amount
         );
+        increaseTotalAllowanceAvailable(amount);
         //assert(allowanceFor(owner,spender) == amount);
         owner.emitApproveAllowance(
             spender,
@@ -189,22 +227,25 @@ library mixinAllowance
     function revoke(
         address owner,
         address spender
-    )internal
-    {
+    )internal returns(
+        uint256
+    ){
         uint256 A = allowanceFor(owner,spender);
         
         A.requireGreaterThanZero();
         //cannot revoke allowance if none is set
-        setAllowanceFor(
+        _setAllowanceFor(
             owner,
             spender,
             0
         );
+        decreaseTotalAllowanceAvailable(A);
         //assert(allowanceFor(owner,spender) == 0);
         owner.emitRevokeAllowance(
             spender,
             A
         );
+        return A;
     }
     //for internal use only, to increase an allowance externally,
     //it is recommended to first revoke the previous allowance
@@ -227,11 +268,13 @@ library mixinAllowance
             amountBy
         );
         
-        setAllowanceFor(
+        _setAllowanceFor(
             owner,
             spender,
             newAllowance
         );
+        
+        increaseTotalAllowanceAvailable(amountBy);
         //assert(NA > PA);
     }
     //for internal use only, to decrease an allowance externally,
@@ -255,11 +298,13 @@ library mixinAllowance
             amountBy
         );
         
-        setAllowanceFor(
+        _setAllowanceFor(
             owner,
             spender,
             newAllowance
         );
+        
+        decreaseTotalAllowanceAvailable(amountBy);
         //assert(NA < PA);
     }
 }

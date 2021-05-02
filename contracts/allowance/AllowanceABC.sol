@@ -33,6 +33,7 @@ abstract contract AllowanceABC is Context,
     constructor(
     )internal Context()
     {
+        mixinAllowance.initialize();
     }
     ///
     /// @dev Get the current allownace `owner` has granted `spender`,
@@ -51,11 +52,22 @@ abstract contract AllowanceABC is Context,
     ){
         return mixinAllowance.allowanceFor(owner,spender);
     }
+    /// @dev get allowance of spender which has been previously approved by msg.sender
+    function allowanceFor(
+        address spender
+    )external view virtual override returns(
+        uint256
+    ){
+        return mixinAllowance.allowanceFor(
+            _msgSender(),
+            spender
+        );
+    }
     function _approve(
         address owner,
         address spender,
         uint256 amount
-    )internal returns(
+    )internal virtual returns(
         bool
     ){
         mixinAllowance.approve(
@@ -63,28 +75,45 @@ abstract contract AllowanceABC is Context,
             spender,
             amount
         );
+        //after storing amount in allowance, must transfer value to self,
+        //so that this contract can send the funds on spender requests
+        (bool success, ) = payable(address(this)).call{value:amount}('');
+        
+        success.requireTrue('_approve failed');
+        
         return true;
     }
+    /// @return revokedAllowance {uint256} total allowance revoked
     function _revokeAllowance(
         address owner,
         address spender
-    )internal
-    {
-        mixinAllowance.revoke(owner, spender);
+    )internal returns(
+        uint256 revokedAllowance
+    ){
+        revokedAllowance = mixinAllowance.revoke(owner, spender);
+        (bool success, ) = payable(owner).call{value:revokedAllowance}('');
+        
+        success.requireTrue('revoke failed');
     }
     ///
     /// @dev See {mixinAllowance.approve}
+    /// transfer value from caller to this contract to hold as custodian of the ETH value (like an escrow) for `spender`,
+    /// so that owner can not accidentally spend the assigned allowance they have granted `spender`,
+    /// without first explicitly revoking `spender`s allowace, returning the funds to `owner`
     /// 
     /// Additional Requirements:
     ///     - `spender` cannot be this contract
     ///
     function approve(
-        address spender,
-        uint256 amount
-    )external virtual override returns(
+        address spender
+    )external payable virtual override returns(
         bool
     ){
-        return _approve(_msgSender(), spender, amount);
+        return _approve(
+            _msgSender(),
+            spender,
+            msg.value
+        );  //amount);
     }
     /// @dev convenience wrapper to get the curent available ETH allowance
     /// approved by this contract for `spender`
@@ -96,6 +125,7 @@ abstract contract AllowanceABC is Context,
         return mixinAllowance.allowanceFor(address(this),spender);
     }
     ///
+    /// @dev caller revokes `spender`s allowance, returning the ETH to caller
     /// Additional Requirements:
     ///     - `spender` cannot be null
     ///     - `spender` cannot be caller
@@ -138,7 +168,7 @@ abstract contract AllowanceABC is Context,
         address owner,
         address spender,
         uint256 subtractedValue
-    )public virtual returns(
+    )internal virtual returns(
         uint256
     ){
         return mixinAllowance.decreaseAllowance(

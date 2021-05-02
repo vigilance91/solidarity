@@ -45,9 +45,8 @@ interface iAllowance
     ///     the approval with fail and revert, keeping the allowance at 0
     ///
     function approve(
-        address spender,
-        uint256 amount
-    )external returns(
+        address spender
+    )external payable returns(
         bool
     );
     function revokeAllowance(
