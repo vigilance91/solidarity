@@ -35,6 +35,12 @@ abstract contract AllowanceABC is Context,
     {
         mixinAllowance.initialize();
     }
+    function totalAllowanceHeldInCustody(
+    )public view returns(
+        uint256
+    ){
+        return mixinAllowance.totalAllowanceHeldInCustody();
+    }
     ///
     /// @dev Get the current allownace `owner` has granted `spender`,
     /// if this value is 0, `spender` has not been granted an allowance by `owner`
@@ -55,7 +61,7 @@ abstract contract AllowanceABC is Context,
     /// @dev get allowance of spender which has been previously approved by msg.sender
     function allowanceFor(
         address spender
-    )external view virtual override returns(
+    )external view returns(
         uint256
     ){
         return mixinAllowance.allowanceFor(

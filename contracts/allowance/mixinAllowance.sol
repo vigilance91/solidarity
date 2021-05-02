@@ -25,7 +25,7 @@ library mixinAllowance
     //using EnumerableMap for EnumerableMap.Map;
     
     struct AllowanceStorage{
-        uint256 totalAllowanceAvailable;
+        uint256 totalAllowanceHeldInCustody;
         mapping(address=>mapping(address=>uint256)) allowances;
         //mapping(address=>mapping(address=>EnumerableMap.Map)) nonces;
     }
@@ -49,15 +49,16 @@ library mixinAllowance
         AllowanceStorage storage ret
     ){
         ret = storageAllowance();
-        ret.totalAllowanceAvailable = 0;
+        ret.totalAllowanceHeldInCustody = 0;
     }
     ///
     ///getters
     ///
-    function totalAllowanceAvailable(
-    )internal view
-    {
-        return storageAllowance().totalAllowanceAvailable;
+    function totalAllowanceHeldInCustody(
+    )internal view returns(
+        uint256
+    ){
+        return storageAllowance().totalAllowanceHeldInCustody;
     }
     function allowances(
     )internal view returns(
@@ -145,27 +146,27 @@ library mixinAllowance
     ///setters
     ///
     /// note this is just a counter for bookkeeping and does not do anything or hold any value in and of itself
-    function increaseTotalAllowanceAvailable(
+    function _increaseTotalAllowanceHeldInCustody(
         uint256 amountBy
-    )internal
+    )private
     {
         amountBy.requireGreaterThanZero();
         
         AllowanceStorage storage s = storageAllowance();
         
-        s.totalAllowanceAvailable = s.totalAllowanceAvailable.add(
+        s.totalAllowanceHeldInCustody = s.totalAllowanceHeldInCustody.add(
             amountBy
         );
     }
-    function decreaseTotalAllowanceAvailable(
+    function _decreaseTotalAllowanceHeldInCustody(
         uint256 amountBy
-    )internal
+    )private
     {
         amountBy.requireGreaterThanZero();
         
         AllowanceStorage storage s = storageAllowance();
         
-        s.totalAllowanceAvailable = s.totalAllowanceAvailable.sub(
+        s.totalAllowanceHeldInCustody = s.totalAllowanceHeldInCustody.sub(
             amountBy
         );
     }
@@ -216,7 +217,7 @@ library mixinAllowance
             spender,
             amount
         );
-        increaseTotalAllowanceAvailable(amount);
+        _increaseTotalAllowanceHeldInCustody(amount);
         //assert(allowanceFor(owner,spender) == amount);
         owner.emitApproveAllowance(
             spender,
@@ -239,7 +240,7 @@ library mixinAllowance
             spender,
             0
         );
-        decreaseTotalAllowanceAvailable(A);
+        _decreaseTotalAllowanceHeldInCustody(A);
         //assert(allowanceFor(owner,spender) == 0);
         owner.emitRevokeAllowance(
             spender,
@@ -274,7 +275,7 @@ library mixinAllowance
             newAllowance
         );
         
-        increaseTotalAllowanceAvailable(amountBy);
+        _increaseTotalAllowanceHeldInCustody(amountBy);
         //assert(NA > PA);
     }
     //for internal use only, to decrease an allowance externally,
@@ -304,7 +305,7 @@ library mixinAllowance
             newAllowance
         );
         
-        decreaseTotalAllowanceAvailable(amountBy);
+        _decreaseTotalAllowanceHeldInCustody(amountBy);
         //assert(NA < PA);
     }
 }
