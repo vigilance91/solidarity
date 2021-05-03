@@ -127,6 +127,29 @@ contract ERC20 is Context,
         //return mixinERC20.balanceOf(_msgSender());
     //}
     
+    //function _requireBalanceGreaterThan(
+        //address account,
+        //uint256 amount
+    //)internal view
+    //{
+        //balanceOf(
+            //account
+        //).requireGreaterThan(
+            //amount
+            ////'insufficient balance'
+        //);
+    //}
+    //function _requireAllowanceGreaterThan(
+        //address owner,
+        //address spender,
+        //uint256 amount
+    //)internal view
+    //{
+        //allowance(
+            //owner,
+            //spender
+        //).requireGreaterThan(amount);
+    //}
     /// @dev See {iERC20.balanceOf}
     function balanceOf(
         address account
@@ -136,6 +159,13 @@ contract ERC20 is Context,
         //_requireNotThis(account);
         return mixinERC20.balanceOf(account);
     }
+    //function balanceOfCaller(
+    //)public view override returns(
+        //uint256
+    //){
+        //_requireNotThis(account);
+        //return mixinERC20.balanceOf(_msgSender());
+    //}
     /// non-standard convenience method
     ///@return {tuple} numerator, denominator
     //function balanceOfToTotalSupply(
@@ -157,7 +187,7 @@ contract ERC20 is Context,
     function transfer(
         address recipient,
         uint256 amount
-    )public virtual override returns(
+    )external virtual override nonReentrant returns(
         bool
     ){
         _transfer(
@@ -196,7 +226,7 @@ contract ERC20 is Context,
     function approve(
         address spender,
         uint256 amount
-    )public virtual override returns(
+    )external virtual override nonReentrant returns(
         bool
     ){
         //address sender = _msgSender();
@@ -214,43 +244,24 @@ contract ERC20 is Context,
         return true;
     }
     ///
-    /// @dev See {mixinERC20.transferFrom}
+    /// @dev msg.sender transfers `amount` of tokens from `owner` to `recipient`
     /// 
     ///Additional  Requirements:
     ///     - `sender` and `recipient` cannot be the same address
     ///
     function transferFrom(
-        address sender,
+        address owner,
         address recipient,
         uint256 amount
-    )public virtual override returns(
+    )external virtual override nonReentrant returns(
         bool
     ){
-        address msgSender = _msgSender();
-        
-        uint256 A = allowance(
-            sender,
-            msgSender
-        );
-        
-        A.requireGreaterThanZero();
-        A.requireGreaterThanOrEqual(amount);
-        
-        _transfer(
-            sender,
+        return _transferFrom(
+            owner,
+            _msgSender(),
             recipient,
             amount
         );
-        
-        _approve(
-            sender,
-            msgSender,
-            A.sub(
-                amount,
-                "allowance exceeded"
-            )
-        );
-        return true;
     }
     ///
     /// @dev See {mixinERC20.decreaseAllowance}
@@ -260,26 +271,25 @@ contract ERC20 is Context,
     ///     - `spender` must have a non-zero allowance to increase it, otherwise first call allow(),
     ///         then call increase/decrease as required
     ///
-    function increaseAllowance(
+    function _increaseAllowance(
+        address owner,
         address spender,
         uint256 addedValue
-    )public virtual returns(
+    )internal virtual returns(
         bool
     ){
         //_requireNotThis(spender);
-        
-        address sender = _msgSender();
+        addedValue.requireGreaterThanZero();
         
         uint256 A = allowance(
-            sender,
+            owner,
             spender
         );
         
         A.requireGreaterThanZero();
-        addedValue.requireGreaterThanZero();
         
         _approve(
-            sender,
+            owner,
             spender,
             A.add(
                 addedValue
@@ -294,17 +304,17 @@ contract ERC20 is Context,
     ///     - `spender` cannot be null
     ///     - `spender` must already have a non-zero allowance of at least `subtractedValue`
     ///
-    function decreaseAllowance(
+    function _decreaseAllowance(
+        address owner,
         address spender,
         uint256 subtractedValue
-    )public virtual returns(
+    )internal virtual returns(
         bool
     ){
         //_requireNotThis(spender);
         
-        address sender = _msgSender();
         uint256 A = allowance(
-            msgSender,
+            owner,
             spender
         );
         //spender must have a non-zero allowance, if decreasing it
@@ -314,7 +324,7 @@ contract ERC20 is Context,
         );
         
         _approve(
-            sender,
+            owner,
             spender,
             A.sub(
                 subtractedValue,
@@ -324,31 +334,41 @@ contract ERC20 is Context,
         
         return true;
     }
-    ///
-    /// Additional Requirements:
-    ///     - `spender` cannot be null
-    ///     - `spender` must have a non-zero allowance
-    ///
-    function revokeAllowance(
+    function _revokeAllowance(
+        address owner,
         address spender
-    )public virtual returns(
+    )internal virtual returns(
         bool
     ){
-        address sender = _msgSender();
-        
         //spender must have a non-zero allowance, if owner is revoking it
+        //_requireAllowanceGreaterThanZero();
         allowance(
-            sender,
+            owner,
             spender
         ).requireGreaterThanZero();
         
         _approve(
-            sender,
+            owner,
             spender,
             0
         );
         
         return true;
+    }
+    ///
+    /// @dev msg.sender revokes `spender`'s allowance
+    /// 
+    /// Additional Requirements:
+    ///     - `spender` cannot be null
+    ///     - `caller` cannot be `spender`
+    ///     - `spender` must have a non-zero allowance
+    ///
+    function revokeAllowance(
+        address spender
+    )external virtual nonReentrant returns(
+        bool
+    ){
+        return _revokeAllowance(_msgSender(), spender);
     }
     /// @dev See {mixinERC20.transfer}
     function _transfer(
@@ -403,6 +423,40 @@ contract ERC20 is Context,
             recipient,
             amount
         );
+    }
+    function _transferFrom(
+        address owner,
+        address spender,
+        address recipient,
+        uint256 amount
+    )internal virtual returns(
+        bool
+    ){  
+        uint256 A = allowance(
+            owner,
+            spender
+        );
+        
+        A.requireGreaterThanZero();
+        A.requireGreaterThanOrEqual(amount);
+        
+        _transfer(
+            owner,
+            recipient,
+            amount
+        );
+        
+        //_decreaseAllowance(owner,spender, amount);
+        _approve(
+            owner,
+            spender,
+            A.sub(
+                amount,
+                "allowance exceeded"
+            )
+        );
+        
+        return true;
     }
     function _setBalanceOf(
         address account,

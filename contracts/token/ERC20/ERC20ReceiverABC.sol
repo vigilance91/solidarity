@@ -35,7 +35,7 @@ abstract contract ERC20ReceiverABC is iERC20Receiver
         return _ERC20_RECEIVED;
     }
     function canReceiveERC20(
-    )external view virtual override returns(
+    )external view virtual override returns(    // nonReentrant?
         bool
     ){
         return true;

@@ -29,4 +29,11 @@ abstract contract ERC20Token is EIP801Canary,
         _registerInterface(type(iERC20).interfaceId);
         //_registerInterface(type(iERC20Token).interfaceId);
     }
+    //function _beforeTokenTransfer(
+        //address from,
+        //address to,
+        //uint256 amount
+    //)internal virtual override{
+        //super._beforeTokenTransfer(from, to,amount);
+    //}
 }

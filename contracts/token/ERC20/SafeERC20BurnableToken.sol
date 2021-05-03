@@ -70,12 +70,12 @@ abstract contract SafeERC20BurnableToken is SafeERC20Token
     /// See {ERC20._burn}
     ///
     /// Requirements:
-    ///     - `amount` must be greater than zero
+    ///     - `amount` must be non-zero
     ///     - caller's balance must be at least `amount`
     ///
     function burn(
         uint256 amount
-    )public virtual
+    )external virtual nonReentrant
     {
         _burn(
             _msgSender(),
@@ -90,13 +90,13 @@ abstract contract SafeERC20BurnableToken is SafeERC20Token
     /// Requirements:
     ///     - caller can not be `account`
     ///     - `account` can not be null address
-    ///     - `amount` must be greater than zero
+    ///     - `amount` must be non-zero
     ///     - `account` must have previously granted caller an allowance of at least `amount` tokens
     ///
     function burnFrom(
         address account,
         uint256 amount
-    )public virtual
+    )external virtual nonReentrant
     {
         address sender = _msgSender();
         
@@ -107,15 +107,16 @@ abstract contract SafeERC20BurnableToken is SafeERC20Token
             sender
         );
         
+        //_requireAllowanceGreaterThanOrEqual(amount);
         A.requireGreaterThanZero(
             //'zero allowance available'
         );
         A.requireGreaterThanOrEqual(amount);
         
+        //_decreasedAllowance(account, sender, amount);
         _approve(
             account,
             sender,
-            //decreasedAllowance
             A.sub(
                 amount,
                 "burn amount exceeds allowance"
