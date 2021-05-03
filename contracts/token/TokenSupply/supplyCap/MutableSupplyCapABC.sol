@@ -4,8 +4,8 @@ pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
 
-import "https://github.com/vigilance91/solidarity/contracts/tokentoken/TokenSupply/supplyCap/StaticSupplyCapABC.sol";
-import "https://github.com/vigilance91/solidarity/contracts/tokentoken/TokenSupply/supplyCap/iMutableSupplyCap.sol";
+import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/supplyCap/StaticSupplyCapABC.sol";
+import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/supplyCap/iMutableSupplyCap.sol";
 
 //interface iERC20MutableSupplyCapToken is iERC20,
 //  iMutableSupplyCap
