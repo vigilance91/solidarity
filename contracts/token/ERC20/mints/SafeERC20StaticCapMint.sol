@@ -22,7 +22,7 @@ import "https://github.com/vigilance91/solidarity/contracts/accessControl/Pausab
 /// preventing the unrecoverable loss of tokens
 ///
 abstract contract SafeERC20StaticCapMint is SafeERC20BurnableToken,
-    PausableAccessControl
+    PausableAccessControl,
     StaticSupplyCapABC
 {
     using SafeMath for uint256;

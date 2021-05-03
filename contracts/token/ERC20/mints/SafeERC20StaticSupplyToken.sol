@@ -6,10 +6,9 @@ pragma experimental ABIEncoderV2;
 import "https://github.com/vigilance91/solidarity/ERC/token/ERC20/ERC20StaticSupplyToken.sol";
 //import "https://github.com/vigilance91/solidarity/contracts/token/ERC20/StaticSupplyCapABC.sol";
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/PausableAccessControl.sol";
+import "https://github.com/vigilance91/solidarity/contracts/token/ERC20/ERC20ReceiverConstraintsABC.sol";
 
 import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/frameworkERC165.sol";
-
-import "https://github.com/vigilance91/solidarity/contracts/token/ERC20/ERC20ReceiverConstraintsABC.sol";
 ///
 /// @title Safe ERC20 Static Supply Token Contract
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 1/5/2021, All Rights Reserved
@@ -22,7 +21,7 @@ import "https://github.com/vigilance91/solidarity/contracts/token/ERC20/ERC20Rec
 ///     since the supply is static, the total supply is immediately minted (to the deploying address) and available upon deployment
 ///
 abstract contract SafeERC20StaticSupplyToken is ERC20StaticSupplyToken,
-    PausableAccessControl
+    PausableAccessControl,
     ERC20ReceiverConstraintsABC
     //StaticSupplyCapABC
 {
@@ -30,7 +29,7 @@ abstract contract SafeERC20StaticSupplyToken is ERC20StaticSupplyToken,
 
     using frameworkERC165 for address;
     //using LogicConstraints for bool;
-    //using AddressLogic for address;
+    using AddressLogic for address;
     //using uint256Constraints for uint256;
     
     //using stringUtilities for string;
@@ -78,7 +77,6 @@ abstract contract SafeERC20StaticSupplyToken is ERC20StaticSupplyToken,
         
         //assert(balanceOf(sender) == tokenCap);
         
-        ////_registerInterface(type(iBurnable).interfaceId);
         ////_registerInterface(type(iERC20StaticSupplyToken).interfaceId);
     }
     function _externalSafeTransfer(
@@ -112,7 +110,7 @@ abstract contract SafeERC20StaticSupplyToken is ERC20StaticSupplyToken,
             amount
         );
     }
-    /**
+    
     /// @dev msg sender approves owner for an allowance of amount from an external contract `token`
     function externalSafeApproveOwner(
         address token,
@@ -129,12 +127,11 @@ abstract contract SafeERC20StaticSupplyToken is ERC20StaticSupplyToken,
         );
     }
     */
-    */
     //transfer from this contract to address `to`, must either be a wallet or an iERC20Receiver implementer
     //Requirements:
     //  - reverts if `to` is NULL or is a contract which does not implement ERC165 AND iERC20Receiver
     //
-    function safeTransferTo(
+    function safeTransfer(
         address to,
         uint256 amount
     )external onlyOwner nonReentrant
@@ -234,13 +231,13 @@ abstract contract SafeERC20StaticSupplyToken is ERC20StaticSupplyToken,
             //_NAME.concatenate("paused")
         );
         
-        if(from == address(0)){
+        if(from.isNull()){
             LogicConstraints.alwaysRevert(
                 //_NAME.concatenate("cannot mint tokens")
                 "cannot mint tokens"
             );
         }
-        else if(to == address(0)){
+        else if(to.isNull()){
             LogicConstraints.alwaysRevert(
                 //_NAME.concatenate("cannot burn tokens")
                 "cannot burn tokens"

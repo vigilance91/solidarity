@@ -24,7 +24,7 @@ import "https://github.com/vigilance91/solidarity/contracts/accessControl/Pausab
 /// before the supply cap can be further decreased
 ///
 abstract contract SafeERC20MutableCapMint is SafeERC20BurnableToken,  //ERC20MutableSupplyCapToken
-    PausableAccessControl
+    PausableAccessControl,
     MutableSupplyCapABC
 {
     using SafeMath for uint256;
