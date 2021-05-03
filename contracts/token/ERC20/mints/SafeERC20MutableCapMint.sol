@@ -7,6 +7,8 @@ import "https://github.com/vigilance91/solidarity/contracts/token/ERC20/SafeERC2
 import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/supplyCap/MutableSupplyCapABC.sol";
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/PausableAccessControl.sol";
 
+import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/supplyCap/iMutableSupplyCap.sol";
+
 //interface iSafeERC20MutableCapMint is iERC20,
 // iPausable
 //{
@@ -25,7 +27,8 @@ import "https://github.com/vigilance91/solidarity/contracts/accessControl/Pausab
 ///
 abstract contract SafeERC20MutableCapMint is SafeERC20BurnableToken,  //ERC20MutableSupplyCapToken
     PausableAccessControl,
-    MutableSupplyCapABC
+    MutableSupplyCapABC,
+    iMutableSupplyCap
 {
     using SafeMath for uint256;
 
@@ -83,8 +86,8 @@ abstract contract SafeERC20MutableCapMint is SafeERC20BurnableToken,  //ERC20Mut
         _setupRole(ROLE_MINTER, sender);
         _setupRole(ROLE_BURNER, sender);
         
-        //_registerInterface(type(iPausable).interfaceId);
-        ////_registerInterface(type(iSafeERC20MutableCapMint).interfaceId);
+        _registerInterface(type(iMutableSupplyCap).interfaceId);
+        //_registerInterface(type(iSafeERC20MutableCapMint).interfaceId);
         
         //if(initialSupply > 0){
             //_mint(sender, initialSupply);
@@ -104,10 +107,130 @@ abstract contract SafeERC20MutableCapMint is SafeERC20BurnableToken,  //ERC20Mut
         //onlyRole(MINTER_ROLE)
     {
         require(
-            hasRole(MINTER_ROLE, _msgSender())
+            hasRole(ROLE_MINTER, _msgSender())
             //_NAME.concatenate("must have minter role to mint")
         );
         _mint(to, amount);
+    }
+    ///
+    /// @dev caller destroys `amount` of their tokens
+    /// See {ERC20._burn}
+    ///
+    /// Requirements:
+    ///     - `amount` must be non-zero
+    ///     - caller's balance must be at least `amount`
+    ///
+    function burn(
+        uint256 amount
+    )external virtual override nonReentrant
+    {
+        address sender = _msgSender();
+        
+        require(
+            hasRole(ROLE_BURNER, sender)
+            //_NAME.concatenate("must have minter role to mint")
+        );
+        _burn(
+            sender,
+            amount
+        );
+    }
+    ///
+    /// @dev caller destroys `amount` of `account`'s tokens,
+    /// deducting from the caller's allowance
+    /// See {ERC20._burn} and {ERC20.allowance}
+    ///
+    /// Requirements:
+    ///     - caller can not be `account`
+    ///     - `account` can not be null address
+    ///     - `amount` must be non-zero
+    ///     - `account` must have previously granted caller an allowance of at least `amount` tokens
+    ///
+    function burnFrom(
+        address account,
+        uint256 amount
+    )external virtual override nonReentrant
+    {
+        address sender = _msgSender();
+        
+        require(
+            hasRole(ROLE_BURNER, sender)
+            //_NAME.concatenate("must have minter role to mint")
+        );
+        sender.requireNotEqual(account);
+        
+        uint256 A = _allowance(
+            account,
+            sender
+        );
+        
+        //_requireAllowanceGreaterThanOrEqual(amount);
+        A.requireGreaterThanZero(
+            //'zero allowance available'
+        );
+        A.requireGreaterThanOrEqual(amount);
+        
+        //_decreasedAllowance(account, sender, amount);
+        _approve(
+            account,
+            sender,
+            A.sub(
+                amount,
+                "burn amount exceeds allowance"
+            )
+        );
+        
+        _burn(
+            account,
+            amount
+        );
+    }
+    function increaseCapBy(
+        uint256 amountBy
+    )external virtual override onlyOwner nonReentrant
+    returns(
+        uint256
+    ){
+        return _increaseCapBy(amountBy);
+    }
+    function decreaseCapBy(
+        uint256 amountBy
+    )external virtual override onlyOwner nonReentrant
+    returns(
+        uint256
+    ){
+        //cannot reduce token cap below current total supply,
+        //without first burning tokens but this does not know about the total token supply
+        cap().sub(
+            amountBy,
+            'decreaseCapBy: undeflow'
+        ).requireGreaterThanOrEqual(
+            totalSupply()
+            //'decreaseCapBy: burn tokens before reducing cap'
+        );
+        return _decreaseCapBy(amountBy);
+    }
+    
+    function setCap(
+        uint256 newCap
+    )external override onlyOwner nonReentrant
+    returns(
+        uint256
+    ){
+        newCap.requireGreaterThanZero();
+        
+        uint256 CC = cap();
+        
+        CC.requireNotEqual(newCap);
+        
+        if(newCap > CC){
+            _increaseCapBy(newCap.sub(CC));
+        }
+        else if(newCap < CC){
+            _decreaseCapBy(CC.sub(newCap));
+        }
+        
+        return _cap;
     }
     ///
     /// @dev See {ERC20._beforeTokenTransfer}

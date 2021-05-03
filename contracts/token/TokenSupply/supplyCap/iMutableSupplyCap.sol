@@ -3,33 +3,29 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/contracts/token/ERC20/supplyCap/iERC20StaticSupplyCap.sol";
+import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/supplyCap/iStaticSupplyCap.sol";
 ///
 /// @title iERC20MutableSupplyCap
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 23/4/2021, All Rights Reserved
 ///
-interface iERC20MutableSupplyCap //is iERC20StaticSupplyCap
+interface iMutableSupplyCap is iStaticSupplyCap
 {
-    /// @dev return the cap on the token's total supply
-    //function cap(
-    //)external view returns(
-        //uint256
-    //);
-    
+    /// @dev decrease cap by `amountBy`
     function setCap(
         uint256 newCap
-    )external view returns(
+    )external returns(
         uint256
     );
-    
+    /// @dev increase supply cap by `amountBy`
     function increaseCapBy(
         uint256 amountBy
-    )external view returns(
+    )external returns(
         uint256
     );
+    /// @dev decrease supply cap by `amountBy`
     function decreaseCapBy(
         uint256 amountBy
-    )exteranl view returns(
+    )external returns(
         uint256
     );
 }

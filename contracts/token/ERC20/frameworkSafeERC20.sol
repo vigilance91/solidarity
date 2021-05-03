@@ -30,7 +30,7 @@ library frameworkSafeERC20
     
     function _requireSupportsInterface(
         address target
-    )private
+    )private view
     {
         target.supportsInterface(_iERC20_RECEIVER_ID).requireTrue(
             'contract does not implement iERC20Receiver'
@@ -71,7 +71,7 @@ library frameworkSafeERC20
             return true;
         }
         
-        _requireSupportsInterface(target);
+        _requireSupportsInterface(recipient);
         
         (bool success, bytes memory result) = recipient.call(
             abi.encodeWithSignature(

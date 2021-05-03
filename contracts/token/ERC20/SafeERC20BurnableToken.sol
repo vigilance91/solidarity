@@ -102,7 +102,7 @@ abstract contract SafeERC20BurnableToken is SafeERC20Token
         
         sender.requireNotEqual(account);
         
-        uint256 A = allowance(
+        uint256 A = _allowance(
             account,
             sender
         );
