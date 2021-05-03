@@ -20,10 +20,9 @@ import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/frame
 ///     this contract never mints or burns tokens (which is why it is not a token not a mint),
 ///     since the supply is static, the total supply is immediately minted (to the deploying address) and available upon deployment
 ///
-abstract contract SafeERC20StaticSupplyToken is ERC20StaticSupplyToken,
+abstract contract SafeERC20StaticSupplyToken is SafeERC20Token,
     PausableAccessControl,
-    ERC20ReceiverConstraintsABC
-    //StaticSupplyCapABC
+    StaticSupplyCapABC
 {
     using SafeMath for uint256;
 
@@ -61,10 +60,9 @@ abstract contract SafeERC20StaticSupplyToken is ERC20StaticSupplyToken,
             tokenCap
         )
         PausableAccessControl()
-        ERC20ReceiverConstraintsABC()
-        //StaticSupplyCapABC(
-            //tokenCap
-        //)
+        StaticSupplyCapABC(
+            tokenCap
+        )
     {
         //tokenCap.requireGreaterThanZero(
             //_NAME.concatenate("token must have non-zero supply")
@@ -79,6 +77,7 @@ abstract contract SafeERC20StaticSupplyToken is ERC20StaticSupplyToken,
         
         ////_registerInterface(type(iERC20StaticSupplyToken).interfaceId);
     }
+    /**
     function _externalSafeTransfer(
         address token,
         address recipient,
@@ -95,7 +94,7 @@ abstract contract SafeERC20StaticSupplyToken is ERC20StaticSupplyToken,
         
         _requireOnERC20Received(recipient, address(this), amount);
     }
-    /**
+    
     //like _externalSafeTransfer but exclusively transfers `amount` of tokens to this contract's owner
     function externalSafeTransferToOwner(
         address token,
@@ -127,11 +126,16 @@ abstract contract SafeERC20StaticSupplyToken is ERC20StaticSupplyToken,
         );
     }
     */
-    //transfer from this contract to address `to`, must either be a wallet or an iERC20Receiver implementer
-    //Requirements:
-    //  - reverts if `to` is NULL or is a contract which does not implement ERC165 AND iERC20Receiver
-    //
-    function safeTransfer(
+    /// 
+    /// @dev this contract transfers `amount` of tokens held to address `to`,
+    /// which must either be a wallet or an iERC20Receiver implementer
+    ///
+    /// Requirements:
+    ///  - `to` cannot be NULL
+    ///  - `to` must be either a wallet address or a contract which implements ERC165 AND iERC20Receiver/iERC20Transactor
+    ///  - `amount` must be non-zero
+    ///
+    function thisTransferTo(
         address to,
         uint256 amount
     )external onlyOwner nonReentrant
@@ -142,72 +146,22 @@ abstract contract SafeERC20StaticSupplyToken is ERC20StaticSupplyToken,
             amount
         );
     }
-    //Requirements:
-    //  - reverts if this contract's owner is NULL
-    //  - reverts if owner is a contract which does not implement ERC165 AND iERC20Receiver
-    //
-    function safeTransferToOwner(
+    /// 
+    /// @dev convenience function for this contract to transfer `amount` of tokens
+    /// to this contract's owner
+    ///
+    /// Requirements:
+    ///  - reverts if this contract's owner is NULL
+    ///  - reverts if owner is a contract which does not implement ERC165 AND iERC20Receiver
+    ///  - `amount` must be non-zero
+    ///
+    function thisTransferToOwner(
         uint256 amount
     )external onlyOwner nonReentrant
     {
         _transfer(
             address(this),
             owner(),
-            amount
-        );
-    }
-    /**
-    //transfer an allowance of `amount`, if available, from `from` to this contract
-    function safeTransferFrom(
-        address from,
-        uint256 amount
-    )external onlyOwner
-    {
-        _transferFrom(
-            from,
-            address(this),
-            amount
-        );
-    }
-    */
-    /// 
-    /// @dev See {ERC20._transfer}
-    /// 
-    /// Additional Requirements:
-    ///     - `recipient`  must be either a non-zero wallet address or a contract which implements ERC165 AND iERC20Receiver
-    ///
-    function _transfer(
-        address sender,
-        address recipient,
-        uint256 amount
-    )internal virtual override
-        //_emitTransfer(sender,recipient,amount)
-    {
-        _requireCanReceiveERC20(recipient);
-        
-        super._transfer(
-            sender,
-            recipient,
-            amount
-        );
-        
-        _requireOnERC20Received(recipient, sender, amount);
-    }
-    ///
-    ///Requirements:
-    ///     - `spender` must be either a wallet address or a contract which implements ERC165 AND iERC20Receiver
-    ///
-    function _approve(
-        address owner,
-        address spender,
-        uint256 amount
-    )internal virtual override
-    {
-        _requireCanReceiveERC20(spender);
-        
-        super._approve(
-            owner,
-            spender,
             amount
         );
     }

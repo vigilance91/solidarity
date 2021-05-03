@@ -3,11 +3,10 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoverV2;
 ///
-/// @title iERC20StaticSupplyCap
+/// @title Static Supply Cap Interface
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 23/4/2021, All Rights Reserved
-/// @dev {ERC20} extension adding a static supply cap
 ///
-interface iERC20StaticSupplyCap
+interface iStaticSupplyCap
 {
     /// @dev with a static supply cap token, the token cap is the total supply
     function cap(

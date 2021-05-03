@@ -3,8 +3,9 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoverV2;
 
-//import "./ERC20Snapshot.sol";
-import "./StaticSupplyCapABC.sol";
+
+import "https://github.com/vigilance91/solidarity/contracts/tokentoken/TokenSupply/supplyCap/StaticSupplyCapABC.sol";
+import "https://github.com/vigilance91/solidarity/contracts/tokentoken/TokenSupply/supplyCap/iMutableSupplyCap.sol";
 
 //interface iERC20MutableSupplyCapToken is iERC20,
 //  iMutableSupplyCap
@@ -15,7 +16,7 @@ import "./StaticSupplyCapABC.sol";
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 23/4/2021, All Rights Reserved
 /// @dev {ERC20} extension with a mutable supply cap
 ///
-abstract contract MutableSupplyCapABC is StaticSupplyCapABC
+abstract contract MutableSupplyCapABC is StaticSupplyCapABC,
     iMutableSupplyCap
 {
     using SafeMath for uint256;
@@ -36,7 +37,6 @@ abstract contract MutableSupplyCapABC is StaticSupplyCapABC
         )
     {
         //_registerInterface(type(iMutableSupplyCap).interfaceId);
-        //_registerInterface(type(iERC20MutableSupplyCapToken).interfaceId);
     }
     function _increaseCapBy(
         uint256 amountBy
@@ -48,7 +48,7 @@ abstract contract MutableSupplyCapABC is StaticSupplyCapABC
         
         _cap = previousCap.add(
             amountBy
-            //'increase cap, overflow'
+            //'increaseCapBy, overflow'
         );
         
         //assert(_cap > previousCap && _cap > totalSupply());
@@ -67,7 +67,7 @@ abstract contract MutableSupplyCapABC is StaticSupplyCapABC
         
         uint256 newCap = previousCap.sub(
             amountBy
-            //'decrease cap, underflow'
+            //'decreaseCapBy: underflow'
         );
         //cannot reduce token cap below current total supply, without first burning tokens
         newCap.requireGreaterThanOrEqual(

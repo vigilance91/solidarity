@@ -3,45 +3,47 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoverV2;
 
-import "./ERC20Snapshot.sol";
-import "./iStaticSupplyCap.sol";
+import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/supplyCap/iStaticSupplyCap.sol";
 ///
 /// @title ERC20StaticSupplyCap
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 23/4/2021, All Rights Reserved
-/// @dev {ERC20} extension adding a static supply cap
+/// @dev Abstract Base contract for extending {ERC20} with static supply cap,
+/// can be applied generically to other contracts a well, which require a immutable supply cap
 ///
-abstract contract ERC20StaticSupplyCapToken is iStaticSupplyCap
-    //ERC20StaticSupplyABC    //ERC20Snapshot
+abstract contract StaticSupplyCapABC is iStaticSupplyCap
 {
-    using SafeMath for uint256;
+    //using SafeMath for uint256;
 
     //using AddressLogic for address;
     //using uint256Constraints for uint256;
     
     string private constant CONTRACT_NAME = ' StaticSupplyCapABC: ';
     
-    uint256 private _cap;
+    uint256 internal _cap;
     ///
     /// @dev Sets the value of the `cap` (his value is immutable),
     /// and can not be set after construction
     ///
     constructor(
-        //uint256 initialSupply
         uint256 tokenCap
     )internal
-        ERC20StaticSupplyABC(tokenCap)
+        //ERC20StaticSupplyABC(tokenCap)
     {
         //tokenCap.requireGreaterThanZero(
             //CONTRACT_NAME.concatenate("cap is 0")
         //);
         require(
-            totalSupply() > 0,
+            tokenCap > 0
             "cap must be greater than 0"
         );
+        //require(
+            //totalSupply() > 0,
+            //"cap must be greater than 0"
+        //);
     }
     /// @dev with a static supply cap token, the token cap is the total supply
     function cap(
-    )public view returns(
+    )public view override returns(
         uint256
     ){
         return _cap;

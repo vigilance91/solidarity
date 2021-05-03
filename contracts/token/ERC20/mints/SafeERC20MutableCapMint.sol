@@ -3,8 +3,8 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/ERC/token/ERC20/SafeERC20BurnableToken.sol";
-import "https://github.com/vigilance91/solidarity/ERC/token/ERC20/mutableCap/MutableCapABC.sol";
+import "https://github.com/vigilance91/solidarity/contracts/token/ERC20/SafeERC20BurnableToken.sol";
+import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/supplyCap/MutableSupplyCapABC.sol";
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/PausableAccessControl.sol";
 
 //interface iSafeERC20MutableCapMint is iERC20,
