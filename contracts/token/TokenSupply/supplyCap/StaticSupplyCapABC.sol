@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 pragma solidity >=0.6.4 <0.8.0;
-pragma experimental ABIEncoverV2;
+pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/supplyCap/iStaticSupplyCap.sol";
 ///
@@ -33,7 +33,7 @@ abstract contract StaticSupplyCapABC is iStaticSupplyCap
             //CONTRACT_NAME.concatenate("cap is 0")
         //);
         require(
-            tokenCap > 0
+            tokenCap > 0,
             "cap must be greater than 0"
         );
         //require(
