@@ -26,9 +26,7 @@ library LogicConstraints
                 //revert(0,0);
             //}
         //}
-        //if(!b){
         require(b, logicCodes.NOT_EQUAL);   //logicCodes.FALSE.concatenate(message));
-        //}
     }
     function requireFalse(
         bool b
@@ -39,9 +37,7 @@ library LogicConstraints
                 //revert(0,0);
             //}
         //}
-        //if(b){
         require(!b, logicCodes.NOT_EQUAL);  //logicCodes.TRUE.concatenate(message));
-        //}
     }
     //overload for error reporting string
     function requireTrue(
@@ -49,18 +45,14 @@ library LogicConstraints
         string memory message
     )internal pure
     {
-        //if(!b){
         require(b, message);    //logicCodes.FALSE.concatenate(message));
-        //}
     }
     function requireFalse(
         bool b,
         string memory message
     )internal pure
     {
-        //if(b){
         require(!b, message);   //logicCodes.TRUE.concatenate(message));
-        //}
     }
     function alwaysRevert(
     )internal pure
