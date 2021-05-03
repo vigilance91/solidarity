@@ -36,10 +36,7 @@ abstract contract StaticSupplyCapABC is iStaticSupplyCap
             tokenCap > 0,
             "cap must be greater than 0"
         );
-        //require(
-            //totalSupply() > 0,
-            //"cap must be greater than 0"
-        //);
+        _cap = tokenCap;
     }
     /// @dev with a static supply cap token, the token cap is the total supply
     function cap(

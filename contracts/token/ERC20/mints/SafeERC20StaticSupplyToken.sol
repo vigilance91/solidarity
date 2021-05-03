@@ -3,8 +3,8 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/ERC/token/ERC20/ERC20StaticSupplyToken.sol";
-//import "https://github.com/vigilance91/solidarity/contracts/token/ERC20/StaticSupplyCapABC.sol";
+import "https://github.com/vigilance91/solidarity/contracts/token/ERC20/SafeERC20Token.sol";
+import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/supplyCap/StaticSupplyCapABC.sol";
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/PausableAccessControl.sol";
 import "https://github.com/vigilance91/solidarity/contracts/token/ERC20/ERC20ReceiverConstraintsABC.sol";
 
@@ -54,28 +54,24 @@ abstract contract SafeERC20StaticSupplyToken is SafeERC20Token,
         uint256 tokenCap
     )internal 
         //SafeERC20AccessControlToken(name,symbol,0)
-        ERC20StaticSupplyToken(
+        SafeERC20Token(
             name,
-            symbol,
-            tokenCap
+            symbol
+            //tokenCap
         )
         PausableAccessControl()
         StaticSupplyCapABC(
             tokenCap
         )
     {
-        //tokenCap.requireGreaterThanZero(
-            //_NAME.concatenate("token must have non-zero supply")
-        //);
-        //
-        //address sender = _msgSender();
+        address sender = _msgSender();
         
-        //_increaseSupply(tokenCap);
-        //_setBalanceOf(sender, tokenCap);
+        mixinTokenSupply.increaseTotalSupply(tokenCap);
+        _setBalanceOf(sender, tokenCap);
         
-        //assert(balanceOf(sender) == tokenCap);
+        assert(_balanceOf(sender) == tokenCap);
         
-        ////_registerInterface(type(iERC20StaticSupplyToken).interfaceId);
+        ////_registerInterface(type(iSafeERC20StaticSupplyToken).interfaceId);
     }
     /**
     function _externalSafeTransfer(
@@ -126,6 +122,7 @@ abstract contract SafeERC20StaticSupplyToken is SafeERC20Token,
         );
     }
     */
+    /**
     /// 
     /// @dev this contract transfers `amount` of tokens held to address `to`,
     /// which must either be a wallet or an iERC20Receiver implementer
@@ -165,6 +162,7 @@ abstract contract SafeERC20StaticSupplyToken is SafeERC20Token,
             amount
         );
     }
+    */
     ///
     /// @dev See {ERC20._beforeTokenTransfer}
     ///

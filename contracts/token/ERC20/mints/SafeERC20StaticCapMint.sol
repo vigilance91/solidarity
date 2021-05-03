@@ -47,8 +47,8 @@ abstract contract SafeERC20StaticCapMint is SafeERC20BurnableToken,
         //ERC20AccessControlToken(name,symbol,0)
         SafeERC20BurnableToken(
             name,
-            symbol,
-            tokenCap
+            symbol
+            //tokenCap
         )
         PausableAccessControl()
         StaticSupplyCapABC(
@@ -86,10 +86,10 @@ abstract contract SafeERC20StaticCapMint is SafeERC20BurnableToken,
         address to,
         uint256 amount
     )external virtual nonReentrant
-        //onlyRole(MINTER_ROLE)
+        //onlyRole(ROLE_MINTER)
     {
         require(
-            hasRole(MINTER_ROLE, _msgSender())
+            hasRole(ROLE_MINTER, _msgSender())
             //_NAME.concatenate("must have minter role to mint")
         );
         _mint(to, amount);
