@@ -44,7 +44,7 @@ contract ExternalEtherTransactor is EtherTransactorABC
     function ethThisTransferTo(
         address recipient,
         uint256 amount
-    )external virtual override onlyOwner
+    )external virtual override onlyOwner nonReentrant
     {
         _requireAvailableBalanceGreaterThanOrEqual(amount);
         _ethThisTransferTo(recipient, amount);
@@ -52,13 +52,13 @@ contract ExternalEtherTransactor is EtherTransactorABC
     /// @dev convenience wrapper to transfer ETH from this contract's balance to owner
     function ethThisTransferToOwner(
         uint256 amount
-    )external virtual override onlyOwner
+    )external virtual override onlyOwner nonReentrant
     {
         _requireAvailableBalanceGreaterThanOrEqual(amount);
         _ethThisTransferTo(owner(), amount);
     }
     function ethTransferToThis(
-    )external virtual override payable
+    )external virtual override payable nonReentrant
     {
         require(msg.value > 0, 'msg.value must be non-zero');
         //note, this contract becomes the new msg.sender in the receiver() function

@@ -36,7 +36,7 @@ contract ExternalEtherAllowanceTransactor is EtherAllowanceTransactorABC
         
     //}
     constructor(
-    )public //payable
+    )public //nonReentrant //payable
         EtherAllowanceTransactorABC()
     {
         //if(msg.value > 0){
@@ -51,7 +51,7 @@ contract ExternalEtherAllowanceTransactor is EtherAllowanceTransactorABC
     function ethThisTransferTo(
         address recipient,
         uint256 amount
-    )external virtual override onlyOwner
+    )external virtual override onlyOwner nonReentrant
     {
         _requireAvailableBalanceGreaterThanOrEqual(amount);
         _ethThisTransferTo(recipient, amount);
@@ -59,13 +59,13 @@ contract ExternalEtherAllowanceTransactor is EtherAllowanceTransactorABC
     /// @dev convenience wrapper to transfer ETH from this contract's balance to owner
     function ethThisTransferToOwner(
         uint256 amount
-    )external virtual override onlyOwner
+    )external virtual override onlyOwner nonReentrant
     {
         _requireAvailableBalanceGreaterThanOrEqual(amount);
         _ethThisTransferTo(owner(), amount);
     }
     function ethTransferToThis(
-    )external virtual override payable
+    )external virtual override payable nonReentrant
     {
         require(msg.value > 0, 'msg.value must be non-zero');
         //note, this contract becomes the new msg.sender in the receiver() function
@@ -82,7 +82,7 @@ contract ExternalEtherAllowanceTransactor is EtherAllowanceTransactorABC
         address from,
         address recipient,
         uint256 amount
-    )external virtual override returns(
+    )external virtual override nonReentrant returns(
         bool
     ){
         _requireCanReceiveETH(recipient, amount);
@@ -115,7 +115,7 @@ contract ExternalEtherAllowanceTransactor is EtherAllowanceTransactorABC
     function ethTransferFromToCaller(
         address from,
         uint256 amount
-    )external virtual override returns(
+    )external virtual override nonReentrant returns(
         bool
     ){
         address sender = _msgSender();
@@ -148,7 +148,7 @@ contract ExternalEtherAllowanceTransactor is EtherAllowanceTransactorABC
     function ethTransferFromThis(
         address recipient,
         uint256 amount
-    )external virtual override returns(
+    )external virtual override nonReentrant returns(
         bool
     ){
         return _ethTransferFromThis(recipient, amount);
@@ -156,7 +156,7 @@ contract ExternalEtherAllowanceTransactor is EtherAllowanceTransactorABC
     /// @dev convenience wrapper for caller to transfer `amount` of their allowance to owner
     function ethTransferFromThisToOwner(
         uint256 amount
-    )external virtual override returns(
+    )external virtual override nonReentrant returns(
         bool
     ){
         return _ethTransferFromThis(owner(), amount);
@@ -165,7 +165,7 @@ contract ExternalEtherAllowanceTransactor is EtherAllowanceTransactorABC
     function ethTransferFromToThis(
         address owner,
         uint256 amount
-    )external virtual override returns(
+    )external virtual override nonReentrant returns(
         bool
     ){
         return _ethTransferFromToThis(owner, _msgSender(), amount);
@@ -175,7 +175,7 @@ contract ExternalEtherAllowanceTransactor is EtherAllowanceTransactorABC
     //
     function approve(
         address spender
-    )external payable virtual override
+    )external payable virtual override nonReentrant
     returns(
         bool
     ){
@@ -184,7 +184,7 @@ contract ExternalEtherAllowanceTransactor is EtherAllowanceTransactorABC
     function ethThisApproveAllowanceFor(
         address spender,
         uint256 amount
-    )external virtual onlyOwner
+    )external virtual onlyOwner nonReentrant
     returns(
         bool
     ){
@@ -193,13 +193,13 @@ contract ExternalEtherAllowanceTransactor is EtherAllowanceTransactorABC
     /// @dev this contract revokes `spender`s allowance, if one is available
     function ethThisRevokeAllowance(
         address spender
-    )external virtual override onlyOwner
+    )external virtual override onlyOwner nonReentrant
     {
         _revokeAllowance(address(this), spender);
     }
     /// @dev msg.sender revokes this contract's allowance, if one is available
     function ethRevokeAllowanceForThis(
-    )external virtual override
+    )external virtual override nonReentrant
     {
         _revokeAllowance(_msgSender(), address(this));
     }

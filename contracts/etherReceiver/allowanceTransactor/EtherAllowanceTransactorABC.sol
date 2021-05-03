@@ -42,11 +42,15 @@ abstract contract EtherAllowanceTransactorABC is EtherTransactorABC,
         //_registerInterface(type(iAllowance).interfaceId);
         //_registerInterface(type(iEtherAllowanceTransactor).interfaceId);
     }
+    ///
+    /// @return {uint256} difference between the total ETH held by the contract and totalAllowanceHeldInCustody()
+    /// @dev represents the total amount of ETH that this contract is freely able to transfer or otherwise transact with
+    ///
     function availableBalance(
     )public view returns(
         uint256
     ){
-        totalBalance().sub(
+        return totalBalance().sub(
             totalAllowanceHeldInCustody()
         );
     }
