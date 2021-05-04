@@ -9,9 +9,9 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contr
 
 import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
 
-//import "https://github.com/vigilance91/solidarity/EIP/SingletonFactory/iEIP2470.sol";
+import "https://github.com/vigilance91/solidarity/EIP/SingletonFactory/iEIP2470.sol";
 //import "https://github.com/vigilance91/solidarity/EIP/SingletonFactory/eventsEIP2470.sol";
-import "./iEIP2470.sol";
+//import "./iEIP2470.sol";
 //import "./eventsEIP2470.sol";
 ///
 /// @title EIP-2470 Singleton Factory Abstract Base Contract

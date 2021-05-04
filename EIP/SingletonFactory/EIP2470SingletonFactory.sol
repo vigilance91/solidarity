@@ -3,7 +3,7 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "../SingletonFactory/EIP2470.sol";
+import "https://github.com/vigilance91/solidarity/EIP/SingletonFactory/EIP2470.sol";
 //import "solidarity/EIP/introspection/EIP801/EIP801Canary.sol";
 ///
 /// @title EIP-2470 Singleton Factory Contract
