@@ -12,7 +12,7 @@
 * interfaces
 * libraries
 
-which are commonly used in developing smart contracts or decentralized applications.
+which are commonly used in developing smart contracts or decentralized applications on Ethereum.
 
 These include:
 
@@ -56,14 +56,13 @@ Standardized ERC (Ethereum Request for Comments) contracts, including:
 ### [solidarity/contracts/][10]
 
 Solidarity specific implementations of Common Abstract Base Contracts (ABCs) and fully realized smart contracts,
-which commonly use libraries from */libraries* and implement or extend appropriate interfaces,
+which commonly use libraries from */libraries* and implement or extend appropriate contracts from either EIP or ERC directories,
 for easy use during development, such as:
 
-* token - implementations for ERC Standard (and some non-standard extensions) Token contracts, including Fixed or Dynamic SUpply ERC20 tokens, ERC-721 Tokens and ERC-11155 tokens
+* token - implementations for ERC Standard (and some non-standard extensions) Token contracts, including Static or Dynamic Supply Capped ERC20 tokens, ERC-721 Tokens and ERC-11155 tokens
 * accessControl - implementations for various permissions based contracts, including assignable roles
-* finance - performaing financial transactions, such as deposit, withdraw and transaction between addresses
-* presets - Ready to use standardized Token Mints
-* democracy - decentralized democratization
+* finance - performaing financial transactions, such as calculating compound interest or performing deposit, withdraw and transactions
+* democracy - democratization for Decentralized Autonomous Organizations (DOAs)
 * proxy - proxies of other contracts
 * etc
 
@@ -76,24 +75,16 @@ Common contracts related to financial operations
 * Compound.sol - library for calculating compound interest
 
 
-### /contracts/presets/
-
-Fully realized contracts derived from 's Token Mint types (including ERC20, ERC721, ERC777 and ERC1155), which also inherit from the Gas Station Network (reducing overall gas expenditures of transaction execution)
-
-
 ### /contracts/token/
 
-ERC compliant Token StandardsStand alone contracts deriving from [OpenZeppelin][4]'s payment classes for fully realized uni-directional,
-bi-directional and other payment channel types,
-which support escrow behaviour and other similar functionality,
-directed and facilitating the exchange of value or assets between a producer and consumer(s)
+ERC compliant Token Standard which are stand alone contracts,
 
 
 ### /contracts/democracy/
 
-Common use cases for secure voting mechanisms (including delegation),
-which are implemented on the Vigilance Network for decentralized governance of the project and establishing
-new resolutions, partners or for funding new projects,
+Common use cases for secure voting mechanisms (including delegation and NFT based voting),
+which are implemented on the Network for decentralized governance of the project and establishing
+new resolutions, partners, affiliate token contracts or for funding new projects,
 including general voting mechanism which require VNT to be consumed,
 where voting weight per user is based on the VNT supplied by each user (where all non-equity holding participants in the network may contribute) or,
 NFT voting for equity holders regarding corporate policies/decisions,
