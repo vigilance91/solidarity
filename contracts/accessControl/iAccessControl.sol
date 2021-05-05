@@ -50,4 +50,10 @@ interface iAccessControl
         bytes32 role,
         address account
     )external;
+    
+    function transferRole(
+        bytes32 role,
+        address from,
+        address to
+    )external;
 }

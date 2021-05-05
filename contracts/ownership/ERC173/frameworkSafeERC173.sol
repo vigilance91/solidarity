@@ -8,6 +8,7 @@ import "https://github.com/vigilance91/solidarity/libraries/address/AddressConst
 import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/frameworkERC165.sol";
 
 import "https://github.com/vigilance91/solidarity/contracts/ownership/ERC173/iERC173Receiver.sol";
+import "https://github.com/vigilance91/solidarity/ERC/ERC173/iERC173.sol";
 ///
 /// @title framework for ERC173 Safe Transfer Introspection
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 18/4/2021, All Rights Reserved
@@ -27,16 +28,30 @@ library frameworkSafeERC173
     bytes private constant _ERC173_OWNER_SIGNATURE = abi.encodeWithSignature('owner()');
     bytes private constant _ERC173_RENOUNCE_OWNERSHIP_SIGNATURE = abi.encodeWithSignature('renounceOwnership()');
     
+    bytes4 private constant _iERC173_ID = type(iERC173).interfaceId;
     bytes4 private constant _iERC173_RECEIVER_ID = type(iERC173Receiver).interfaceId;
+    
     bytes4 public constant _ERC173_RECEIVED = iERC173Receiver.onERC173Received.selector;
-    /// @dev can target address accept ERC173 ownership transfers
-    function _requireSupportsInterface(
+    
+    /// @dev can target support ERC173 calls
+    function _requireSupportsInterfaceERC173(
         address target
-    )private
+    )private view
     {
-        target.supportsInterface(_iERC173_RECEIVER_ID).requireTrue(
-            'contract does not implement iERC173Receiver'
+        target.supportsInterface(_iERC173_ID).requireTrue(
+            'contract does not implement iERC173'
         );
+    }
+    /// @dev can target address accept ERC173 ownership transfers
+    function _requireSupportsInterfaceERC173Receiver(
+        address target
+    )private view
+    {
+        if(target.isContract()){
+            target.supportsInterface(_iERC173_RECEIVER_ID).requireTrue(
+                'contract does not implement iERC173Receiver'
+            );
+        }
     }
     /// @dev pre-check to determine if an address is capable of accepting ERC173 ownership transfers
     function canReceiveERC173(
@@ -51,7 +66,7 @@ library frameworkSafeERC173
             return true;
         }
         
-        _requireSupportsInterface(target);
+        _requireSupportsInterfaceERC173Receiver(target);
         
         (bool success, bytes memory result) = target.staticcall(
             _ERC173_RECEIVE_SIGNATURE
@@ -73,7 +88,7 @@ library frameworkSafeERC173
             return true;
         }
         
-        _requireSupportsInterface(target);
+        _requireSupportsInterfaceERC173Receiver(recipient);
         
         (bool success, bytes memory result) = recipient.call(
             abi.encodeWithSignature(
@@ -106,10 +121,10 @@ library frameworkSafeERC173
             return AddressLogic.NULL;
         }
         
-        _requireSupportsInterface(target);
+        _requireSupportsInterfaceERC173(target);
         
         (bool success, bytes memory result) = target.staticcall(
-            _ERC173_RECEIVE_SIGNATURE
+            _ERC173_OWNER_SIGNATURE
         );
         success.requireTrue('staticcall failed');
         
@@ -137,7 +152,9 @@ library frameworkSafeERC173
             'target must be a contract to transfer ownership'
         );
         
-        _requireSupportsInterface(target);
+        _requireSupportsInterfaceERC173(target);
+        
+        canReceiveERC173(newOwner);
         
         (bool success, ) = target.call(
             abi.encodeWithSignature(
@@ -148,6 +165,8 @@ library frameworkSafeERC173
         success.requireTrue(
             'frameworkSafeERC173: transferOwnerhip call failed'
         );
+        
+        onERC173Received(newOwner, address(this));
     }
     /// 
     /// @dev the calling contract context renounces ownership of target, if it has ownership
@@ -164,12 +183,13 @@ library frameworkSafeERC173
         
         O.requireNotNull();
         //O.requireEqualAndNotNull(currentOwner);
+        require(O == currentOwner, 'invalid owner');
         //if address is an externally owned wallet address
         target.isContract().requireTrue(
             'target must be a contract to renounce ownership'
         );
         
-        _requireSupportsInterface(target);
+        _requireSupportsInterfaceERC173(target);
         
         (bool success, ) = target.call(
             _ERC173_RENOUNCE_OWNERSHIP_SIGNATURE

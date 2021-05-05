@@ -5,6 +5,12 @@ pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/AccessControl.sol";
 import "https://github.com/vigilance91/solidarity/contracts/Pausable.sol";
+
+//interface iPausableAccessControl is iAccessControl,
+//    iPausable
+//{
+//}
+
 ///
 /// @title Pausable Access Control
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 22/4/2021, All Rights Reserved

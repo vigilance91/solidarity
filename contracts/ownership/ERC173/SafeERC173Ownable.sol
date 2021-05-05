@@ -37,6 +37,8 @@ abstract contract SafeERC173Ownable is ERC173Ownable,
 {
     using LogicConstraints for bool;
     
+    using Address for address;
+    
     using AddressLogic for address;
     using AddressConstraints for address;
     
