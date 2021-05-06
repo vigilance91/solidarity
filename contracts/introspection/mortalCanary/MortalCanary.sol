@@ -58,7 +58,7 @@ contract MortalCanary is EIP801Canary,
     //}
     
     function apoptosis(
-    )external virtual override
+    )external virtual override onlyOwner NonReentrant
         onlyOwner
         nonReentrant
     {
