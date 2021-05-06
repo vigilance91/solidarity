@@ -4,7 +4,7 @@ pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/EIP/SingletonFactory/EIP2470.sol";
-//import "solidarity/EIP/introspection/EIP801/EIP801Canary.sol";
+import "https://github.com/vigilance91/solidarity/EIP/introspection/Canary/EIP801Canary.sol";
 ///
 /// @title EIP-2470 Singleton Factory Contract
 /// @notice Exposes CREATE2 (EIP-1014) to deploy bytecode on deterministic addresses based on initialization code and salt
@@ -15,14 +15,15 @@ import "https://github.com/vigilance91/solidarity/EIP/SingletonFactory/EIP2470.s
     //iEIP801Canary
 //{
 //}
-contract EIP2470SingletonFactory is EIP2470,
+contract EIP2470SingletonFactory is EIP801Canary,
+    EIP2470,
     iEIP2470
-    //EIP801Canary
 {
     //using eventsEIP2470 for address;
     
     constructor(
-    )public //EIP801Canary()
+    )public 
+        EIP801Canary()
         EIP2470()
     {
         _registerInterface(type(iEIP2470).interfaceId);

@@ -26,51 +26,35 @@ library AddressConstraints
         address rhs
     )public pure
     {
-        bool b = lhs.equal(rhs);
-        
-        if(!b){
-            b.requireTrue(
-                //LIB_NAME.concatenate('lhs != rhs')
-            );
-        }
+        lhs.equal(rhs).requireTrue(
+            //LIB_NAME.concatenate('lhs != rhs')
+        );
     }
     function requireNotEqual(
         address lhs,
         address rhs
     )public pure
     {
-        bool b = lhs.equal(rhs);
-        
-        if(b){
-            b.requireFalse(
-                //LIB_NAME.concatenate('lhs == rhs')
-            );
-        }
+        lhs.equal(rhs).requireFalse(
+            //LIB_NAME.concatenate('lhs == rhs')
+        );
     }
     
     function requireIsNull(
         address account
     )public pure
     {
-        bool b = account.isNull();
-        
-        if(!b){
-            b.requireTrue(
-                //LIB_NAME.concatenate('lhs == 0x0')
-            );
-        }
+        account.isNull().requireTrue(
+            //LIB_NAME.concatenate('lhs == 0x0')
+        );
     }
     function requireNotNull(
         address account
     )public pure
     {
-        bool b = account.isNotNull();
-        
-        if(!b){
-            b.requireTrue(
-                //LIB_NAME.concatenate('lhs != 0x0')
-            );
-        }
+        account.isNotNull().requireTrue(
+            //LIB_NAME.concatenate('lhs != 0x0')
+        );
     }
     /**
     *note library internal modifiers can not be called externally

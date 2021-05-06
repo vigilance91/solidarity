@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 pragma solidity >=0.6.4 <0.8.0;
+pragma experimental ABIEncoderV2;
 ///
 /// @title Address Logic Library
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 18/2/2021, All Rights Reserved
@@ -13,26 +14,26 @@ library AddressLogic
     function equal(
         address lhs,
         address rhs
-    )public pure returns(
+    )internal pure returns(
         bool
     ){
-        //return uint256(lhs) ^ uint256(rhs) == 0;
+        //return uint256(lhs)._xor(uint256(rhs)) == 0;
         return lhs == rhs;
     }
     
     function notEqual(
         address lhs,
         address rhs
-    )public pure returns(
+    )internal pure returns(
         bool
     ){
-        //return uint256(lhs) ^ uint256(rhs) != 0;
+        //return uint256(lhs)._xor(uint256(rhs)) != 0;
         return lhs != rhs;
     }
     
     function isNull(
         address lhs
-    )public pure returns(
+    )internal pure returns(
         bool
     ){
         return equal(lhs, NULL);
@@ -40,7 +41,7 @@ library AddressLogic
     
     function isNotNull(
         address lhs
-    )public pure returns(
+    )internal pure returns(
         bool
     ){
         return notEqual(
@@ -51,7 +52,7 @@ library AddressLogic
     function isNotNullAndNotEqual(
         address lhs,
         address rhs
-    )public pure returns(
+    )internal pure returns(
         bool
     ){
         return isNotNull(
@@ -64,7 +65,7 @@ library AddressLogic
     function isNotNullAndAreEqual(
         address lhs,
         address rhs
-    )public pure returns(
+    )internal pure returns(
         bool
     ){
         return isNotNull(
@@ -73,16 +74,27 @@ library AddressLogic
             rhs
         ) && equal(lhs,rhs);
     }
-    //function isMsgSender(
-        //address account
-    //) public view returns(
-        //bool
+    //function callerIsThisContract(
+    //)internal returns(
+        //bool ret
     //){
-        //return isNotNullAndAreEqual(msg.sender, account);
+        //assembly{
+            //ret := eq(caller(),address())
+        //}
     //}
+    //function callerEquals(
+        //address account
+    //)internal returns(
+        //bool ret
+    //){
+        //assembly{
+            //ret := eq(caller(),account)
+        //}
+    //}
+    
     function isNotMsgSender(
         address account
-    )public view returns(
+    )internal view returns(
         bool
     ){
         return isNotNullAndNotEqual(msg.sender, account);
@@ -90,7 +102,7 @@ library AddressLogic
     //function isNotThisAndNotNullArray(
         //address self,
         //address[] memory container
-    //)public pure
+    //)internal pure
     //{
         //bool ret = true;
         
@@ -104,33 +116,69 @@ library AddressLogic
         //return ret;
     //}
     /**
-    //function and(
+    function balanceWei(
+        address account
+    )internal returns(
+        uint256 ret
+    ){
+        //account.requireNotNull();
+        assembly{
+            ret := balance(account)
+        }
+    }
+    function balanceEth(
+        address account
+    )internal returns(
+        uint256 ret
+    ){
+        //account.requireNotNull();
+        assembly{
+            let BAL := balance(account)
+            
+            if(lt(BAL, 1e18)){
+                ret := 0
+                //stop()
+            }
+            if(or(gt(BAL, 1e18),eq(BAL,1e18))){
+                ret := div(BAL, 1e18)
+            }
+        }
+    }
+    */
+    /**
+    //function _and(
         //address lhs,
         //address rhs
-    //)public pure returns(
+    //)internal pure returns(
         //address
     //){
-        //return address(uint256(lhs) & uint256(rhs));
+        //return address(
+            //uint256(lhs)._and(uint256(rhs))
+        //);
     //}
-    //function or(
+    //function _or(
         //address lhs,
         //address rhs
-    //)public pure returns(
+    //)internal pure returns(
         address
     //){
-        //return address(uint256(lhs) | uint256(rhs));
+        //return address(
+            //uint256(lhs)._or(uint256(rhs))
+        //);
     //}
-    //function xor(
+    //function _xor(
         //address lhs,
         //address rhs
-    //)public pure returns(
+    //)internal pure returns(
         //address
     //){
-        //return address(uint256(lhs) ^ uint256(rhs));
+        //return address(
+            //uint256(lhs)._xor(uint256(rhs))
+        //);
     //}
-    //function not(
+    //function _not(
         //address lhs
-    //)public pure returns(
+    //)internal pure returns(
         address
     //){
         //return address(!uint256(lhs));
