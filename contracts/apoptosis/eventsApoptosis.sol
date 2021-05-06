@@ -9,15 +9,15 @@ pragma experimental ABIEncoderV2;
 library eventsApoptosis
 {
     event Apoptosis(
-        address contract,
-        addres receiver,
+        address self,
+        address receiver,
         uint time,
         uint blockNumber
     );
     
     function emitApoptosis(
         address self,
-        addres receiver
+        address receiver
     )internal
     {
         emit Apoptosis(

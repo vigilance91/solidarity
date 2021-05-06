@@ -4,7 +4,11 @@ pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
-import "https://github.com/vigilance91/solidarity/libraries/etherReceiver/EtherReceiverConstraintsABC.sol";
+
+import "https://github.com/vigilance91/solidarity/contracts/apoptosis/eventsApoptosis.sol";
+
+//import "https://github.com/vigilance91/solidarity/contracts/etherReceiver/eventsEtherReceiver.sol";
+import "https://github.com/vigilance91/solidarity/contracts/etherReceiver/EtherReceiverConstraintsABC.sol";
 
 //library mixinApoptosis
 //{
@@ -31,7 +35,7 @@ abstract contract ApoptosisABC is EtherReceiverConstraintsABC
     
     using eventsApoptosis for address;
     
-    using SafeMath for uint256;
+    //using SafeMath for uint256;
     
     constructor(
         //address _payableFallback
@@ -53,9 +57,10 @@ abstract contract ApoptosisABC is EtherReceiverConstraintsABC
         //ETH receiver can not be null
         receiver.requireNotNull();
         //can not send ETH to itself, this would otherwise cause the contract to break
-        address(this).requireNotEqual(receiver);
+        address _this = address(this);
+        _this.requireNotEqual(receiver);
         
-        _requireCanReceiverETH(receiver);
+        _requireCanReceiveEther(receiver);
         
         //_die();
         _this.emitApoptosis(

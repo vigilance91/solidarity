@@ -22,7 +22,8 @@ import "https://github.com/vigilance91/solidarity/contracts/apoptosis/iApoptosis
 /// nor can apoptosis be externally executed if the owner is null
 /// 
 contract MortalCanary is EIP801Canary,
-    ApoptosisABC
+    ApoptosisABC,
+    iApoptosis
 {
     using eventsEIP801 for address;
     
@@ -58,7 +59,7 @@ contract MortalCanary is EIP801Canary,
     //}
     
     function apoptosis(
-    )external virtual override onlyOwner NonReentrant
+    )external payable virtual override
         onlyOwner
         nonReentrant
     {

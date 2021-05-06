@@ -25,7 +25,7 @@ abstract contract EtherReceiverConstraintsABC //is ContractConstraintsABC
     
     function _requireCanReceiveEther(
         address recipient
-    )internal view
+    )internal
     {
         recipient.canReceiveEther().requireTrue(
             _TRANSFER_FAILED

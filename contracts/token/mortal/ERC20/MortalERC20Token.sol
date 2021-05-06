@@ -3,7 +3,7 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/EIP/introspection/mortalCanary/MortalCanary.sol";
+import "https://github.com/vigilance91/solidarity/contracts/introspection/mortalCanary/MortalCanary.sol";
 
 import "https://github.com/vigilance91/solidarity/ERC/token/ERC20/ERC20.sol";
 import "https://github.com/vigilance91/solidarity/ERC/token/ERC20/iERC20.sol";

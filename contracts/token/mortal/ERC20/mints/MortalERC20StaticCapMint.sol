@@ -22,7 +22,7 @@ import "https://github.com/vigilance91/solidarity/contracts/accessControl/Pausab
 /// and token transfers to contracts which do NOT implement ERC20Receiver interface will fail and revert state,
 /// preventing the unrecoverable loss of tokens
 ///
-abstract contract SafeERC20StaticCapMint is SafeERC20BurnableToken,
+abstract contract MortalERC20StaticCapMint is MortalERC20BurnableToken,
     PausableAccessControl,
     StaticSupplyCapABC
 {
