@@ -44,6 +44,7 @@ abstract contract SafeERC20Mint is SafeERC20BurnableToken,
     ///     so, simply prevent proxying here and any attempt to call a function not declared in this implementation
     ///     will always revert here, no need to figure out issues with function visibility, modifiers, execution context, etc
     /// 
+    //fallback(
     //)external view nonReentrant payable{
         //LogicConstraints.alwaysRevert('proxying disabled');
     //}
@@ -198,4 +199,72 @@ abstract contract SafeERC20Mint is SafeERC20BurnableToken,
             amount
         );
     }
+    /**
+    /// 
+    /// @dev transfer ownership and any roles the owner has to the new owner, otherwise,
+    /// the previous owner would retain their privellages and be able to undermine the new owner,
+    /// such as by forcing the mint to pause, minting/burning tokens or performing other admin only functions
+    /// which they should not be entitled to anymore since they are not the contract's owner
+    /// 
+    /// note:
+    ///     renounceOwnership does NOT revoke any assigned roles, only transfering
+    ///
+    //function transferOwnership(
+    //)external virtual override onlyOwner nonReentrant
+    //{
+        //if(){
+        //}
+        //super.transferOwnership(newOwner);
+    //}
+    //function safeTransferOwnership(
+    //)virtual override
+    //{
+        //if(){
+        //}
+        //super.safeTransferOwnership(newOwner);
+    //}
+    
+    function externalSafeTransferOwnership(
+        address ownable,
+        address newOwner
+    )external virtual override onlyOwner nonReentrant
+    {
+        _safeTransferOwnership(ownable, newOwner);
+    }
+    /// @dev like _safeTransferOwnership but exclusively transfers ownership of `ownable` contract address to this contract's owner,
+    ///
+    /// Requirements:
+    ///     * this contract's owner must not be null, otherwise call _safeRenounceOwnership
+    ///     * `ownable` must not already be this contract's owner
+    ///
+    function safeTransferOwnershipToThisOwner(
+        address ownable
+    )external virtual override onlyOwner nonReentrant
+    {
+        //address O = owner();
+        //address _this = address(this);
+        
+        if(hasRole(ROLE_PAUSER), _this){
+            _transferRole(ROLE_PAUSER, _this, O);
+        }
+        if(hasRole(ROLE_MINTER), _this){
+        _transferRole(ROLE_MINTER, _this, O);
+        }
+        if(hasRole(ROLE_BURNER), _this){
+            _transferRole(ROLE_BURNER, _this, O);
+        }
+        
+        _safeTransferOwnershipToThisOwner(ownable);
+    }
+    /// 
+    /// @dev this contract renounces ownership of `ownable`, only if this contract is `ownable`s owner,
+    /// otherwise transaction will revert
+    /// 
+    function externalSafeRenounceOwnership(
+        address ownable
+    )external virtual override onlyOwner nonReentrant
+    {
+        _safeRenounceOwnership(ownable);
+    }
+    */
 }

@@ -7,9 +7,10 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contr
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/utils/Address.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/GSN/Context.sol";
 
-import "https://github.com/vigilance91/solidarity/contracts/accessControl/eventsAccessControl.sol";
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/iAccessControl.sol";
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/mixinAccessControl.sol";
+//import "./iAccessControl.sol";
+//import "./mixinAccessControl.sol";
 
 import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
 ///
@@ -97,6 +98,8 @@ abstract contract AccessControl is Context,
     using LogicConstraints for bool;
     using AddressConstraints for address;
     
+    //using mixinAccessControl for address;
+    
     //struct RoleData {
         //EnumerableSet.AddressSet members;
         //bytes32 adminRole;
@@ -177,6 +180,15 @@ abstract contract AccessControl is Context,
             //"AccessControl: sender must not be an admin"
         );
     }
+    /**
+    modifier onlyRole(
+        bytes32 role
+    )internal
+    {
+        _requireHasRole(_msgSender(),role);
+        _;
+    }
+    */
     //helpful post-initialization, where it must be enforced 1 or more role members have been assigned a role
     /**
     function _requireRoleHasMembers(
@@ -367,6 +379,32 @@ abstract contract AccessControl is Context,
         _revokeRole(role, account);
     }
     ///
+    /// @dev Admin forces transfer of `role` from address `from` to address `to`
+    /// emits a {RoleRevoked} even for `from` and {RoleGranted} event for `to`
+    ///
+    /// Requirements:
+    ///     - the caller must have `role`'s admin role or be default admin
+    ///     - `from` must not be null and currently have the role `role`
+    ///     - `to` must not be null and not have been assigned the role `role`
+    ///
+    /// NOTE:
+    ///     Be careful, default admin role can be transfered (only with the privallegaes it provides),
+    ///     this is useful along with transfering ownership via ERC173
+    ///     however, if default admin role is transfered, this will immediately prevent any further admin operations,
+    ///     thus it should be the last role transfered, if at all
+    ///
+    function transferRole(
+        bytes32 role,
+        address from,
+        address to
+    )public virtual override
+        //onlyDefaultAdminOrRoleAdmin
+    {
+        _requireHasAdminRole(role, _msgSender());
+        
+        _transferRole(role, from, to);
+    }
+    ///
     /// @dev Grants `role` to `account`
     /// emits a {RoleGranted} event
     ///
@@ -403,7 +441,7 @@ abstract contract AccessControl is Context,
     function _grantRole(
         bytes32 role,
         address account
-    )private
+    )internal
     {
         if(_mutableRoles()[role].members.add(account)){
             role.emitRoleGranted(
@@ -415,7 +453,7 @@ abstract contract AccessControl is Context,
     function _revokeRole(
         bytes32 role,
         address account
-    )private
+    )internal
     {
         if(_mutableRoles()[role].members.remove(account)){
             role.emitRoleRevoked(
@@ -423,5 +461,33 @@ abstract contract AccessControl is Context,
                 _msgSender()
             );
         }
+    }
+    ///
+    /// @dev Admin forces transfer of `role` from address `from` to address `to`
+    /// emits a {RoleRevoked} even for `from` and {RoleGranted} event for `to`
+    ///
+    /// Requirements:
+    ///     - the caller must have `role`'s admin role or be default admin
+    ///     - `from` must not be null and currently have the role `role`
+    ///     - `to` must not be null and not have been assigned the role `role`
+    ///
+    /// NOTE:
+    ///     Be careful, default admin role can be transfered (only with the privallegaes it provides),
+    ///     this is useful along with transfering ownership via ERC173
+    ///     however, if default admin role is transfered, this will immediately prevent any further admin operations,
+    ///     thus it should be the last role transfered, if at all
+    ///
+    function _transferRole(
+        bytes32 role,
+        address from,
+        address to
+    )internal
+        //onlyDefaultAdminOrRoleAdmin
+    {
+        _requireHasRole(role,from);
+        _requireNotHasRole(role,to);
+        
+        _grantRole(role, to);
+        _revokeRole(role, from);
     }
 }

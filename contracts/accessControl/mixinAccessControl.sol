@@ -5,7 +5,11 @@ pragma solidity >=0.6.4 <0.8.0;
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/utils/EnumerableSet.sol";
 
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/eventsAccessControl.sol";
-
+///
+/// @title Mixin Access Control Library
+/// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 19/4/2021, All Rights Reserved
+/// @dev mixin for role-based access control mechanisms
+///
 library mixinAccessControl
 {
     struct RoleData {
