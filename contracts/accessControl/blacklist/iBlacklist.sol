@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 pragma solidity >=0.6.4 <0.8.0;
-pragma experiemental ABIEncoderV2;
+pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/iAccessControl.sol";
 ///
