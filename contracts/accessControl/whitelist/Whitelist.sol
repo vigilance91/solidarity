@@ -10,6 +10,7 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contr
 
 import "https://github.com/vigilance91/solidarity/contracts/nonces/NoncesABC.sol";
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/AccessControl.sol";
+
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/whitelist/iWhitelist.sol";
 ///
 /// @title Access Control Address Whitelist

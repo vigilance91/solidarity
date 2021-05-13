@@ -5,7 +5,10 @@ pragma solidity >=0.6.4 <0.8.0;
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/whitelist/iWhitelist.sol";
 
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/frameworkAccessControl.sol";
-
+///
+/// @title Framework Whitelist Library
+/// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 12/5/2021, All Rights Reserved
+///
 library frameworkWhitelist
 {
     using frameworkERC165 for address;
