@@ -5,11 +5,13 @@ pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/contracts/token/mortal/ERC20/MortalERC20Token.sol";
 
-import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/supplyCap/StaticSupplyCapABC.sol";
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/PausableAccessControl.sol";
+
+import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/supplyCap/StaticSupplyCapABC.sol";
 import "https://github.com/vigilance91/solidarity/contracts/token/ERC20/ERC20ReceiverConstraintsABC.sol";
 
 import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/frameworkERC165.sol";
+import "https://github.com/vigilance91/solidarity/contracts/accessControl/whitelist/frameworkWhitelist.sol";
 ///
 /// @title Safe ERC20 Static Supply Token Contract
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 1/5/2021, All Rights Reserved
@@ -28,13 +30,19 @@ abstract contract MortalERC20StaticSupplyToken is MortalERC20Token,
     using SafeMath for uint256;
 
     using frameworkERC165 for address;
-    //using LogicConstraints for bool;
-    using AddressLogic for address;
-    //using uint256Constraints for uint256;
     
+    using LogicConstraints for bool;
+    using AddressLogic for address;
+    
+    //using uint256Constraints for uint256;
+    using Address for address;
     //using stringUtilities for string;
     
-    //string private constant _NAME = ' SafeERC20StaticSupplyToken: ';
+    using frameworkWhitelist for address;
+    
+    address private constant _WHITELIST = 0x3676B215188F65eE6CfB151539A3442d23A9476B;
+    
+    //string private constant _NAME = ' MortalERC20StaticSupplyToken: ';
     
     ///
     /// @dev explicitly prevent proxying
@@ -71,8 +79,36 @@ abstract contract MortalERC20StaticSupplyToken is MortalERC20Token,
         
         assert(_balanceOf(sender) == tokenCap);
         
-        ////_registerInterface(type(iSafeERC20StaticSupplyToken).interfaceId);
+        ////_registerInterface(type(iMortalERC20StaticSupplyToken).interfaceId);
     }
+    function _requirePermitted(
+        address account
+    )internal view
+    {
+        _WHITELIST.isPermitted(account).requireTrue(
+            'address is not whitelisted'
+        );
+    }
+    /// @dev owner may use this to whitelist external,
+    /// verified contracts (such as other Solidarity products, Tether, Uniswap, 1inch, Bancor, etc),
+    /// in combination with Whitelist's `grantPermission` signed message function
+    //function permitExternalContract(
+        //address target,
+        //bytes32 targetHash,
+        //bytes memory signature
+    //)external nonReentrant onlyOwner
+    //{
+        //target.isContract().requireTrue(
+            //'target must be contract address'
+        //);
+        
+        //return _grantContractPermission(
+            //_msgSender(),
+            //target,
+            //targetHash,
+            //signature
+        //);
+    //}
     ///
     /// @dev See {ERC20._beforeTokenTransfer}
     ///
@@ -105,6 +141,17 @@ abstract contract MortalERC20StaticSupplyToken is MortalERC20Token,
                 "cannot burn tokens"
             );
         }
+        //`from` and `to` must be whitelisted addresses, otherwise revert and deny transfer
+        //
+        //NOTE:
+        //  not only does this contract NOT support accepting token transfers via iSafeERC20Receiver,
+        //  but this contract is also NOT whitelisted on the network for transactions,
+        //  so token transfers have two layers of security which cannot be feasibly bypassed,
+        //  requiring explicit developer action to be taken before a contract can/will accept ERC20 token transfers,
+        //  otherwise this logic should not be able to be violated and will deny all tokens being transfer to this contract
+        //
+        _requirePermitted(from);
+        _requirePermitted(to);
         
         super._beforeTokenTransfer(
             from,
