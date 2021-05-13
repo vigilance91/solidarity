@@ -3,7 +3,7 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experiemental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/contracts/accessControl/blacklist/iAccessControl.sol";
+import "https://github.com/vigilance91/solidarity/contracts/accessControl/iAccessControl.sol";
 ///
 /// @title Blacklist Interface
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 12/5/2021, All Rights Reserved
