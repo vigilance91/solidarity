@@ -1,14 +1,13 @@
 // SPDX-License-Identifier: Apache-2.0
 
 pragma solidity >=0.6.4 <0.8.0;
+pragma expermiental ABIEncoderV2;
 
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/utils/EnumerableSet.sol";
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/utils/Address.sol";
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/GSN/Context.sol";
+import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
 
-import "https://github.com/vigilance91/miniOZ/libraries/AdminRoleEvents.sol";
-import "https://github.com/vigilance91/solidarity/interfaces/iAccessControl.sol";
-import "https://github.com/vigilance91/solidarity/interfaces/mixinAccessControl.sol";
+import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/frameworkERC165.sol";
+
+import "https://github.com/vigilance91/solidarity/contracts/accessControl/iAccessControl.sol";
 
 library frameworkAccessControl
 {
