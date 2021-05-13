@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 pragma solidity >=0.6.4 <0.8.0;
-pragma experiemental ABIEncoderV2;
+pragma experimental ABIEncoderV2;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/utils/EnumerableSet.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/utils/Address.sol";

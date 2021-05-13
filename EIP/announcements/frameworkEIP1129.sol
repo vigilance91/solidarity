@@ -111,10 +111,10 @@ library frameworkEIP1129
     }
     function numberOfPosts(
         address target
-    )public view override returns(
+    )public view returns(
         uint256 ret
     ){
-        //_requireSupportsInterface(target);
+        _requireSupportsInterface(target);
         
         (bool success, bytes memory result) = target.staticcall(
             _NUMBER_OF_POST_SIGNATURE
@@ -127,12 +127,12 @@ library frameworkEIP1129
     function readPost(
         address target,
         uint256 postNumber
-    )public view override returns(
+    )public view returns(
         bytes32 authorHash,
         bytes32 postHash,
         string memory post
     ){
-        //_requireSupportsInterface(target);
+        _requireSupportsInterface(target);
         
         (bool success, bytes memory result) = target.staticcall(
             abi.encodeWithSignature(
@@ -155,7 +155,7 @@ library frameworkEIP1129
         string memory post
     )public
     {
-        //_requireSupportsInterface(target);
+        _requireSupportsInterface(target);
         
         (bool success, ) = target.call(
             abi.encodeWithSignature(
@@ -173,7 +173,7 @@ library frameworkEIP1129
         string memory reason
     )public
     {
-        //_requireSupportsInterface(target);
+        _requireSupportsInterface(target);
         
         (bool success, ) = target.call(
             abi.encodeWithSignature(
@@ -192,7 +192,7 @@ library frameworkEIP1129
         string memory reason
     )public
     {
-        //_requireSupportsInterface(target);
+        _requireSupportsInterface(target);
         
         (bool success, ) = target.call(
             abi.encodeWithSignature(

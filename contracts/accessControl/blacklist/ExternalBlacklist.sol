@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 pragma solidity >=0.6.4 <0.8.0;
-pragma experiemental ABIEncoderV2;
+pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/blacklist/iBlacklist.sol";
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/blacklist/BlacklistABC.sol";
@@ -43,7 +43,7 @@ contract ExternalBlacklist is MortalCanary,
     /// can be used together with {getRoleMember} to enumerate all banned accounts
     ///
     function bannedAddressCount(
-    )external virtual override nonReentrant view returns(
+    )external virtual override view returns(
         uint256
     ){
         return _bannedAddressCount();
@@ -79,6 +79,6 @@ contract ExternalBlacklist is MortalCanary,
     {
         //_requireHasAdminRole(role, _msgSender());
         
-        _revokeBan(ROLE_BANNED, account);
+        _revokeBan(account);
     }
 }

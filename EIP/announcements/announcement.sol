@@ -18,7 +18,11 @@ library announcement
 {
     using SafeMath for uint;
     
-    using bytes32Logic for bytes32;
+    using Bytes32Logic for bytes32;
+    
+    using addressToString for address;
+    using addressToString for address payable;
+    
     using stringUtilities for string;
     
     struct data{
@@ -26,12 +30,13 @@ library announcement
         bytes32 authorHash;   //unique hash, used to verify the author and/or platform
         bytes32 postHash;   //unique hash, used to verify the author and/or platform
         string author;
-        //
+        
         string post;
-        //uint createdTime;    //timestamp of post
-        //uint createdBlock;   //block number of post
+        
+        uint createdTime;    //timestamp of post
+        uint createdBlock;   //block number of post
     }
-    
+    /**
     function initialize(
         data storage self,
         address blogAddress,
@@ -40,27 +45,28 @@ library announcement
     )internal returns(
         data memory
     ){
-        string HEX = msg.sender.hexadecimal();
+        string memory HEX = msg.sender.hexadecimal();
         
-        self = new data(
+        self = data(
             blogAddress.hexadecimal().saltAndHash(
                 HEX
             ),
-            //keccak256(bytes(post.saltAndHash(HEX))),
+            HEX.saltAndHash(post),
             //msg.sender,
             posterName,
             post,
-            //now,
-            //block.number
+            block.timestamp,
+            block.number
         );
         
         //msg.sender.emitInialized(
             //post
         //);
     }
+    */
     function isAuthor(
-        data storage self
-        //address blogAddress
+        data storage self,
+        address blogAddress
     )internal view returns(
         bool
     ){
@@ -70,6 +76,16 @@ library announcement
             )
         );
     }
+    //function postEquals(
+        //data storage self,
+        //address blogAddress,
+        //string memory post
+    //)internal returns(
+        //bool
+    //){
+        //string memory HEX = msg.sender.hexadecimal();
+        //return self.postHash ^ HEX.saltAndHash(self.post) == 0;
+    //}
     function postAge(
         data storage self
     )internal view returns(

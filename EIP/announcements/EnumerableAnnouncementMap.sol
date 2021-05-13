@@ -238,8 +238,8 @@ library EnumerableAnnouncementMap
             toRemove._value.authorHash,
             toRemove._value.postHash,
             //toRemove._value.post,
-            removerHash,
-            reason
+            reason,
+            removerHash
         );
         
         // Delete the slot where the moved entry was stored

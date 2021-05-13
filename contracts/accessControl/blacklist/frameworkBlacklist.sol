@@ -18,7 +18,7 @@ library frameworkBlacklist
     using frameworkERC165 for address;
     using frameworkAccessControl for address;
     
-    string private constant _NAME = 'frameworkWhitelist: ';
+    string private constant _NAME = 'frameworkBlacklist: ';
     
     bytes private constant _CALLER_ADDRESS_HASH_SIGNATURE = abi.encodeWithSignature(
         'callerAddressHash()'
@@ -32,7 +32,7 @@ library frameworkBlacklist
         'getBannedMemberCount()'
     );
     
-    bytes4 private constant _iBLACKIST_ID = type(iBlacklist).interfaceId;
+    bytes4 private constant _iBLACKLIST_ID = type(iBlacklist).interfaceId;
     
     function _requireSupportsInterface(
         address target

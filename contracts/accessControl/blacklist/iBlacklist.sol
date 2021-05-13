@@ -13,10 +13,10 @@ interface iBlacklist is iAccessControl
     ///
     /// @return {bool} true if msg.sender is banned, otherwise false
     ///
-    function isBanned(
-    )external view returns(
-        bool
-    );
+    //function isBanned(
+    //)external view returns(
+        //bool
+    //);
     ///
     /// @return {bool} true if account is banned, otherwise false
     ///
