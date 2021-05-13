@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 pragma solidity >=0.6.4 <0.8.0;
-pragma expermiental ABIEncoderV2;
+pragma experimental ABIEncoderV2;
 
+import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
 import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
 
 import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/frameworkERC165.sol";
@@ -12,15 +13,18 @@ import "https://github.com/vigilance91/solidarity/contracts/accessControl/iAcces
 library frameworkAccessControl
 {
     using frameworkERC165 for address;
+    
+    using LogicConstraints for bool;
+    
     using AddressConstraints for address;
     
     string private constant _NAME = 'frameworkAccessControl: ';
     
     bytes4 private constant _iACCESS_CONTROL_ID = type(iAccessControl).interfaceId;
     
-    function _supportsInterface(
+    function _requireSupportsInterface(
         address target
-    )private
+    )private view
     {
         target.supportsInterface(_iACCESS_CONTROL_ID).requireTrue(
             'contract does not implement iWhitelist'
@@ -47,6 +51,7 @@ library frameworkAccessControl
             //"sender already has role"
         );
     }
+    /**
     function _requireHasAdminRole(
         bytes32 role,
         address account
@@ -66,6 +71,15 @@ library frameworkAccessControl
             //"sender must not be an admin"
         );
     }
+    */
+    //function _roleAt(
+        //address target,
+        //bytes32 role
+    //)internal view returns(
+        //bytes32
+    //){
+        //return _roleAt(target, role);
+    //}
     /**
     modifier onlyDefaultAdmin(
     )internal view
@@ -146,7 +160,7 @@ library frameworkAccessControl
     function getRoleMemberCount(
         address target,
         bytes32 role
-    )public returns(
+    )public view returns(
         uint256 ret
     ){
         _requireSupportsInterface(target);
@@ -175,6 +189,7 @@ library frameworkAccessControl
     ///         https://forum.openzeppelin.com/t/iterating-over-elements-on-enumerableset-in-openzeppelin-contracts/2296[forum post]
     ///
     function getRoleMember(
+        address target,
         bytes32 role,
         uint256 index
     )public view returns(
@@ -284,15 +299,16 @@ library frameworkAccessControl
         address account
     )public
     {
-        account.requireEquals(
-            _msgSender()
+        //account.requireEquals(
+            //_msgSender()
             //"can only renounce roles for self"
-        );
+        //);
 
         revokeRole(target, role, account);
     }
     
     function transferRole(
+        address target,
         bytes32 role,
         address from,
         address to
