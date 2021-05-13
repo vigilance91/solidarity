@@ -3,7 +3,8 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/contracts/token/mortal/ERC20/MortalERC20BurnableToken.sol";
+import "https://github.com/vigilance91/solidarity/contracts/token/mortal/ERC20/MortalPermissionERC20BurnableToken.sol";
+
 import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/supplyCap/MutableSupplyCapABC.sol";
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/PausableAccessControl.sol";
 
@@ -15,13 +16,20 @@ import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/su
 //}
 
 ///
-/// @title Safe ERC20 Token Mint
+/// @title ERC20 Token Mint Abstract Base Contract
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 6/5/2021, All Rights Reserved
-/// @dev Generic ERC20 compliant token mint which is pausable, with an uncapped, dynamic (mutable) supply,
-/// capable of permissioned minting and burning of tokens by addresses designated with minter and burner roles
+/// @dev ERC20 compliant token mint which is pausable, with a dynamic (mutable) supply cap
+/// the supply cap can be increased, decreased or explicitly set after contract deployment
+/// typically either by the contract owner, an admin or a trusted address othewise designated to do so
 ///
-abstract contract MortalERC20Mint is MortalERC20BurnableToken,
-    PausableAccessControl
+/// Setting a new cap explicitly or decreasing the supply cap below the total supply available
+/// will cause the transaction to revert, requiring the burning of tokens (using burn or burnFrom)
+/// before the supply cap can be further decreased
+///
+abstract contract MortalERC20MutableCapMint is MortalPermissionERC20BurnableToken,
+    PausableAccessControl,
+    MutableSupplyCapABC,
+    iMutableSupplyCap
 {
     using SafeMath for uint256;
 
@@ -31,10 +39,10 @@ abstract contract MortalERC20Mint is MortalERC20BurnableToken,
     
     //using stringUtilities for string;
     
-    bytes32 public constant ROLE_MINTER = keccak256("MortalPermissionERC20Mint.ROLE_MINTER");
-    bytes32 public constant ROLE_BURNER = keccak256("MortalPermissionERC20Mint.ROLE_BURNER");
+    bytes32 public constant ROLE_MINTER = keccak256("MortalERC20MutableCapMint.ROLE_MINTER");
+    bytes32 public constant ROLE_BURNER = keccak256("MortalERC20MutableCapMint.ROLE_BURNER");
     
-    //string private constant _NAME = ' MortalERC20MutableCapMint: ';
+    //string private constant _NAME = ' SafeERC20MutableCapMint: ';
     
     ///
     /// @dev explicitly prevent proxying
@@ -44,7 +52,6 @@ abstract contract MortalERC20Mint is MortalERC20BurnableToken,
     ///     so, simply prevent proxying here and any attempt to call a function not declared in this implementation
     ///     will always revert here, no need to figure out issues with function visibility, modifiers, execution context, etc
     /// 
-    //fallback(
     //)external view nonReentrant payable{
         //LogicConstraints.alwaysRevert('proxying disabled');
     //}
@@ -57,15 +64,18 @@ abstract contract MortalERC20Mint is MortalERC20BurnableToken,
     constructor(
         string memory name,
         string memory symbol,
-        //string memory version,
-        uint256 initialSupply
+        //uint initialSupply
+        uint256 tokenCap
     )internal 
         //ERC20AccessControlToken(name,symbol,0)
-        MortalERC20BurnableToken(
+        MortalPermissionERC20BurnableToken(
             name,
             symbol
         )
         PausableAccessControl()
+        MutableSupplyCapABC(
+            tokenCap
+        )
     {
         //tokenCap.requireGreaterThanOrEqual(
             //initialSupply,
@@ -77,11 +87,12 @@ abstract contract MortalERC20Mint is MortalERC20BurnableToken,
         _setupRole(ROLE_MINTER, sender);
         _setupRole(ROLE_BURNER, sender);
         
-        //_registerInterface(type(iSafeERC20Mint).interfaceId);
+        _registerInterface(type(iMutableSupplyCap).interfaceId);
+        //_registerInterface(type(iSafeERC20MutableCapMint).interfaceId);
         
-        if(initialSupply > 0){
-            _mint(sender, initialSupply);
-        }
+        //if(initialSupply > 0){
+            //_mint(sender, initialSupply);
+        //}
     }
     ///
     /// @dev Creates `amount` new tokens for `to`
@@ -175,6 +186,53 @@ abstract contract MortalERC20Mint is MortalERC20BurnableToken,
             amount
         );
     }
+    function increaseCapBy(
+        uint256 amountBy
+    )external virtual override onlyOwner nonReentrant
+    returns(
+        uint256
+    ){
+        return _increaseCapBy(amountBy);
+    }
+    function decreaseCapBy(
+        uint256 amountBy
+    )external virtual override onlyOwner nonReentrant
+    returns(
+        uint256
+    ){
+        //cannot reduce token cap below current total supply,
+        //without first burning tokens but this does not know about the total token supply
+        cap().sub(
+            amountBy,
+            'decreaseCapBy: undeflow'
+        ).requireGreaterThanOrEqual(
+            totalSupply()
+            //'decreaseCapBy: burn tokens before reducing cap'
+        );
+        return _decreaseCapBy(amountBy);
+    }
+    
+    function setCap(
+        uint256 newCap
+    )external override onlyOwner nonReentrant
+    returns(
+        uint256
+    ){
+        newCap.requireGreaterThanZero();
+        
+        uint256 CC = cap();
+        
+        CC.requireNotEqual(newCap);
+        
+        if(newCap > CC){
+            _increaseCapBy(newCap.sub(CC));
+        }
+        else if(newCap < CC){
+            _decreaseCapBy(CC.sub(newCap));
+        }
+        
+        return _cap;
+    }
     ///
     /// @dev See {ERC20._beforeTokenTransfer}
     ///
@@ -193,78 +251,25 @@ abstract contract MortalERC20Mint is MortalERC20BurnableToken,
             //_NAME.concatenate("paused")
         );
         
+        //minting
+        if(from.isNull()){
+            require(
+                totalSupply().add(amount) <= cap(),
+                "supply cap exceeded"
+            );
+        }
+        else{
+            _requirePermitted(from);
+        }
+        
+        //if(!to.isNull()){
+            //_requirePermitted(to);
+        //}
+        
         super._beforeTokenTransfer(
             from,
             to,
             amount
         );
     }
-    /**
-    /// 
-    /// @dev transfer ownership and any roles the owner has to the new owner, otherwise,
-    /// the previous owner would retain their privellages and be able to undermine the new owner,
-    /// such as by forcing the mint to pause, minting/burning tokens or performing other admin only functions
-    /// which they should not be entitled to anymore since they are not the contract's owner
-    /// 
-    /// note:
-    ///     renounceOwnership does NOT revoke any assigned roles, only transfering
-    ///
-    //function transferOwnership(
-    //)external virtual override onlyOwner nonReentrant
-    //{
-        //if(){
-        //}
-        //super.transferOwnership(newOwner);
-    //}
-    //function safeTransferOwnership(
-    //)virtual override
-    //{
-        //if(){
-        //}
-        //super.safeTransferOwnership(newOwner);
-    //}
-    
-    function externalSafeTransferOwnership(
-        address ownable,
-        address newOwner
-    )external virtual override onlyOwner nonReentrant
-    {
-        _safeTransferOwnership(ownable, newOwner);
-    }
-    /// @dev like _safeTransferOwnership but exclusively transfers ownership of `ownable` contract address to this contract's owner,
-    ///
-    /// Requirements:
-    ///     * this contract's owner must not be null, otherwise call _safeRenounceOwnership
-    ///     * `ownable` must not already be this contract's owner
-    ///
-    function safeTransferOwnershipToThisOwner(
-        address ownable
-    )external virtual override onlyOwner nonReentrant
-    {
-        //address O = owner();
-        //address _this = address(this);
-        
-        if(hasRole(ROLE_PAUSER), _this){
-            _transferRole(ROLE_PAUSER, _this, O);
-        }
-        if(hasRole(ROLE_MINTER), _this){
-        _transferRole(ROLE_MINTER, _this, O);
-        }
-        if(hasRole(ROLE_BURNER), _this){
-            _transferRole(ROLE_BURNER, _this, O);
-        }
-        
-        _safeTransferOwnershipToThisOwner(ownable);
-    }
-    /// 
-    /// @dev this contract renounces ownership of `ownable`, only if this contract is `ownable`s owner,
-    /// otherwise transaction will revert
-    /// 
-    function externalSafeRenounceOwnership(
-        address ownable
-    )external virtual override onlyOwner nonReentrant
-    {
-        _safeRenounceOwnership(ownable);
-    }
-    */
 }

@@ -3,7 +3,7 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/contracts/token/mortal/ERC20/MortalERC20Token.sol";
+import "https://github.com/vigilance91/solidarity/contracts/token/mortal/ERC20/MortalPermissionERC20Token.sol";
 
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/PausableAccessControl.sol";
 
@@ -22,7 +22,7 @@ import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/frame
 ///     this contract never mints or burns tokens (which is why it is not a token not a mint),
 ///     since the supply is static, the total supply is immediately minted (to the deploying address) and available upon deployment
 ///
-abstract contract MortalERC20StaticSupplyToken is MortalERC20Token,
+abstract contract MortalERC20StaticSupplyToken is MortalPermissionERC20Token,
     PausableAccessControl,
     StaticSupplyCapABC
 {
@@ -57,7 +57,7 @@ abstract contract MortalERC20StaticSupplyToken is MortalERC20Token,
         string memory symbol,
         uint256 tokenCap
     )internal 
-        MortalERC20Token(
+        MortalPermissionERC20Token(
             name,
             symbol
             //tokenCap
@@ -129,6 +129,17 @@ abstract contract MortalERC20StaticSupplyToken is MortalERC20Token,
                 "cannot burn tokens"
             );
         }
+        //`from` and `to` must be whitelisted addresses, otherwise revert and deny transfer
+        //
+        //NOTE:
+        //  not only does this contract NOT support accepting token transfers via iSafeERC20Receiver,
+        //  but this contract is also NOT whitelisted on the network for transactions,
+        //  so token transfers have two layers of security which cannot be feasibly bypassed,
+        //  requiring explicit developer action to be taken before a contract can/will accept ERC20 token transfers,
+        //  otherwise this logic should not be able to be violated and will deny all tokens being transfer to this contract
+        //
+        _requirePermitted(from);
+        _requirePermitted(to);
         
         super._beforeTokenTransfer(
             from,

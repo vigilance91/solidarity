@@ -3,7 +3,7 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/contracts/token/mortal/ERC20/MortalERC20BurnableToken.sol";
+import "https://github.com/vigilance91/solidarity/contracts/token/mortal/ERC20/MortalPermissionERC20BurnableToken.sol";
 
 import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/supplyCap/StaticSupplyCapABC.sol";
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/PausableAccessControl.sol";
@@ -22,7 +22,7 @@ import "https://github.com/vigilance91/solidarity/contracts/accessControl/Pausab
 /// and token transfers to contracts which do NOT implement ERC20Receiver interface will fail and revert state,
 /// preventing the unrecoverable loss of tokens
 ///
-abstract contract MortalERC20StaticCapMint is MortalERC20BurnableToken,
+abstract contract MortalERC20StaticCapMint is MortalPermissionERC20BurnableToken,
     PausableAccessControl,
     StaticSupplyCapABC
 {
@@ -46,7 +46,7 @@ abstract contract MortalERC20StaticCapMint is MortalERC20BurnableToken,
         uint256 tokenCap
     )internal 
         //ERC20AccessControlToken(name,symbol,0)
-        MortalERC20BurnableToken(
+        MortalPermissionERC20BurnableToken(
             name,
             symbol
             //tokenCap
@@ -122,6 +122,13 @@ abstract contract MortalERC20StaticCapMint is MortalERC20BurnableToken,
                 "supply cap exceeded"
             );
         }
+        //else{
+            //_requirePermitted(from);
+        //}
+        
+        //if(to.isNotNull()){
+            //_requirePermitted(to);
+        //}
         
         super._beforeTokenTransfer(
             from,

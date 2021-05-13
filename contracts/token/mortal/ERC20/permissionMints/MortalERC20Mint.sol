@@ -3,7 +3,7 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/contracts/token/mortal/ERC20/MortalERC20BurnableToken.sol";
+import "https://github.com/vigilance91/solidarity/contracts/token/mortal/ERC20/MortalPermissionERC20BurnableToken.sol";
 import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/supplyCap/MutableSupplyCapABC.sol";
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/PausableAccessControl.sol";
 
@@ -20,7 +20,7 @@ import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/su
 /// @dev Generic ERC20 compliant token mint which is pausable, with an uncapped, dynamic (mutable) supply,
 /// capable of permissioned minting and burning of tokens by addresses designated with minter and burner roles
 ///
-abstract contract MortalERC20Mint is MortalERC20BurnableToken,
+abstract contract MortalERC20Mint is MortalPermissionERC20BurnableToken,
     PausableAccessControl
 {
     using SafeMath for uint256;
@@ -34,7 +34,7 @@ abstract contract MortalERC20Mint is MortalERC20BurnableToken,
     bytes32 public constant ROLE_MINTER = keccak256("MortalPermissionERC20Mint.ROLE_MINTER");
     bytes32 public constant ROLE_BURNER = keccak256("MortalPermissionERC20Mint.ROLE_BURNER");
     
-    //string private constant _NAME = ' MortalERC20MutableCapMint: ';
+    //string private constant _NAME = ' SafeERC20MutableCapMint: ';
     
     ///
     /// @dev explicitly prevent proxying
@@ -61,7 +61,7 @@ abstract contract MortalERC20Mint is MortalERC20BurnableToken,
         uint256 initialSupply
     )internal 
         //ERC20AccessControlToken(name,symbol,0)
-        MortalERC20BurnableToken(
+        MortalPermissionERC20BurnableToken(
             name,
             symbol
         )
@@ -192,6 +192,14 @@ abstract contract MortalERC20Mint is MortalERC20BurnableToken,
             !paused()
             //_NAME.concatenate("paused")
         );
+        
+        //if(from.notNull()){
+            //_requirePermitted(from);
+        //}
+        
+        //if(to.notNull()){
+            //_requirePermitted(to);
+        //}
         
         super._beforeTokenTransfer(
             from,

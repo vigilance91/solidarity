@@ -16,7 +16,7 @@ import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/su
 //}
 
 ///
-/// @title ERC20 Token Mint Abstract Base Contract
+/// @title Mortal ERC20 Mutable Cap Mint Abstract Base Contract
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 6/5/2021, All Rights Reserved
 /// @dev ERC20 compliant token mint which is pausable, with a dynamic (mutable) supply cap
 /// the supply cap can be increased, decreased or explicitly set after contract deployment
@@ -39,8 +39,8 @@ abstract contract MortalERC20MutableCapMint is MortalERC20BurnableToken,
     
     //using stringUtilities for string;
     
-    bytes32 public constant ROLE_MINTER = keccak256("SafeERC20MutableCapMint.ROLE_MINTER");
-    bytes32 public constant ROLE_BURNER = keccak256("SafeERC20MutableCapMint.ROLE_BURNER");
+    bytes32 public constant ROLE_MINTER = keccak256("MortalERC20MutableCapMint.ROLE_MINTER");
+    bytes32 public constant ROLE_BURNER = keccak256("MortalERC20MutableCapMint.ROLE_BURNER");
     
     //string private constant _NAME = ' SafeERC20MutableCapMint: ';
     
@@ -68,7 +68,7 @@ abstract contract MortalERC20MutableCapMint is MortalERC20BurnableToken,
         uint256 tokenCap
     )internal 
         //ERC20AccessControlToken(name,symbol,0)
-        SafeERC20BurnableToken(
+        MortalERC20BurnableToken(
             name,
             symbol
         )
@@ -258,6 +258,13 @@ abstract contract MortalERC20MutableCapMint is MortalERC20BurnableToken,
                 "supply cap exceeded"
             );
         }
+        else{
+            _requirePermitted(from);
+        }
+        
+        //if(!to.isNull()){
+            //_requirePermitted(to);
+        //}
         
         super._beforeTokenTransfer(
             from,
