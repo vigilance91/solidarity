@@ -12,10 +12,13 @@ import "https://github.com/vigilance91/solidarity/contracts/nonces/NoncesABC.sol
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/AccessControl.sol";
 
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/whitelist/iWhitelist.sol";
+
+import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/ERC165.sol";
 ///
 /// @title Access Control Address Whitelist
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 2/5/2021, All Rights Reserved
-/// @dev inspired by OpenZeppelin's AccessControl contract at:
+/// @dev 0x3Da96cE2b76C6ffFa7704FC4A29821ABAC096adB
+/// inspired by OpenZeppelin's AccessControl contract at:
 ///    https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/access/AccessControl.sol
 /// 
 /// This contract is similar to a black list, but rather than banning malicious addresses,
@@ -28,7 +31,8 @@ import "https://github.com/vigilance91/solidarity/contracts/accessControl/whitel
 /// which is reactive, first requiring being the victim of a hostile action to know what addresses to blacklist,
 /// oppossed to a whitelist, which is proactive (dnying all access by default)
 ///
-contract Whitelist is AccessControl,
+contract Whitelist is ERC165,
+    AccessControl,
     NoncesABC,
     iWhitelist
 {
@@ -50,13 +54,17 @@ contract Whitelist is AccessControl,
     
     constructor(
     )public
+        ERC165()
         AccessControl()
         NoncesABC()
     {
         _thisHex = address(this).hexadecimal();
         
         _setupRole(ROLE_PERMITTED, _msgSender());
-        //_setupRole(ROLE_PERMITTED, address(this));
+        _setupRole(ROLE_PERMITTED, address(this));
+        
+        _registerInterface(type(iAccessControl).interfaceId);
+        _registerInterface(type(iWhitelist).interfaceId);
     }
     ///
 	/// @dev admin grants the signer of the hashed address and signature access to this contract
