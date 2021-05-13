@@ -12,6 +12,17 @@ interface iWhitelist is iAccessControl
 {
     ///
 	/// @dev admin grants the signer of the hashed address and signature access to this contract
+    ///
+    /// Requirements:
+    ///     - `account` must not be null
+    ///
+    function isPermitted(
+        address account
+    )external view returns(
+        bool
+    );
+    ///
+	/// @dev admin grants the signer of the hashed address and signature access to this contract
     /// transaction cost: 195,085 gas + execution cost 166,837 gas === 361,922 total gas
     /// emits a {RoleGranted} event
     ///

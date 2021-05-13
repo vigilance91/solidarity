@@ -99,7 +99,7 @@ library frameworkWhitelist
     ///
     /// @return ret {bool} true if account is whitelisted, granted access to network
     ///
-    function  function isPermitted(
+    function isPermitted(
         address target,
         address account
     )public view returns(
@@ -128,7 +128,7 @@ library frameworkWhitelist
     /// Requirements:
     ///     - the caller must have ``role``'s admin role
     ///
-    function  function grantPermission(
+    function grantPermission(
         bytes32 signerHash,
         bytes memory signature
     )public
