@@ -110,7 +110,7 @@ library frameworkEIP1129
         );
     }
     function numberOfPosts(
-        address target,
+        address target
     )public view override returns
         uint256 ret
     ){
