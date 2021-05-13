@@ -19,7 +19,7 @@ library frameworkEIP1129
     
     using frameworkAccessControl for address;
     
-    using LogicCOnstraints for bool;
+    using LogicConstraints for bool;
     
     bytes private constant _NUMBER_OF_POST_SIGNATURE = abi.encodeWithSignature(
         'numberOfPosts()'

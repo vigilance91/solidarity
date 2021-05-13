@@ -2,9 +2,13 @@
 
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
-
-//Ethereum Improvments Proposal: Standard DAPP Announcements - https://eips.ethereum.org/EIPS/eip-1129
-interface iERC1129
+///
+/// @title EIP1129 Announcements Interface
+/// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 8/4/2021, All Rights Reserved
+/// @dev Bsed On:
+///     Ethereum Improvments Proposal: Standard DAPP Announcements - https://eips.ethereum.org/EIPS/eip-1129
+///
+interface iEIP1129
 {
     ///
     ///read-only interface
