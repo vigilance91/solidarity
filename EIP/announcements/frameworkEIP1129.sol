@@ -37,7 +37,7 @@ library frameworkEIP1129
     ///
     function _supportsInterface(
         address target
-    )internal view returns
+    )internal view returns(
         bool ret
     ){
         return target.supportsInterface(_iEIP1129_ID);
