@@ -10,6 +10,7 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contr
 
 import "https://github.com/vigilance91/solidarity/contracts/nonces/NoncesABC.sol";
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/AccessControl.sol";
+import "https://github.com/vigilance91/solidarity/contracts/accessControl/whitelist/iWhitelist.sol";
 ///
 /// @title Access Control Address Whitelist
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 2/5/2021, All Rights Reserved
@@ -27,7 +28,8 @@ import "https://github.com/vigilance91/solidarity/contracts/accessControl/Access
 /// oppossed to a whitelist, which is proactive (dnying all access by default)
 ///
 contract Whitelist is AccessControl,
-    NoncesABC
+    NoncesABC,
+    iWhitelist
 {
     using EnumerableSet for EnumerableSet.AddressSet;
     
@@ -69,7 +71,7 @@ contract Whitelist is AccessControl,
     function grantPermission(
         bytes32 signerHash,
         bytes memory signature
-    )external virtual //returns(address)  //,bytes32,bytes32, bytes32)  //override nonReentrant
+    )external virtual override //returns(address)  //,bytes32,bytes32, bytes32)  //override nonReentrant
     {
         address sender = _msgSender();
         //sender must be admin and also be permitted to use this contract
@@ -82,7 +84,7 @@ contract Whitelist is AccessControl,
         );
         //prevent signer from self-permitting
         signer.requireNotEqual(
-            _msgSender()
+            sender
             //'admin can not be signer'
         );
         
@@ -113,6 +115,68 @@ contract Whitelist is AccessControl,
         
         //return signer;
     }
+    /// @dev `sender` whitelists an external, verified, contract `target`, granting permission to utilize the network's infrastructure
+    function _grantContractPermission(
+        address sender,
+        address target,
+        bytes32 targetHash,
+        bytes memory signature
+    )internal //returns(address)  //,bytes32,bytes32, bytes32)  //override nonReentrant
+    {
+        //address sender = _msgSender();
+        //sender must be admin and also be permitted to use this contract
+        //_requirePermitted(sender);
+        _requireHasAdminRole(ROLE_PERMITTED, sender);
+        
+        address signer = ECDSA.recover(
+            ECDSA.toEthSignedMessageHash(targetHash),
+            signature
+        );
+        //signer must be the sender and also a permitted admin
+        signer.requireEqual(
+            sender
+            //'admin can not be signer'
+        );
+        
+        //ensure the recovered traget contract address matchs the original hash sent in the signed message by the admin,
+        //otherwise, any contract can be aritrarily signed and granted permission
+        //_addressHash(signer).requireEqual(
+            //signerHash
+        //);
+        require(
+            _addressHash(target) == targetHash,
+            'invalid signer hash'
+        );
+        // require signer has not already been granted permission
+        _requireNotHasRole(ROLE_PERMITTED,target);
+        
+        //caller of permit() can not be the transaction signer
+        //return (
+            //signer,
+            //signerHash,
+            //_addressHash(signer),
+            //messageHash
+        //);
+        
+        _incrementNonce(target);
+        
+        _grantRole(ROLE_PERMITTED, target);
+        
+        //return signer;
+    }
+    // @dev owner may use this to whitelist external,
+    // verified contracts (such as other Solidarity products, Tether, Uniswap, 1inch, Bancor, etc),
+    // in combination with Whitelist's `grantPermission` signed message function
+    //function _contractAddressHash(
+        //address target
+    //)internal view returns(
+        //bytes32
+    //){
+        //target.isContract().requireTrue(
+            //'target must be contract address'
+        //);
+        //return _addressHash(target);
+    //}
     /// 
     /// @return {bytes32} hash of the hexadecimal string of this address concatentated with account's hexadecimal repressentation, combined with that account's current nonce
     /// @dev this will be unique after each successful call to permit, or similar transactions, which increments the account's nonce
@@ -133,7 +197,7 @@ contract Whitelist is AccessControl,
     /// and caller's nonce, then hash result. Use this result for argument `signerHash` in {permit}
     /// 
     function callerAddressHash(
-    )external view returns(
+    )external view override returns(
         bytes32
     ){
         return _addressHash(_msgSender());
@@ -157,12 +221,19 @@ contract Whitelist is AccessControl,
             //"address is white-listed"
         );
     }
+    function isPermitted(
+        address account
+    )public view override returns(
+        bool
+    ){
+        return hasRole(ROLE_PERMITTED, account);
+    }
     ///
     /// @return {uint256} the number of white-listed accounts,
     /// can be used together with {getRoleMember} to enumerate all white-listed accounts
     ///
     function getPermittedMemberCount(
-    )public view returns(
+    )public view override returns(
         uint256
     ){
         //return _roleAt(ROLE_PERMITTED).members.length();
@@ -178,7 +249,7 @@ contract Whitelist is AccessControl,
     ///
     function revokePermission(
         address account
-    )external //virtual override
+    )external virtual override
         //onlyDefaultAdminOrRoleAdmin
     {
         _requireHasAdminRole(ROLE_PERMITTED, _msgSender());
