@@ -8,7 +8,7 @@ import "https://github.com/vigilance91/solidarity/contracts/accessControl/iAcces
 /// @title Whitelist Interface
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 12/5/2021, All Rights Reserved
 ///
-contract iWhitelist is iAccessControl
+interface iWhitelist is iAccessControl
 {
     ///
 	/// @dev admin grants the signer of the hashed address and signature access to this contract
