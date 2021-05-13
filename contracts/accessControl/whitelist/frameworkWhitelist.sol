@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 pragma solidity >=0.6.4 <0.8.0;
+pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/whitelist/iWhitelist.sol";
 
@@ -11,9 +12,11 @@ import "https://github.com/vigilance91/solidarity/contracts/accessControl/framew
 ///
 library frameworkWhitelist
 {
+    using LogicConstraints for bool;
+    using AddressConstraints for address;
+    
     using frameworkERC165 for address;
     using frameworkAccessControl for address;
-    using AddressConstraints for address;
     
     string private constant _NAME = 'frameworkWhitelist: ';
     
@@ -31,7 +34,7 @@ library frameworkWhitelist
     
     bytes4 private constant _iWHITELIST_ID = type(iWhitelist).interfaceId;
     
-    function _supportsInterface(
+    function _requireSupportsInterface(
         address target
     )private view
     {
@@ -59,25 +62,25 @@ library frameworkWhitelist
             //"sender already has role"
         );
     }
-    function _requireHasAdminRole(
-        bytes32 role,
-        address account
-    )internal view
-    {
-        hasRole(target, _roleAt(role).adminRole, account).requireTrue(
-            //"sender must be an admin"
-        );
-    }
-    function _requireNotHasAdminRole(
-        address target,
-        bytes32 role,
-        address account
-    )internal view
-    {
-        hasRole(target, _roleAt(role).adminRole, account).requireFalse(
-            //"sender must not be an admin"
-        );
-    }
+    //function _requireHasAdminRole(
+        //bytes32 role,
+        //address account
+    //)internal view
+    //{
+        //hasRole(target, _roleAt(role).adminRole, account).requireTrue(
+            ////"sender must be an admin"
+        //);
+    //}
+    //function _requireNotHasAdminRole(
+        //address target,
+        //bytes32 role,
+        //address account
+    //)internal view
+    //{
+        //hasRole(target, _roleAt(role).adminRole, account).requireFalse(
+            ////"sender must not be an admin"
+        //);
+    //}
     /**
     modifier onlyPermitted(
         bytes32 role
@@ -129,6 +132,7 @@ library frameworkWhitelist
     ///     - the caller must have ``role``'s admin role
     ///
     function grantPermission(
+        address target,
         bytes32 signerHash,
         bytes memory signature
     )public
@@ -223,8 +227,9 @@ library frameworkWhitelist
     }
     
     function callerAddressHash(
+        address target
     )public view returns(
-        bytes32
+        bytes32 ret
     ){
         _requireSupportsInterface(target);
         
@@ -236,6 +241,7 @@ library frameworkWhitelist
         (ret) = abi.decode(result, (bytes32));
     }
     function getPermittedMemberCount(
+        address target
     )public view returns(
         uint256 ret
     ){
