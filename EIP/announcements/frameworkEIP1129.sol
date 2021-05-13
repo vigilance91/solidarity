@@ -111,7 +111,7 @@ library frameworkEIP1129
     }
     function numberOfPosts(
         address target
-    )public view override returns
+    )public view override returns(
         uint256 ret
     ){
         //_requireSupportsInterface(target);
