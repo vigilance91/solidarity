@@ -23,6 +23,16 @@ abstract contract EtherReceiverConstraintsABC //is ContractConstraintsABC
     )internal{
     }
     
+    function _requireBalanceGreaterThanOrEqual(
+        uint256 amount
+    )internal view
+    {
+        require(
+            address(this).balance >= amount,
+            'insufficient contract balance'
+        );
+    }
+    
     function _requireCanReceiveEther(
         address recipient
     )internal view
