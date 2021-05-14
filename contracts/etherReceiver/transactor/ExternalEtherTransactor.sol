@@ -11,7 +11,7 @@ import "https://github.com/vigilance91/solidarity/contracts/etherReceiver/transa
 /// @dev Fully realized External extension of EtherTransactorABC which provides safe ETH transfer functionality,
 /// similar to ERC20 tokens but for ETH and can be easily implemented in other dApps or be used as a stand alone contract
 ///
-contract ExternalEtherTransactor is EtherTransactorABC
+contract ExternalEtherTransactor is EtherTransactorABC,
     iEtherTransactor
 {
     using SafeMath for uint256;
