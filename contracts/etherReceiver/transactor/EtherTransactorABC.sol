@@ -12,20 +12,21 @@ pragma experimental ABIEncoderV2;
 ///     This contract performs safe transfers of ETH to contracts,
 ///     reverting if the recipient is a contract which does not implement iEtherReceiver
 ///
-import "./EtherReceiverABC.sol";
-import "./frameworkEtherReceiver.sol";
-import "./EtherReceiverConstraintsABC.sol";
+//import "./EtherReceiverABC.sol";
+//import "./frameworkEtherReceiver.sol";
+//import "./EtherReceiverConstraintsABC.sol";
+
+import "https://github.com/vigilance91/solidarity/contracts/etherReceiver/EtherReceiverABC.sol";
+import "https://github.com/vigilance91/solidarity/contracts/etherReceiver/frameworkEtherReceiver.sol";
+import "https://github.com/vigilance91/solidarity/contracts/etherReceiver/EtherReceiverConstraintsABC.sol";
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/math/SafeMath.sol";
 
 import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
 import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256Constraints.sol";
 
-//import "https://github.com/vigilance91/solidarity/contracts/allowance/AllowanceABC.sol";
-
 abstract contract EtherTransactorABC is EtherReceiverABC,
     EtherReceiverConstraintsABC
-    //AllowanceABC
 {
     using SafeMath for uint256;
     
@@ -53,7 +54,6 @@ abstract contract EtherTransactorABC is EtherReceiverABC,
     )internal
         EtherReceiverABC()
         EtherReceiverConstraintsABC()
-        //AllowanceABC()
     {
         //if(msg.value > 0){
             //(bool success, ) = payable(address(this)).call{value:msg.value}("");
