@@ -40,7 +40,7 @@ library frameworkERC173
     ///
     function supportsInterface(
         address target
-    )public view returns(
+    )internal view returns(
         bool ret
     ){
         //target.isContract().requireTrue(
@@ -61,7 +61,7 @@ library frameworkERC173
     }
     function requireSupportsInterface(
         address target
-    )public
+    )internal
     {
         supportsInterface(target).requireTrue(
             "not supported"
@@ -69,14 +69,13 @@ library frameworkERC173
     }
     function owner(
         address target
-    )public view returns(
+    )internal view returns(
         address ret
     ){
         //requireSupportsInterface(target);
         
         (bool result, bytes memory data) = target.staticcall(
             OWNER_SIGNATURE     //abi.encodeWithSignature('owner()')
-            
         );
         result.requireTrue(
             'call failed'
@@ -87,7 +86,7 @@ library frameworkERC173
     /// otherwise this function will revert
     function renounceOwnership(
         address target
-    )public
+    )internal
     {
         //requireSupportsInterface(target);
         
@@ -102,7 +101,7 @@ library frameworkERC173
     function transferOwnership(
         address target,
         address newOwner
-    )public
+    )internal
     {
         //requireSupportsInterface(target);
         

@@ -56,7 +56,7 @@ library frameworkSafeERC173
     /// @dev pre-check to determine if an address is capable of accepting ERC173 ownership transfers
     function canReceiveERC173(
         address target
-    )public view returns(
+    )internal view returns(
         bool ret
     ){
         target.requireNotNull(
@@ -79,7 +79,7 @@ library frameworkSafeERC173
     function onERC173Received(
         address recipient,
         address from
-    )public returns(
+    )internal returns(
         bool
     ){
         recipient.requireNotNull();
@@ -110,7 +110,7 @@ library frameworkSafeERC173
     /// 
     function owner(
         address target
-    )public view returns(
+    )internal view returns(
         address ret
     ){
         target.requireNotNull(
@@ -141,7 +141,7 @@ library frameworkSafeERC173
         address currentOwner,
         address target,
         address newOwner
-    )public
+    )internal
     {
         address O = owner(target);
         
@@ -177,7 +177,7 @@ library frameworkSafeERC173
     function renounceOwnership(
         address currentOwner,
         address target
-    )public
+    )internal
     {
         address O = owner(target);
         

@@ -20,7 +20,7 @@ library bytes32ToString
     /// @return octal formatted string [0-7]
     function octal(
         bytes32 value
-    )public pure returns(
+    )internal pure returns(
         string memory
     ){
         return uint256(value).octal();
@@ -28,7 +28,7 @@ library bytes32ToString
     /// @return decimal formatted string [0-9] (without leading '0x')
     function decimal(
         bytes32 value
-    )public pure returns(
+    )internal pure returns(
         string memory
     ){
         return uint256(value).decimal();
@@ -37,7 +37,7 @@ library bytes32ToString
     /// @return hex string [0-F] (without leading '0x')
     function hexadecimal(
         bytes32 value
-    )public pure returns(
+    )internal pure returns(
         string memory
     ){
         return uint256(value).hexadecimal();
@@ -48,9 +48,9 @@ library bytes32ToString
     //function concatenate(
         //bytes32 lhs,
         //bytes32 rhs
-    //) public pure
-        //returns(string memory)
-    //{
+    //)internal pure returns(
+        //string memory
+    //){
         //return string(lhs).concatenate(
             //string(rhs)
         //);
@@ -59,7 +59,7 @@ library bytes32ToString
     function concatenateAsDecimal(
         bytes32 lhs,
         bytes32 rhs
-    )public pure returns(
+    )internal pure returns(
         string memory
     ){
         return uint256(lhs).decimal().concatenate(
@@ -71,7 +71,7 @@ library bytes32ToString
     function concatenateAsHex(
         bytes32 lhs,
         bytes32 rhs
-    )public pure returns(
+    )internal pure returns(
         string memory
     ){
         return uint256(lhs).hexadecimal().concatenate(
@@ -82,7 +82,7 @@ library bytes32ToString
     function saltAndHash(
         bytes32 lhs,
         bytes32 rhs
-    )public pure returns(
+    )internal pure returns(
         bytes32
     ){
         return keccak256(abi.encodePacked(
@@ -93,7 +93,7 @@ library bytes32ToString
     function saltAsOctalAndHash(
         bytes32 lhs,
         bytes32 rhs
-    )public pure returns(
+    )internal pure returns(
         bytes32
     ){
         return keccak256(
@@ -106,7 +106,7 @@ library bytes32ToString
     function saltAsDecimalAndHash(
         bytes32 lhs,
         bytes32 rhs
-    )public pure returns(
+    )internal pure returns(
         bytes32
     ){
         return keccak256(
@@ -119,7 +119,7 @@ library bytes32ToString
     function saltAsHexAndHash(
         bytes32 lhs,
         bytes32 rhs
-    )public pure returns(
+    )internal pure returns(
         bytes32
     ){
         return keccak256(
@@ -133,9 +133,9 @@ library bytes32ToString
     //function saltAsDecimalAndHashAsString(
         //bytes32 lhs,
         //bytes32 rhs
-    //) public pure
-        //returns(string memory)
-    //{
+    //)internal pure returns(
+        //string memory
+    //){
         //return string(saltAsDecimalAndHash(
     //        lhs,
     //        rhs
@@ -144,9 +144,9 @@ library bytes32ToString
     //function saltAsHexAndHashAsString(
     //    bytes32 lhs,
     //    bytes32 rhs
-    //) public pure
-    //    returns(string memory)
-    //{
+    //)internal pure returns(
+        //string memory
+    //){
     //    return string(saltAsHexAndHash(
     //        lhs,
     //        rhs

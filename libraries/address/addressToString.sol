@@ -27,7 +27,7 @@ library addressToString
     /// @return octal formatted string [0-7]
     function octal(
         address value
-    )public pure returns(
+    )internal pure returns(
         string memory
     ){
         return uint256(value).octal();
@@ -35,7 +35,7 @@ library addressToString
     /// @return decimal formatted string [0-9] (without leading '0x')
     function decimal(
         address value
-    )public pure returns(
+    )internal pure returns(
         string memory
     ){
         return uint256(value).decimal();
@@ -43,7 +43,7 @@ library addressToString
     /// @return hex string [0-F] (without leading '0x')
     function hexadecimal(
         address value
-    )public pure returns(
+    )internal pure returns(
         string memory
     ){
         return uint256(value).hexadecimal();
@@ -52,7 +52,7 @@ library addressToString
     function concatenateAsOctal(
         address lhs,
         address rhs
-    )public pure returns(
+    )internal pure returns(
         string memory
     ){
         return uint256(lhs).octal().concatenate(
@@ -62,7 +62,7 @@ library addressToString
     function concatenateAsDecimal(
         address lhs,
         address rhs
-    )public pure returns(
+    )internal pure returns(
         string memory
     ){
         return uint256(lhs).decimal().concatenate(
@@ -74,7 +74,7 @@ library addressToString
     function concatenateAsHex(
         address lhs,
         address rhs
-    )public pure returns(
+    )internal pure returns(
         string memory
     ){
         return uint256(lhs).hexadecimal().concatenate(
@@ -84,7 +84,7 @@ library addressToString
     function saltAsOctalAndHash(
         address lhs,
         address rhs
-    )public pure returns(
+    )internal pure returns(
         bytes32
     ){
         return keccak256(abi.encodePacked(
@@ -95,7 +95,7 @@ library addressToString
     function saltAsDecimalAndHash(
         address lhs,
         address rhs
-    )public pure returns(
+    )internal pure returns(
         bytes32
     ){
         return keccak256(abi.encodePacked(
@@ -106,7 +106,7 @@ library addressToString
     function saltAndHash(
         address lhs,
         address rhs
-    )public pure returns(
+    )internal pure returns(
         bytes32
     ){
         //return Secure.saltAndHash(uint256(lhs).hexadecimal(),uint256(rhs).hexadecimal());
@@ -119,7 +119,7 @@ library addressToString
     //function saltAsOctalAndHashAsString(
     //    address lhs,
     //    address rhs
-    //) public pure
+    //)internal pure
     //    returns(string memory ret)
     //{
     //    bytes32 res = saltAsOctalAndHash(
@@ -133,7 +133,7 @@ library addressToString
     //function saltAsDecimalAndHashAsString(
     //    address lhs,
     //    address rhs
-    //) public pure
+    //)internal pure
     //    returns(string memory ret)
     //{
     //    bytes32 res = saltAsDecimalAndHash(
@@ -147,7 +147,7 @@ library addressToString
     //function saltAsHexAndHashAsString(
     //    address lhs,
     //    address rhs
-    //) public pure
+    //)internal pure
     //    returns(string memory)
     //{
     //    return string(saltAsHexAndHash(
@@ -163,9 +163,9 @@ library addressToString
         //address lhs,
         //address rhs,
         //bytes32 mask
-    //) public pure
-        //returns(string memory)
-    //{
+    //)internal pure returns(
+        //string memory
+    //){
         //return LogicalBytes.xor(
             //keccak256(abi.encodePacked(
                 //uint256(lhs).octal(),
@@ -178,9 +178,9 @@ library addressToString
         //uint256 lhs,
         //address rhs,
         //bytes32 mask
-    //) public pure
-        //returns(string memory)
-    //{
+    //)internal pure returns(
+        //string memory
+    //){
         //return LogicalBytes.xor(
             //keccak256(abi.encodePacked(
                 //decimal(lhs),
@@ -193,9 +193,9 @@ library addressToString
         //uint256 lhs,
         //address rhs,
         //bytes32 mask
-    //) public pure
-        //returns(string memory)
-    //{
+    //)internal pure returns(
+        //string memory
+    //){
         //return LogicalBytes.xor(
             //keccak256(abi.encodePacked(
                 //hexadecimal(lhs),

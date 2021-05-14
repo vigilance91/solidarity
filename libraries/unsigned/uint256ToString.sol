@@ -28,9 +28,9 @@ library uint256ToString
     /// @return octal formatted string [0-7]
     function octal(
         uint256 value
-    ) public pure
-        returns(string memory)
-    {
+    )internal pure returns(
+        string memory
+    ){
         if(value == 0){
             return "0";
         }
@@ -51,9 +51,9 @@ library uint256ToString
     /// @return decimal formatted string [0-9] (without leading '0x')
     function decimal(
         uint256 value
-    ) public pure
-        returns(string memory)
-    {
+    )internal pure returns(
+        string memory
+    ){
         if(value == 0){
             return "0";
         }
@@ -71,9 +71,9 @@ library uint256ToString
     /// @return hex string [0-F] (without leading '0x')
     function hexadecimal(
         uint256 value
-    ) public pure
-        returns(string memory)
-    {
+    )internal pure returns(
+        string memory
+    ){
         if(value == 0){
             return "0";
         }
@@ -99,9 +99,9 @@ library uint256ToString
     function concatenateAsOctal(
         uint256 lhs,
         uint256 rhs
-    ) public pure
-        returns(string memory)
-    {
+    )internal pure returns(
+        string memory
+    ){
         return octal(lhs).concatenate(
             octal(rhs)
         );
@@ -109,9 +109,9 @@ library uint256ToString
     function concatenateAsDecimal(
         uint256 lhs,
         uint256 rhs
-    ) public pure
-        returns(string memory)
-    {
+    )internal pure returns(
+        string memory
+    ){
         return decimal(lhs).concatenate(
             decimal(rhs)
         );
@@ -121,9 +121,9 @@ library uint256ToString
     function concatenateAsHex(
         uint256 lhs,
         uint256 rhs
-    ) public pure
-        returns(string memory)
-    {
+    )internal pure returns(
+        string memory
+    ){
         return hexadecimal(lhs).concatenate(
             hexadecimal(rhs)
         );
@@ -134,9 +134,9 @@ library uint256ToString
     function saltAndHash(
         uint256 lhs,
         uint256 rhs
-    ) public pure
-        returns(bytes32)
-    {
+    )internal pure returns(
+        bytes32
+    ){
         //return Secure.saltAndHash(hexadecimal(lhs),hexadecimal(uint256(rhs)));
         return keccak256(abi.encodePacked(
             hexadecimal(lhs),
@@ -147,9 +147,9 @@ library uint256ToString
     //function saltAsDecimalAndHash(
         //string memory salt,
         //uint256 rhs
-    //) public pure
-        //returns(string memory)
-    //{
+    //)internal pure returns(
+        //string memory
+    //){
         //return keccak256(abi.encodePacked(
             //salt,
             //decimal(rhs)
@@ -158,9 +158,9 @@ library uint256ToString
     //function saltAsHexAndHash(
         //string memory salt,
         //uint256 rhs
-    //) public pure
-        //returns(string memory)
-    //{
+    //)internal pure returns(
+        string memory
+    //){
         //return keccak256(abi.encodePacked(
             //salt,
             //hexadecimal(rhs)
@@ -170,9 +170,9 @@ library uint256ToString
     //function saltAsDecimalAndHashAsString(
     //    address lhs,
     //    address rhs
-    //) public pure
-    //    returns(string memory)
-    //{
+    //)internal pure returns(
+        //string memory
+    //){
     //    return string(saltAsDecimalAndHash(
     //        lhs,
     //        rhs
@@ -182,9 +182,9 @@ library uint256ToString
    //function saltAsHexAndHashAsString(
     //    address lhs,
     //    address rhs
-    //) public pure
-    //    returns(string memory)
-    //{
+    //)internal pure returns(
+        //string memory
+    //){
     //    return string(saltAndHash(
     //        lhs,
     //        rhs

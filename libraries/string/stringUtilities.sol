@@ -23,7 +23,7 @@ library stringUtilities
     function concatenate(
         string memory lhs,
         string memory rhs
-    )public pure returns(
+    )internal pure returns(
         string memory
     ){
         LogicConstraints.requireTrue(
@@ -38,7 +38,7 @@ library stringUtilities
     function concatenate(
         string memory lhs,
         bytes32 rhs
-    )public pure returns(
+    )internal pure returns(
         string memory
     ){
         LogicConstraints.requireTrue(
@@ -53,7 +53,7 @@ library stringUtilities
     */
     function hash(
         string memory self
-    )public pure returns(
+    )internal pure returns(
         bytes32
     ){
         return keccak256(bytes(self));
@@ -62,7 +62,7 @@ library stringUtilities
     function saltAndHash(
         string memory lhs,
         string memory rhs
-    )public pure returns(
+    )internal pure returns(
         bytes32
     ){
         //salting empty string is point and a waste of gas
@@ -80,7 +80,7 @@ library stringUtilities
     /// the return of this function is considered that function's selector by the EVM
     function hashSignature(
         string memory self
-    )public pure returns(
+    )internal pure returns(
         bytes4
     ){
         //LogicConstraints.requireTrue(
@@ -94,7 +94,7 @@ library stringUtilities
     function hashSignatureEquals(
         string memory lhs,
         bytes4 rhs
-    )public pure
+    )internal pure
         returns(bool)
     {
         return hashSignature(lhs) == rhs;
@@ -103,7 +103,7 @@ library stringUtilities
     //function hashSignatureEquals(
         //string memory lhs,
         //string memory rhs
-    //)public pure returns(
+    //)internal pure returns(
         //bool
     //){
         //return hashSignature(lhs) ^ hashSignature(rhs) == 0;
@@ -114,7 +114,7 @@ library stringUtilities
     /// @return the hashed value of lhs + rhs, as a string instead of bytes32
     function hashAsString(
         string memory self
-    )public pure returns(
+    )internal pure returns(
         string memory
     ){
         return string(
@@ -127,7 +127,7 @@ library stringUtilities
     function saltAndHashAsString(
         string memory lhs,
         string memory rhs
-    )public pure returns(
+    )internal pure returns(
         string memory
     ){
         //salting empty string is point and a waste of gas

@@ -33,7 +33,7 @@ library frameworkERC165
     ///does target support ERC165
     function supportsInterface(
         address target
-    )public view returns(
+    )internal view returns(
         bool ret
     ){
         //msg.gas.requireGreaterThan(60000);
@@ -57,7 +57,7 @@ library frameworkERC165
     function supportsInterface(
         address target,
         bytes4 interfaceId
-    )public view returns(
+    )internal view returns(
         bool ret
     ){
         //two calls to supportsInterface, requires at least 60,000 * 2 gas
@@ -81,7 +81,7 @@ library frameworkERC165
     }
     function requireSupportsInterface(
         address target
-    )public view
+    )internal view
     {
         supportsInterface(target).requireTrue(
             "not supported"  //_LIB_NAME.concatenate("not supported")
@@ -90,7 +90,7 @@ library frameworkERC165
     function requireSupportsInterface(
         address target,
         bytes4 interfaceId
-    )public view
+    )internal view
     {
         supportsInterface(
             target,
@@ -101,7 +101,7 @@ library frameworkERC165
     }
     function requireNotSupportsInterface(
         address target
-    )public view
+    )internal view
     {
         supportsInterface(target).requireFalse(
             "ERC-165: target supports interface"
@@ -110,7 +110,7 @@ library frameworkERC165
     function requireNotSupportsInterface(
         address target,
         bytes4 interfaceId
-    )public view
+    )internal view
     {
         supportsInterface(
             target,

@@ -118,7 +118,7 @@ library frameworkAccessControl
     ///
     function roleDefaultAdmin(
         address target
-    )public view returns(
+    )internal view returns(
         bytes32 ret
     ){
         _requireSupportsInterface(target);
@@ -137,7 +137,7 @@ library frameworkAccessControl
         address target,
         bytes32 role,
         address account
-    )public view returns(
+    )internal view returns(
         bool ret
     ){
         _requireSupportsInterface(target);
@@ -160,7 +160,7 @@ library frameworkAccessControl
     function getRoleMemberCount(
         address target,
         bytes32 role
-    )public view returns(
+    )internal view returns(
         uint256 ret
     ){
         _requireSupportsInterface(target);
@@ -192,7 +192,7 @@ library frameworkAccessControl
         address target,
         bytes32 role,
         uint256 index
-    )public view returns(
+    )internal view returns(
         address ret
     ){
         _requireSupportsInterface(target);
@@ -216,7 +216,7 @@ library frameworkAccessControl
     function getRoleAdmin(
         address target,
         bytes32 role
-    )public view returns(
+    )internal view returns(
         bytes32 ret
     ){
         _requireSupportsInterface(target);
@@ -246,7 +246,7 @@ library frameworkAccessControl
         address target,
         bytes32 role,
         address account
-    )public
+    )internal
     {
         _requireSupportsInterface(target);
         
@@ -270,7 +270,7 @@ library frameworkAccessControl
         address target,
         bytes32 role,
         address account
-    )public
+    )internal
     {
         _requireSupportsInterface(target);
         
@@ -297,7 +297,7 @@ library frameworkAccessControl
         address target,
         bytes32 role,
         address account
-    )public
+    )internal
     {
         //account.requireEquals(
             //_msgSender()
@@ -312,7 +312,7 @@ library frameworkAccessControl
         bytes32 role,
         address from,
         address to
-    )public
+    )internal
     {
         _requireSupportsInterface(target);
         
