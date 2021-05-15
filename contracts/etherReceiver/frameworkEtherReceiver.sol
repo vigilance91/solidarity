@@ -38,7 +38,7 @@ library frameworkEtherReceiver
     }
     function canReceiveEther(
         address target
-    )public view returns(
+    )internal view returns(
         bool ret
     ){
         target.requireNotNull();
@@ -61,7 +61,7 @@ library frameworkEtherReceiver
         address recipient,
         address from,
         uint256 amount
-    )public returns(
+    )internal returns(
         bool
     ){
         recipient.requireNotNull();

@@ -17,7 +17,13 @@ import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/ERC16
 ///
 /// @title Access Control Address Whitelist
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 2/5/2021, All Rights Reserved
-/// @dev 0x3Da96cE2b76C6ffFa7704FC4A29821ABAC096adB
+/// @dev 0x9cF2b03628F83E2b73B19D652959CDB2C06153f2
+///
+/// deployment cost:
+///     = transaction cost: 1,891,498 gas + execution cost 1,399,630 gas 
+///     = 3,291,128 gas
+///
+///
 /// inspired by OpenZeppelin's AccessControl contract at:
 ///    https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/access/AccessControl.sol
 /// 
@@ -30,6 +36,10 @@ import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/ERC16
 /// where as a black list, by deafault allows access, unless an address is on the black list,
 /// which is reactive, first requiring being the victim of a hostile action to know what addresses to blacklist,
 /// oppossed to a whitelist, which is proactive (dnying all access by default)
+///
+/// Additionally, both black and white lists can be used in concert,
+/// with the blacklist banning malicious, buggy or nefarious contracts or known hackers by default,
+///     and then by allowing only non-blacklisted addresses to be permitted onto the whitelist to access functionality
 ///
 contract Whitelist is ERC165,
     AccessControl,

@@ -18,6 +18,11 @@ import "https://github.com/vigilance91/solidarity/contracts/accessControl/whitel
 /// @title Mortal Permission ERC20Token Implementation
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 13/5/2021, All Rights Reserved
 /// @dev standard ERC-20 token with (non-standard) Apoptosis support, for killing the contract (or for it to shut itself down internally)
+/// Whitelist is deployed using create2 via EIP2470 SingletonFactory and should thus have the same address contract
+/// every network deployed, assuming the contract creation code and the Factory's hash remain the same
+/// 
+/// NOTE:
+///     if either the Factory's hash or the creation code have changed, the address the Whitelist is deployed to will vary
 ///
 abstract contract MortalPermissionERC20Token is MortalERC20Token
 {
@@ -25,7 +30,7 @@ abstract contract MortalPermissionERC20Token is MortalERC20Token
     
     using frameworkWhitelist for address;
     
-    address private constant _WHITELIST = 0x3676B215188F65eE6CfB151539A3442d23A9476B;
+    address private constant _WHITELIST = 0x9cF2b03628F83E2b73B19D652959CDB2C06153f2;
     //address private constant _BLACKLIST = 0x0;
     
     constructor(

@@ -56,7 +56,7 @@ library uint256Logic
     function _xor(
         uint256 lhs,
         uint256 rhs
-    )public pure returns(
+    )internal pure returns(
         uint256 ret
     ){
         assembly{
@@ -65,7 +65,7 @@ library uint256Logic
     }
     //function not(
         //uint256 lhs
-    //)public pure returns(
+    //)internal pure returns(
         //uint256
     //){
         //assembly{
@@ -76,7 +76,7 @@ library uint256Logic
     function greaterThan(
         uint256 lhs,
         uint256 rhs
-    )public pure returns(
+    )internal pure returns(
         bool ret
     ){
         assembly{
@@ -86,7 +86,7 @@ library uint256Logic
     function greaterThanOrEqual(
         uint256 lhs,
         uint256 rhs
-    ) public pure returns(
+    )internal pure returns(
         bool ret
     ){
         //return lhs >= rhs;
@@ -97,7 +97,7 @@ library uint256Logic
     function lessThan(
         uint256 lhs,
         uint256 rhs
-    )public pure returns(
+    )internal pure returns(
         bool ret
     ){
         assembly{
@@ -107,7 +107,7 @@ library uint256Logic
     function lessThanOrEqual(
         uint256 lhs,
         uint256 rhs
-    )public pure returns(
+    )internal pure returns(
         bool ret
     ){
         assembly{
@@ -119,7 +119,7 @@ library uint256Logic
     */
     function greaterThanZero(
         uint256 lhs
-    ) public pure returns(
+    )internal pure returns(
         bool ret
     ){
         assembly{
@@ -128,7 +128,7 @@ library uint256Logic
     }
     //function lessThanMax(
         //uint256 lhs
-    //) public pure returns(
+    //)internal pure returns(
         //bool ret
     //){
         //return lessThan(lhs, 0xFF);
