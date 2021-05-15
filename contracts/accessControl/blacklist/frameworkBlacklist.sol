@@ -105,7 +105,7 @@ library frameworkBlacklist
     function isBanned(
         address target,
         address account
-    )public view returns(
+    )internal view returns(
         bool ret
     ){
         _requireSupportsInterface(target);
@@ -134,7 +134,7 @@ library frameworkBlacklist
     function ban(
         address target,
         address account
-    )public
+    )internal
     {
         _requireSupportsInterface(target);
         
@@ -156,7 +156,7 @@ library frameworkBlacklist
     function revokeBan(
         address target,
         address account
-    )public
+    )internal
     {
         _requireSupportsInterface(target);
         
@@ -171,7 +171,7 @@ library frameworkBlacklist
     
     function roleBanned(
         address target
-    )public view returns(
+    )internal view returns(
         bytes32 ret
     ){
         _requireSupportsInterface(target);
@@ -186,7 +186,7 @@ library frameworkBlacklist
     
     function getBannedMemberCount(
         address target
-    )public view returns(
+    )internal view returns(
         uint256 ret
     ){
         _requireSupportsInterface(target);

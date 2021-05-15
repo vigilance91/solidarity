@@ -159,7 +159,7 @@ library uint256ToString
         //string memory salt,
         //uint256 rhs
     //)internal pure returns(
-        string memory
+        //string memory
     //){
         //return keccak256(abi.encodePacked(
             //salt,

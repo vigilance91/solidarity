@@ -105,7 +105,7 @@ library frameworkWhitelist
     function isPermitted(
         address target,
         address account
-    )public view returns(
+    )internal view returns(
         bool ret
     ){
         _requireSupportsInterface(target);
@@ -135,7 +135,7 @@ library frameworkWhitelist
         address target,
         bytes32 signerHash,
         bytes memory signature
-    )public
+    )internal
     {
         _requireSupportsInterface(target);
         
@@ -158,7 +158,7 @@ library frameworkWhitelist
     function revokePermission(
         address target,
         address account
-    )public
+    )internal
     {
         _requireSupportsInterface(target);
         
@@ -213,7 +213,7 @@ library frameworkWhitelist
     //}
     function rolePermitted(
         address target
-    )public view returns(
+    )internal view returns(
         bytes32 ret
     ){
         _requireSupportsInterface(target);
@@ -228,7 +228,7 @@ library frameworkWhitelist
     
     function callerAddressHash(
         address target
-    )public view returns(
+    )internal view returns(
         bytes32 ret
     ){
         _requireSupportsInterface(target);
@@ -242,7 +242,7 @@ library frameworkWhitelist
     }
     function getPermittedMemberCount(
         address target
-    )public view returns(
+    )internal view returns(
         uint256 ret
     ){
         _requireSupportsInterface(target);
