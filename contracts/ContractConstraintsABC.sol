@@ -15,37 +15,85 @@ abstract contract ContractConstraintsABC
 {
     using AddressConstraints for address;
     //using SafeMath for uint256;
+    
+    //using uint256ToString for uint256;
+    
     //
     address internal _this;
     //address payable _thisPayable;
     
+    //string private _chainID;
+    ////bytes32 _chainHash;
+    
     constructor(
     )internal
     {
+        //_chainID = chainID().toDecimal();
+        ////_chainHash = _chainID.hash();
+        
         _this = address(this);
+        //_thisHash = _this.toHex().concatenate(_chainID).hash();
+        
         //_thisPayable = payable(_this);
     }
     /**
-    //disable accepting ether transfers
-    receive(
-    )external virtual payable //nonReentrant
-    {
-        LogicContraints.alwaysRevert("receive() deleted");
+    function chainID(
+    )private view returns(
+        uint256 chain
+    ){
+        assembly {
+            chain := chainid()
+        }
     }
-    //disable proxying
-    fallback(
-    )external virtual payable //nonReentrant
+    
+    //function chainID(
+    //)public view returns(
+        //string memory
+    //){
+        //return _chainID;
+    //}
+    
+    //function chainHash(
+    //)public view returns(
+        //bytes32
+    //){
+        //return _chainHash;
+    //}
+    //
+    //constrain execution of code to a specific chain eg:
+    //  Ethereum Mainet:
+    //  Ropsten:
+    //  :
+    //  :
+    //  Kovan:
+    //  Matic:
+    //  BSC:
+    //
+    function _requireChain(
+        uint256 chainID
+    )internal view
     {
-        LogicContraints.alwaysRevert("fallback() deleted");
+        chainID().requireEquals(chainID);
+    }
+    function _requireNotChain(
+        uint256 chainID
+    )internal view
+    {
+        chainID().requireNotEquals(chainID);
+    }
+    function chainEquals(
+        uint256 id
+    )internal view returns(
+    ){
+        return chainID().equal(id);
+    }
+    function chainNotEquals(
+        uint256 id
+    )internal view returns(
+    ){
+        return chainID().notEqual(id);
     }
     */
-    //function _thisPayable(
-    //)internal returns(
-        //address payable
-    //){
-        //return _thisPayable;
-        //return payable(_this);
-    //}
     ///
     /// Contract base calls to Require statements in library
     ///
@@ -53,7 +101,7 @@ abstract contract ContractConstraintsABC
         address account
     )internal pure
     {
-        account.requireNull();
+        account.requireIsNull();
     }
     function _requireNotNull(
         address account
@@ -61,6 +109,24 @@ abstract contract ContractConstraintsABC
     {
         account.requireIsNotNull();
     }
+    
+    //function _requireIsContract(
+        //address account
+    //)internal pure
+    //{
+        //_requireNotNull(account);
+        //account.isContract().requireTrue(
+        //);
+    //}
+    //function _requireIsNotContract(
+        //address account
+    //)internal pure
+    //{
+        ////_requireNotNull(account);
+        //account.isContract().requireFalse(
+        //);
+    //}
+    
     function _requireNotThis(
         address account
     )internal view
