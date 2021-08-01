@@ -165,13 +165,13 @@ abstract contract ContractConstraintsABC
         address account
     )internal view
     {
-        _this.requireIsNotThisAndNotNull(account);
+        _this.requireNotThisAndNotNull(account);
     }
     function _requireAddressessNotThisAndNotNull(
         address lhs,
         address rhs
     )internal view
     {
-        _this.requireAddressessNotThisAndNotNull(lhs,rhs);
+        _this.requireAddressesNotThisAndNotNull(lhs,rhs);
     }
 }
