@@ -21,6 +21,8 @@ abstract contract ContractConstraintsABC
     //
     address internal _this;
     //address payable _thisPayable;
+    //string memory internal _thisHex;
+    //bytes32 internal _thisHash;
     
     //string private _chainID;
     ////bytes32 _chainHash;
@@ -32,7 +34,8 @@ abstract contract ContractConstraintsABC
         ////_chainHash = _chainID.hash();
         
         _this = address(this);
-        //_thisHash = _this.toHex().concatenate(_chainID).hash();
+        //_thisHex = _this.toHex();
+        //_thisHash = _thisHex.concatenate(_chainID).hash();
         
         //_thisPayable = payable(_this);
     }
@@ -93,6 +96,31 @@ abstract contract ContractConstraintsABC
     ){
         return chainID().notEqual(id);
     }
+    /// 
+    /// @return {bytes32} hash of the hexadecimal string of this address concatentated with account's hexadecimal repressentation, combined with that account's current nonce
+    /// @dev this will be unique after each successful call to permit, or similar transactions, which increments the account's nonce
+    /// 
+    function _addressHash(
+        address account
+    )internal view returns(
+        bytes32
+    ){
+        account.requireNotNull();
+        
+        return _thisHex.saltAndHash(
+            _asHexAndSalt(account)
+        );
+    }
+    /// 
+    /// @dev concatentate hex repressentation of this contract's address, caller's address,
+    /// and caller's nonce, then hash result. Use this result for argument `signerHash` in {permit}
+    /// 
+    function callerAddressHash(
+    )external view override returns(
+        bytes32
+    ){
+        return _addressHash(_msgSender());
+    }
     */
     ///
     /// Contract base calls to Require statements in library
@@ -107,7 +135,7 @@ abstract contract ContractConstraintsABC
         address account
     )internal pure
     {
-        account.requireIsNotNull();
+        account.requireNotNull();
     }
     
     //function _requireIsContract(
