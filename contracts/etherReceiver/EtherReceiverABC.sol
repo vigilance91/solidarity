@@ -14,7 +14,7 @@ import "https://github.com/vigilance91/solidarity/contracts/etherReceiver/events
 
 import "https://github.com/vigilance91/solidarity/EIP/introspection/Canary/EIP801Canary.sol";
 ///
-/// @title Ether Reciever Abstract Base Contract
+/// @title Ether Receiver Abstract Base Contract
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 18/4/2021, All Rights Reserved
 ///
 abstract contract EtherReceiverABC is EIP801Canary,
