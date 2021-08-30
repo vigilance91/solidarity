@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
 
-# Copyright © Tyler R. Drury 10-04-2021, All Rights Reserved
+# Copyright © Tyler R. Drury (vigilance.eth) 10-04-2021, All Rights Reserved
 
 ----------------------------------------------------------------
 

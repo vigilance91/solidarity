@@ -32,7 +32,7 @@ contract EIP2470SingletonFactory is EIP801Canary,
     function deploy(
         bytes memory byteCode,
         bytes32 salt
-    )external virtual override returns(
+    )external onlyOwner virtual override returns(
         address
     ){
         return _deploy(byteCode, salt);
@@ -57,7 +57,7 @@ contract EIP2470SingletonFactory is EIP801Canary,
     function deployPayable(
         bytes memory byteCode,
         bytes32 salt
-    )external payable virtual override returns(
+    )external payable onlyOwner virtual override returns(
         address createdContract
     ){
         //byteCode.requireNotNull();
