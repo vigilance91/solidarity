@@ -4,7 +4,6 @@ pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/contracts/apoptosis/encoder/abiEncoderApoptosis.sol";
-
 import "https://github.com/vigilance91/solidarity/contracts/apoptosis/encoder/iEncoderApoptosis.sol";
 ///
 /// @title Encoder Apoptosis Abstract Base Contract
