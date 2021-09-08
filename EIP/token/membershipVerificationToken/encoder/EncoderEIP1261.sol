@@ -6,7 +6,7 @@ pragma experimental ABIEncoderV2;
 import "https://github.com/vigilance91/solidarity/EIP/token/membershipVerificationToken/encoder/abiEncoderERC1261.sol";
 import "https://github.com/vigilance91/solidarity/EIP/token/membershipVerificationToken/encoder/iEncoderEIP1261.sol";
 
-import "./EncoderTokenIdentifierABC.sol";
+import "https://github.com/vigilance91/solidarity/contracts/token/TokenIdentifier/encoder/EncoderTokenIdentifierABC.sol";
 
 //import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/ERC165.sol";
 ///
@@ -15,14 +15,14 @@ import "./EncoderTokenIdentifierABC.sol";
 /// convenience library for creating encoded signatures for low-level address call operations
 ///
 abstract contract EncoderEIP1261 is iEncoderEIP1261,
-    //EncoderTokenIdentifierABC
+    EncoderTokenIdentifierABC
 {
     using abiEncoderERC1261 for address;
     
     constructor(
     )internal
         //ERC165()
-        //EncoderTokenIdentifierABC()
+        EncoderTokenIdentifierABC()
     {
         //todo register appropriate interface in derived class which inherits from ERC-165
         //_registerInterface(type(iEncoderERC1261).interfaceId);

@@ -19,6 +19,8 @@ contract EncoderEIP1261Factory is EIP2470SingletonFactory
     
     bytes private constant _BYTE_CODE = type(EncoderERC1261).creationCode;
     
+    bytes32 public constant HASH_ENCODER_EIP1261 = keccak256(_BYTE_CODE);
+    
     constructor(
     )public //nonReentrant
         EIP2470SingletonFactory()
