@@ -5,7 +5,7 @@ pragma experimental ABIEncoderV2;
 //
 import "https://github.com/vigilance91/solidarity/EIP/SingletonFactory/EIP2470SingletonFactory.sol";
 //
-import "https://github.com/vigilance91/solidarity/EIP/token/license/encoder/EncoderEIP1261.sol";
+import "https://github.com/vigilance91/solidarity/EIP/token/membershipVerificationToken/encoder/EncoderEIP1261.sol";
 ///
 /// @title EIP-1261 Transaction Encoder Factory Singleton Contract
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 30/8/2021, All Rights Reserved
