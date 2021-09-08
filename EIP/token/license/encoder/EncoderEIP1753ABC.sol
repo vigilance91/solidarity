@@ -3,16 +3,16 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/EIP/token/license/encoder/iEncoderEIP1153.sol";
-import "https://github.com/vigilance91/solidarity/EIP/token/license/encoder/abiEncoderEIP1153.sol";
+import "https://github.com/vigilance91/solidarity/EIP/token/license/encoder/iEncoderEIP1753.sol";
+import "https://github.com/vigilance91/solidarity/EIP/token/license/encoder/abiEncoderEIP1753.sol";
 
 //import "https://github.com/vigilance91/solidarity/contract/token/TokenIdentifier/encoder/EncoderTokenIdentifierABC.sol";
 //import "https://github.com/vigilance91/solidarity/contract/token/TokenSupply/encoder/EncoderTokenSupplyABC.sol";
 ///
-/// @title Allowance Transaction Encoder Abstract Base Contract
+/// @title EIP-1753 License Transaction Encoder Abstract Base Contract
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 29/8/2021, All Rights Reserved
 /// 
-abstract contract EncoderEIP1753LicenseABC is iEncoderEIP1153
+abstract contract EncoderEIP1753LicenseABC is iEncoderEIP1753
     //EncoderTokenIdentifierABC
     //EncoderTokenSupplyABC
 {

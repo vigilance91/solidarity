@@ -35,7 +35,7 @@ library iEncoderEtherTransactor
     )external pure returns(
         bytes memory
     ){
-        abi.encodeWithSignature(
+        return abi.encodeWithSignature(
             STUB_ETH_THIS_TRANSFER_TO_OWNER,
             amount
         );
