@@ -3,12 +3,12 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 ///
-/// @title EIP1129 Announcements Interface
+/// @title EIP1129 Announcement Transaction Encoder Interface
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 3/9/2021, All Rights Reserved
 /// @dev Bsed On:
 ///     Ethereum Improvments Proposal: Standard DAPP Announcements - https://eips.ethereum.org/EIPS/eip-1129
 ///
-interface iEIP1129
+interface iEncoderEIP1129
 {
     ///
     ///read-only interface
