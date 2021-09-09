@@ -4,7 +4,7 @@ pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
 //import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/iEncoderTokenSupply.sol";
-import "https://github.com/vigilance91/solidarity/contracts/token/TokenIdentifier/iEncoderTokenIdentifier.sol";
+import "https://github.com/vigilance91/solidarity/contracts/token/TokenIdentifier/encoder/iEncoderTokenIdentifier.sol";
 
 ///
 /// @dev EIP1153 License Transaction Encoder Interface
