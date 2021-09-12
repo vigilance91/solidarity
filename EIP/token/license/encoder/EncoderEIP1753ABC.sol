@@ -12,7 +12,7 @@ import "https://github.com/vigilance91/solidarity/EIP/token/license/encoder/abiE
 /// @title EIP-1753 License Transaction Encoder Abstract Base Contract
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 29/8/2021, All Rights Reserved
 /// 
-abstract contract EncoderEIP1753LicenseABC is iEncoderEIP1753
+abstract contract EncoderEIP1753ABC is iEncoderEIP1753
     //EncoderTokenIdentifierABC
     //EncoderTokenSupplyABC
 {
