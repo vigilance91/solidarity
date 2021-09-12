@@ -29,7 +29,7 @@ abstract contract EncoderEIP1753LicenseABC is iEncoderEIP1753
     /// 
     function hasValidLicense(
         address client
-    )public pure returns(
+    )public pure override returns(
         bytes memory
     ){
         return client.hasValidLicense();
@@ -51,7 +51,7 @@ abstract contract EncoderEIP1753LicenseABC is iEncoderEIP1753
     /// 
     function hasAuthority(
         address client
-    )public pure returns(
+    )public pure override returns(
         bytes memory
     ){
         return client.hasAuthority();
@@ -63,7 +63,7 @@ abstract contract EncoderEIP1753LicenseABC is iEncoderEIP1753
     /// 
     function grantAuthority(
         address account
-    )public pure returns(
+    )public pure override returns(
         bytes memory
     ){
         return account.grantAuthority();
@@ -73,7 +73,7 @@ abstract contract EncoderEIP1753LicenseABC is iEncoderEIP1753
     /// 
     function revokeAuthority(
         address account
-    )public pure returns(
+    )public pure override returns(
         bytes memory
     ){
         return account.revokeAuthority();
@@ -85,7 +85,7 @@ abstract contract EncoderEIP1753LicenseABC is iEncoderEIP1753
         address client,
         uint from,
         uint to
-    )public pure returns(
+    )public pure override returns(
         bytes memory
     ){
         return client.issue(
@@ -98,7 +98,7 @@ abstract contract EncoderEIP1753LicenseABC is iEncoderEIP1753
     /// 
     function revoke(
         address client
-    )public pure returns(
+    )public pure override returns(
         bytes memory
     ){
         return client.revoke();
@@ -110,21 +110,21 @@ abstract contract EncoderEIP1753LicenseABC is iEncoderEIP1753
 	function purchase(
         uint validFrom,
         uint validTo
-    )public pure returns(
+    )public pure override returns(
         bytes memory
     );
     ///renew an active license, extending to timestamp time
     function renewTime(
         address client,
         uint time
-    )public pure returns(
+    )public pure override returns(
         bytes memory
     );
     ///renew an active license, extending by duration seconds
     function renewDuration(
         address client,
         uint duration
-    )public pure returns(
+    )public pure override returns(
         bytes memory
     ){
         return abi.encodeWithSignature(
