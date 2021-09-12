@@ -10,20 +10,20 @@ pragma experimental ABIEncoderV2;
 /// 
 library cryptographicCodes
 {
-    string public constant DECRYPT_FAULURE = "0xE0";
-    string public constant DECRYPT_SUCCESS = "0xE1";
-    string public constant AWAITING_OTHER_SINGATURE = "0xE2";	//Awaiting Other Signatures or Keys
-    string public constant SIGNED = "0xE3";
-    string public constant UNSIGNED_OR_UNUTRUSTED = "0xE4";
-    string public constant SIGNATURE_REQUIRED = "0xE5";
-    string public constant KNOWN_COMPRIMISED = "0xE6";
-    //string public constant [reserved] = "0xE7	[reserved]
-    string public constant ALREADY_SIGNED_OR_NOT_ENCRYPTED = "0xE8";
-    //string public constant [invalidSignature] = "0xE9	[reserved]
-    //string public constant [invalidHash] = "0xEA	[reserved]
-    //string public constant [reserved] = "0xEB	[reserved]
-    //string public constant [reserved] = "0xEC	[reserved]
-    //string public constant [reserved] = "0xED	[reserved]
-    //string public constant [reserved] = "0xEE	[reserved]
-    string public constant METADATA = "0xEF";
+    string internal constant DECRYPT_FAULURE = "0xE0";
+    string internal constant DECRYPT_SUCCESS = "0xE1";
+    string internal constant AWAITING_OTHER_SINGATURE = "0xE2";	//Awaiting Other Signatures or Keys
+    string internal constant SIGNED = "0xE3";
+    string internal constant UNSIGNED_OR_UNUTRUSTED = "0xE4";
+    string internal constant SIGNATURE_REQUIRED = "0xE5";
+    string internal constant KNOWN_COMPRIMISED = "0xE6";
+    //string internal constant [reserved] = "0xE7	[reserved]
+    string internal constant ALREADY_SIGNED_OR_NOT_ENCRYPTED = "0xE8";
+    //string internal constant [invalidSignature] = "0xE9	[reserved]
+    //string internal constant [invalidHash] = "0xEA	[reserved]
+    //string internal constant [reserved] = "0xEB	[reserved]
+    //string internal constant [reserved] = "0xEC	[reserved]
+    //string internal constant [reserved] = "0xED	[reserved]
+    //string internal constant [reserved] = "0xEE	[reserved]
+    string internal constant METADATA = "0xEF";
 }

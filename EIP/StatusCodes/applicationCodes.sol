@@ -15,22 +15,22 @@ pragma experimental ABIEncoderV2;
 /// as long as they are coherent with the broader definition.
 library applicationCodes
 {
-    string public constant FAILURE = "0xA0";
-    string public constant SUCCESS = "0xA1";
-    string public constant AWAITING_OTHERS = "0xA2";
-    string public constant ACCEPTANCE = "0xA3";
-    string public constant BELOW_CONDITION = "0xA4";
-    string public constant RECEIVER_ACTION_REQUIRED = "0xA5";
-    string public constant TIMEOUT_REACHED = "0xA6";
-    //string public constant [reserved] = "0xA7";
-    string public constant INAPPLICABLE = " 0xA8";
-    //string public constant [reserved] = "0xA9";
-    //string public constant [reserved] = "0xAA";
-    //string public constant [reserved] = "0xAB";
-    //string public constant [reserved] = "0xAC";
-    //string public constant [reserved] = "0xAD";
-    //string public constant [reserved] = "0xAE";
-    string public constant METADATA = "0xAF";
+    string internal constant FAILURE = "0xA0";
+    string internal constant SUCCESS = "0xA1";
+    string internal constant AWAITING_OTHERS = "0xA2";
+    string internal constant ACCEPTANCE = "0xA3";
+    string internal constant BELOW_CONDITION = "0xA4";
+    string internal constant RECEIVER_ACTION_REQUIRED = "0xA5";
+    string internal constant TIMEOUT_REACHED = "0xA6";
+    //string internal constant [reserved] = "0xA7";
+    string internal constant INAPPLICABLE = " 0xA8";
+    //string internal constant [reserved] = "0xA9";
+    //string internal constant [reserved] = "0xAA";
+    //string internal constant [reserved] = "0xAB";
+    //string internal constant [reserved] = "0xAC";
+    //string internal constant [reserved] = "0xAD";
+    //string internal constant [reserved] = "0xAE";
+    string internal constant METADATA = "0xAF";
 }
 /// 0xB* TBD - Currently unspecified. (Full range reserved)
 /// 0xC* TBD - Currently unspecified. (Full range reserved)

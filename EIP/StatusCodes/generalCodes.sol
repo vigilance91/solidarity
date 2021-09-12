@@ -25,19 +25,19 @@ pragma experimental ABIEncoderV2;
 ///
 library generalCodes
 {
-    string public constant SUCCESS = "0x01";	
-    string public constant AWAITING_OTHERS = "0x02";
-    string public constant ACCEPTED = "0x03";
-    string public constant LOWER_LIMIT = "0x04";
-    string public constant RECEIVER_ACTION_REQUESTED = "0x05";
-    string public constant UPPER_LIMIT = "0x06";
-    //string public constant reserved = "0x07";	[reserved]
-    string public constant INAPPLICABLE = "0x08";
-    //string public constant reserved = "0x09";	[reserved]
-    //string public constant reserved = "0x0A";	[reserved]
-    //string public constant reserved = "0x0B";	[reserved]
-    //string public constant reserved = "0x0C";	[reserved]
-    //string public constant reserved = "0x0D";	[reserved]
-    //string public constant reserved = "0x0E";	[reserved]
-    string public constant METADATA = "0x0F";
+    string internal constant SUCCESS = "0x01";	
+    string internal constant AWAITING_OTHERS = "0x02";
+    string internal constant ACCEPTED = "0x03";
+    string internal constant LOWER_LIMIT = "0x04";
+    string internal constant RECEIVER_ACTION_REQUESTED = "0x05";
+    string internal constant UPPER_LIMIT = "0x06";
+    //string internal constant reserved = "0x07";	[reserved]
+    string internal constant INAPPLICABLE = "0x08";
+    //string internal constant reserved = "0x09";	[reserved]
+    //string internal constant reserved = "0x0A";	[reserved]
+    //string internal constant reserved = "0x0B";	[reserved]
+    //string internal constant reserved = "0x0C";	[reserved]
+    //string internal constant reserved = "0x0D";	[reserved]
+    //string internal constant reserved = "0x0E";	[reserved]
+    string internal constant METADATA = "0x0F";
 }

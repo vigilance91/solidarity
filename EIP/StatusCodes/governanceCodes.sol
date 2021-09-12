@@ -9,20 +9,20 @@ pragma experimental ABIEncoderV2;
 /// Note that “other party” may be more than one actor (not necessarily the sender)
 library governanceCodes
 {
-    string public constant VOTES_NAY = "0x30";
-    string public constant VOTES_Yea = "0x31";
-    string public constant AWAITING_RATIFICATION = "0x32";
-    string public constant OFFER_SENT_OR_VOTED = "0x33";
-    string public constant QUORUM_NOT_REACHED = "0x34";
-    string public constant RATIFICATION_REQUESTED = "0x35";
-    string public constant LIMIT_REACHED = "0x36";
-    //string public constant [reserved] = "0x37";
-    string public constant ALREADY_VOTED = "0x38";
-    //string public constant [reserved] = "0x39";
-    //string public constant [reserved]= "0x3A";
-    //string public constant [reserved] = "0x3B";
-    //string public constant [reserved] = "0x3C";
-    //string public constant [reserved] = "0x3D";
-    //string public constant [reserved] = "0x3E";
-    string public constant METADATA = "0x3F";
+    string internal constant VOTES_NAY = "0x30";
+    string internal constant VOTES_Yea = "0x31";
+    string internal constant AWAITING_RATIFICATION = "0x32";
+    string internal constant OFFER_SENT_OR_VOTED = "0x33";
+    string internal constant QUORUM_NOT_REACHED = "0x34";
+    string internal constant RATIFICATION_REQUESTED = "0x35";
+    string internal constant LIMIT_REACHED = "0x36";
+    //string internal constant [reserved] = "0x37";
+    string internal constant ALREADY_VOTED = "0x38";
+    //string internal constant [reserved] = "0x39";
+    //string internal constant [reserved]= "0x3A";
+    //string internal constant [reserved] = "0x3B";
+    //string internal constant [reserved] = "0x3C";
+    //string internal constant [reserved] = "0x3D";
+    //string internal constant [reserved] = "0x3E";
+    string internal constant METADATA = "0x3F";
 }

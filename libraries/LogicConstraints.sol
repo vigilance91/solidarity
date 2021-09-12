@@ -5,7 +5,6 @@ pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/EIP/StatusCodes/generalCodes.sol";
 import "https://github.com/vigilance91/solidarity/EIP/StatusCodes/logicCodes.sol";
-import "https://github.com/vigilance91/solidarity/libraries/string/statusMessage.sol";
 /// 
 /// @title Logic Contraints Library
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 3/1/2021, All Rights Reserved
@@ -80,7 +79,7 @@ library LogicConstraints
     {
         require(
             !b,
-            message //logicCodes.TRUE.concatenate(message));
+            message //logicCodes.TRUE.concatenate(message)
         );
     }
     function alwaysRevert(
