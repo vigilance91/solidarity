@@ -17,8 +17,8 @@ library abiEncoderEIP1753
     //
     //mutable stubs
     //
-    string public constant STUB_ISSUE = 'grantAuthority(address)';
-    string public constant STUB_ISSUE = 'revokeAuthority(address)';
+    string public constant STUB_GRANT_AUTHORITY = 'grantAuthority(address)';
+    string public constant STUB_REVOKE_AUTHORITY = 'revokeAuthority(address)';
     //
     string public constant STUB_ISSUE = 'issue(address,uint,uint)';
     string public constant STUB_REVOKE = 'revoke(address)';
