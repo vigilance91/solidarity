@@ -9,11 +9,9 @@ import "https://github.com/vigilance91/solidarity/EIP/announcements/encoder/abiE
 /// @title EIP-1129 Announcements Transaction Encoder Abstract Base Contract
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 3/9/2021, All Rights Reserved
 /// 
-abstract contract EncoderEIP1129LicenseABC is iEncoderEIP1129
-    //EncoderTokenIdentifierABC
-    //EncoderTokenSupplyABC
+abstract contract EncoderEIP1129ABC is iEncoderEIP1129
 {
-    //using abiEncoderEIP1129 for address;
+    //using abiEncoderEIP1129 for uint256;
     
     constructor(
     )internal
@@ -40,6 +38,9 @@ abstract contract EncoderEIP1129LicenseABC is iEncoderEIP1129
             postNumber
         );
     }
+    ///
+    /// @return {bytes}
+    /// 
     function postAnnouncement(
         string memory post
     )public pure override returns(
@@ -49,7 +50,9 @@ abstract contract EncoderEIP1129LicenseABC is iEncoderEIP1129
             post
         );
     }
-    
+    ///
+    /// @return {bytes}
+    /// 
     function editAnnouncement(
         uint256 postNumber,
         string memory newMessage,
@@ -63,7 +66,9 @@ abstract contract EncoderEIP1129LicenseABC is iEncoderEIP1129
             reason
         );
     }
-    
+    ///
+    /// @return {bytes}
+    /// 
     function removeAnnouncement(
         uint256 postNumber,
         string memory reason
