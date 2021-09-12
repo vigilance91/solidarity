@@ -12,16 +12,16 @@ library abiEncoderEIP1753
     //
     //getter stubs
     //
-    string public constant STUB_HAS_VALID_LICENSE = 'hasValidLicense(address)';
-    string public constant STUB_HAS_AUTHORITY = 'hasAuthority(address)';
+    string internal constant STUB_HAS_VALID_LICENSE = 'hasValidLicense(address)';
+    string internal constant STUB_HAS_AUTHORITY = 'hasAuthority(address)';
     //
     //mutable stubs
     //
-    string public constant STUB_GRANT_AUTHORITY = 'grantAuthority(address)';
-    string public constant STUB_REVOKE_AUTHORITY = 'revokeAuthority(address)';
+    string internal constant STUB_GRANT_AUTHORITY = 'grantAuthority(address)';
+    string internal constant STUB_REVOKE_AUTHORITY = 'revokeAuthority(address)';
     //
-    string public constant STUB_ISSUE = 'issue(address,uint,uint)';
-    string public constant STUB_REVOKE = 'revoke(address)';
+    string internal constant STUB_ISSUE = 'issue(address,uint,uint)';
+    string internal constant STUB_REVOKE = 'revoke(address)';
     //
     // = 'purchase(uint,uint)';
     // = 'renewTime(address,uint)';
@@ -29,12 +29,12 @@ library abiEncoderEIP1753
     //
     //current circulating supply(licnese which have been issued)
     //function circulatingSupply(
-    //)external pure returns(
+    //)internal pure returns(
         //bytes memory
     //);
     //totalSupply - issued
     //function remainingSupply(
-    //)public view returns(
+    //)internal view returns(
         //uint256
     //);
     
@@ -134,21 +134,21 @@ library abiEncoderEIP1753
 	function purchase(
         uint validFrom,
         uint validTo
-    )external pure returns(
+    )internal pure returns(
         bytes memory
     );
     ///renew an active license, extending to timestamp time
     function renewTime(
         address client,
         uint time
-    )external pure returns(
+    )internal pure returns(
         bytes memory
     );
     ///renew an active license, extending by duration seconds
     function renewDuration(
         address client,
         uint duration
-    )external pure returns(
+    )internal pure returns(
         bytes memory
     )
     {
