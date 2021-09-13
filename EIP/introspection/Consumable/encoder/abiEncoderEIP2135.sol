@@ -13,12 +13,12 @@ pragma experimental ABIEncoderV2;
 ///
 library abiEncoderEIP2135
 {
-    string public constant STUB_IS_CONSUMABLE = 'isConsumable(uint256)';
-    string public constant STUB_CONSUME = 'consume(uint256)';
+    string internal constant STUB_IS_CONSUMABLE = 'isConsumable(uint256)';
+    string internal constant STUB_CONSUME = 'consume(uint256)';
     
     function isConsumable(
         uint256 assetId
-    )public view override returns(
+    )internal view returns(
         bytes memory
     ){
         return abi.encodeWithSignature(
@@ -29,7 +29,7 @@ library abiEncoderEIP2135
     
     function consume(
         uint256 assetId
-    )public virtual override returns(
+    )internal view returns(
         bytes memory
     ){
         return abi.encodeWithSignature(
