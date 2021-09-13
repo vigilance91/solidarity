@@ -11,7 +11,7 @@ import "https://github.com/vigilance91/solidarity/EIP/introspection/Canary/encod
 /// @dev ligi, "EIP-801: ERC-801 Canary Standard [DRAFT]," Ethereum Improvement Proposals, no. 801, December 2017. [Online serial].
 /// Available: https://eips.ethereum.org/EIPS/eip-801
 /// 
-abstract contract EncoderEIP801CanaryABC is iEncoderEIP801
+abstract contract EncoderEIP801ABC is iEncoderEIP801
 {
     constructor(
     )internal

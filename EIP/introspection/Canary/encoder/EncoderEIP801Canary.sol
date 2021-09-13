@@ -7,10 +7,10 @@ import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/ERC16
 
 import "https://github.com/vigilance91/solidarity/EIP/introspection/Canary/encoder/EncoderEIP801ABC.sol";
 
-//interface iEncoderEIP801Canary is iERC165,
-//    iEncoderEIP801
-//{
-//}
+interface iEncoderEIP801Canary is iERC165,
+    iEncoderEIP801
+{
+}
 
 ///
 /// @title EIP-801 Canary Transaction Encoder Contract
@@ -24,7 +24,7 @@ contract EncoderEIP801Canary is ERC165,
         ERC165()
         EncoderEIP801ABC()
     {
-        //_registerInterface(type(iEncoderEIP801).interfaceId);
+        _registerInterface(type(iEncoderEIP801).interfaceId);
         //_registerInterface(type(iEncoderEIP801Canary).interfaceId);
     }
 }
