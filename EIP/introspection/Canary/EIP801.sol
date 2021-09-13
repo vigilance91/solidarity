@@ -36,12 +36,12 @@ abstract contract EIP801 is iEIP801
         _this = address(this);
     }
     
-    function _mutableCanaryStorage(
-    )private returns(
-        mixinEIP801.EIP801Storage storage
-    ){
-        return mixinEIP801.canaryStorage();
-    }
+    //function _mutableCanaryStorage(
+    //)private returns(
+        //mixinEIP801.EIP801Storage storage
+    //){
+        //return mixinEIP801.canaryStorage();
+    //}
     
     function _readOnlyCanaryStorage(
     )private pure returns(
@@ -90,7 +90,7 @@ abstract contract EIP801 is iEIP801
     )internal
     {
         //_mutableCanaryStorage().die();
-        mixinEIP801.EIP801Storage storage ls = _mutableCanaryStorage();
+        mixinEIP801.EIP801Storage storage ls = mixinEIP801.canaryStorage(); //_mutableCanaryStorage();
         
         if(ls.alive){
             ls.alive = false;
