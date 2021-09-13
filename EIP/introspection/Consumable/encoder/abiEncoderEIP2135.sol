@@ -18,7 +18,7 @@ library abiEncoderEIP2135
     
     function isConsumable(
         uint256 assetId
-    )internal view returns(
+    )internal pure returns(
         bytes memory
     ){
         return abi.encodeWithSignature(
@@ -29,7 +29,7 @@ library abiEncoderEIP2135
     
     function consume(
         uint256 assetId
-    )internal view returns(
+    )internal pure returns(
         bytes memory
     ){
         return abi.encodeWithSignature(
