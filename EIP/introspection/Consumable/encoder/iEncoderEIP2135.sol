@@ -14,7 +14,7 @@ interface iEncoderEIP2135
     //check whether an asset is consumable
     function isConsumable(
         uint256 assetId
-    )external pure returns(
+    )external view returns(
         bytes memory
     );
     ///
@@ -23,7 +23,7 @@ interface iEncoderEIP2135
     //consume asset
     function consume(
         uint256 assetId
-    )external pure returns(
+    )external view returns(
         bytes memory
     );
 }

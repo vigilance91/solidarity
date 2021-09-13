@@ -22,7 +22,7 @@ abstract contract EncoderEIP2135ABC is iEncoderEIP2135
     
     function isConsumable(
         uint256 assetId
-    )public pure override returns(
+    )public view override returns(
         bytes memory
     ){
         return assetId.isConsumable();
@@ -30,7 +30,7 @@ abstract contract EncoderEIP2135ABC is iEncoderEIP2135
     
     function consume(
         uint256 assetId
-    )public pure override returns(
+    )public view override returns(
         bytes memory
     ){
         return assetId.consume();
