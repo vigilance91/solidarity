@@ -15,6 +15,7 @@ interface iEncoderEIP801Canary is iERC165,
 ///
 /// @title EIP-801 Canary Transaction Encoder Contract
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 12/9/2021, All Rights Reserved
+/// @dev gas cost to deploy: 
 /// 
 contract EncoderEIP801Canary is ERC165,
     EncoderEIP801ABC

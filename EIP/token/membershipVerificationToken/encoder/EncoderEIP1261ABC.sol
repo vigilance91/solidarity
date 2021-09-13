@@ -25,7 +25,7 @@ abstract contract EncoderEIP1261ABC is iEncoderEIP1261,
     function addAttributeSet(
         bytes32 name,
         bytes32[] calldata values
-    )public pure override returns(
+    )external view override returns(
         bytes memory
     ){
         return abiEncoderEIP1261.addAttributeSet(
@@ -40,7 +40,7 @@ abstract contract EncoderEIP1261ABC is iEncoderEIP1261,
         address to,
         uint attributeIndex,
         uint modifiedValueIndex
-    )public pure override returns(
+    )public view override returns(
         bytes memory
     ){
         return to.modifyAttributeByIndex(
@@ -53,7 +53,7 @@ abstract contract EncoderEIP1261ABC is iEncoderEIP1261,
     /// 
     function requestMembership(
         uint[] calldata attributeIndexes
-    )internal pure returns(
+    )external view returns(
         bytes memory
     ){
         return abiEncoderEIP1261.requestMembership(
@@ -65,7 +65,7 @@ abstract contract EncoderEIP1261ABC is iEncoderEIP1261,
     /// 
     function approveRequest(
         address account
-    )public pure override returns(
+    )public view override returns(
         bytes memory
     ){
         return account.approveRequest();
@@ -75,7 +75,7 @@ abstract contract EncoderEIP1261ABC is iEncoderEIP1261,
     /// 
     function discardRequest(
         address account
-    )public pure override returns(
+    )public view override returns(
         bytes memory
     ){
         return account.discardRequest();
@@ -86,7 +86,7 @@ abstract contract EncoderEIP1261ABC is iEncoderEIP1261,
     function assignTo(
         address account,
         uint[] calldata attributeIndexes
-    )public pure override returns(
+    )external view override returns(
         bytes memory
     ){
         return account.assignTo(
@@ -98,7 +98,7 @@ abstract contract EncoderEIP1261ABC is iEncoderEIP1261,
     /// 
     function revokeFrom(
         address account
-    )public pure override returns(
+    )public view override returns(
         bytes memory
     ){
         return account.revokeFrom();
@@ -108,7 +108,7 @@ abstract contract EncoderEIP1261ABC is iEncoderEIP1261,
     /// 
     function isCurrentMember(
         address account
-    )public pure override returns(
+    )public view override returns(
         bytes memory
     ){
         return account.isCurrentMember();
@@ -118,7 +118,7 @@ abstract contract EncoderEIP1261ABC is iEncoderEIP1261,
     /// 
     function getAttributeExhaustiveCollection(
         bytes32 name
-    )public pure override returns(
+    )public view override returns(
         bytes memory
     ){
         return abiEncoderEIP1261.getAttributeExhaustiveCollection(
@@ -130,7 +130,7 @@ abstract contract EncoderEIP1261ABC is iEncoderEIP1261,
     /// 
     function getAttributes(
         address account
-    )public pure override returns(
+    )public view override returns(
         bytes memory
     ){
         return account.getAttributes();
@@ -141,7 +141,7 @@ abstract contract EncoderEIP1261ABC is iEncoderEIP1261,
     function getAttributeByIndex(
         address account,
         uint attributeIndex
-    )public pure override returns(
+    )public view override returns(
         bytes memory
     ){
         return account.getAttributeByIndex(

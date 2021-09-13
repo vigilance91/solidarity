@@ -22,7 +22,7 @@ interface iEncoderEIP1261
     function addAttributeSet(
         bytes32 name,
         bytes32[] calldata values
-    )external pure returns(
+    )external view returns(
         bytes memory
     );
     /// 
@@ -38,7 +38,7 @@ interface iEncoderEIP1261
         address to,
         uint attributeIndex,
         uint modifiedValueIndex
-    )external pure returns(
+    )external view returns(
         bytes memory
     );
     /// 
@@ -54,7 +54,7 @@ interface iEncoderEIP1261
     /// 
     function requestMembership(
         uint[] calldata attributeIndexes
-    )external pure returns(
+    )external view returns(
         bytes memory
     );
     /// 
@@ -63,7 +63,9 @@ interface iEncoderEIP1261
     ///  The individual `msg.sender` can revoke his/her membership.
     ///  When the token is revoked, this function emits the Revoked event.
     function forfeitMembership(
-    )external payable;
+    )external view returns(
+        bytes memory
+    );
 
     /// @notice Owner approves membership from any address.
     /// @dev Throws if the `_user` doesn't have a pending request.
@@ -74,7 +76,7 @@ interface iEncoderEIP1261
     /// @param _user the user whose membership request will be approved.
     function approveRequest(
         address account
-    )external pure returns(
+    )external view returns(
         bytes memory
     );
     /// 
@@ -88,7 +90,7 @@ interface iEncoderEIP1261
     /// 
     function discardRequest(
         address account
-    )external pure returns(
+    )external view returns(
         bytes memory
     );
     /// 
@@ -106,7 +108,7 @@ interface iEncoderEIP1261
     function assignTo(
         address account,
         uint[] calldata attributeIndexes
-    )external pure returns(
+    )external view returns(
         bytes memory
     );
     /// 
@@ -121,7 +123,7 @@ interface iEncoderEIP1261
     /// 
     function revokeFrom(
         address account
-    )external pure returns(
+    )external view returns(
         bytes memory
     );
     /// 
@@ -135,7 +137,7 @@ interface iEncoderEIP1261
     /// 
     function isCurrentMember(
         address account
-    )external pure returns(
+    )external view returns(
         bytes memory
     );
     /// 
@@ -147,7 +149,7 @@ interface iEncoderEIP1261
     /// 
     function getAttributeExhaustiveCollection(
         bytes32 name
-    )external pure returns(
+    )external view returns(
         bytes memory
     );
     /// 
@@ -158,7 +160,7 @@ interface iEncoderEIP1261
     /// @return List of addresses who have owned the token and currently own the token.
     /// 
     function getAllMembers(
-    )external pure returns(
+    )external view returns(
         bytes memory
     );
     /// 
@@ -168,7 +170,7 @@ interface iEncoderEIP1261
     /// @return Count of current Members.
     /// 
     function getCurrentMemberCount(
-    )external pure returns(
+    )external view returns(
         bytes memory
     );
     /// 
@@ -184,7 +186,7 @@ interface iEncoderEIP1261
     /// @return The names of attributes.
     /// 
     function getAttributeNames(
-    )external pure returns(
+    )external view returns(
         bytes memory
     );
     /// 
@@ -198,7 +200,7 @@ interface iEncoderEIP1261
     /// 
     function getAttributes(
         address account
-    )external pure returns(
+    )external view returns(
         bytes memory
     );
     /// 
@@ -214,7 +216,7 @@ interface iEncoderEIP1261
     function getAttributeByIndex(
         address account,
         uint attributeIndex
-    )external pure returns(
+    )external view returns(
         bytes memory
     );
 }

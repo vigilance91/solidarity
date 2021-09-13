@@ -10,6 +10,9 @@ import "https://github.com/vigilance91/solidarity/EIP/introspection/Consumable/e
 /// @title EIP-2135 Consumable Transaction Encoder Factory Singleton Contract
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 12/9/2021, All Rights Reserved
 /// @dev Singleton EIP-2135 ABI Encoder contract for deploying contracts which encode external transaction payloads for EIP-2135 derived contracts or proxies
+/// gas cost to deploy: 2,416,630
+/// encoder deployed to address: 0x6bCa8d2e347B38763F0Ee8e920A4C8f0216Adeb5
+/// 
 ///
 contract EncoderEIP2135Factory is EIP2470SingletonFactory
 {

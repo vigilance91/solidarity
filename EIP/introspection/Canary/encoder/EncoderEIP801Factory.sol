@@ -10,6 +10,8 @@ import "https://github.com/vigilance91/solidarity/EIP/introspection/Canary/encod
 /// @title EIP-801 Canary Transaction Encoder Factory Singleton Contract
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 12/9/2021, All Rights Reserved
 /// @dev Singleton EIP-801 ABI Encoder contract for deploying contracts which encode external transaction payloads for EIP-801 derived contracts or proxies
+/// gas to deploy: 2,406,874 
+/// encoder deployed at: 0xceE4F4D741aa21B55B96b087996f49d139B3Dd71
 ///
 contract EncoderEIP801Factory is EIP2470SingletonFactory
 {
