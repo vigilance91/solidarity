@@ -11,7 +11,7 @@ import "https://github.com/vigilance91/solidarity/EIP/introspection/Consumable/e
 /// @dev ERC-2135 Consumable Standard
 /// Available: https://eips.ethereum.org/EIPS/eip-2135
 /// 
-abstract contract EncoderEIP2135ConsumableABC is iEncoderEIP2135
+abstract contract EncoderEIP2135ABC is iEncoderEIP2135
 {
     using abiEncoderEIP2135 for uint256;
     
