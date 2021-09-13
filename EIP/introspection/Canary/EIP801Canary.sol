@@ -12,7 +12,7 @@ import "https://github.com/vigilance91/solidarity/EIP/introspection/Canary/EIP80
 //import "https://github.com/vigilance91/solidarity/ERC/ERC173/ERC173Ownable.sol";
 import "https://github.com/vigilance91/solidarity/contracts/ownership/ERC173/SafeERC173Ownable.sol";
 /**
-interface iEIP801Canary is iERC173Ownable,
+interface iEIP801Canary is iSafeERC173Ownable,
     iEIP801
 {
 }
