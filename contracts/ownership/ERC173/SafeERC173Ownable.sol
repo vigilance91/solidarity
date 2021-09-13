@@ -70,10 +70,11 @@ abstract contract SafeERC173Ownable is ERC173Ownable,
         //_requireSupportsInterface(recipient);
         address O = ownable.owner();
         
-        //O.requireEqualAndNotNull(
-            //address(this)
-            ////'invalid owner'
-        //);
+        O.requireNotNull();
+        O.requireEqual(
+            address(this)
+            //'invalid owner'
+        );
         
         //revert transaction if this contract is already owner of ownable,
         //don't waste ether on redundant call
@@ -91,10 +92,11 @@ abstract contract SafeERC173Ownable is ERC173Ownable,
     {
         address O = ownable.owner();
         
-        //O.requireEqualAndNotNull(
-            //address(this)
-            ////'invalid owner'
-        //);
+        O.requireNotNull();
+        O.requireEqual(
+            address(this)
+            //'invalid owner'
+        );
         
         address(this).renounceOwnership(ownable);
         
@@ -117,15 +119,30 @@ abstract contract SafeERC173Ownable is ERC173Ownable,
         );
         
         address O = ownable.owner();
+        
+        O.requireNotNull();
+        O.requireEqual(
+            address(this)
+            //'this contract is not owner, cannot transfer ownership'
+        );
+        
         address thisOwner = owner();
         //this is for external ownership transfers
         //thisOwner.requireNotEqualAndNotNull(O);
         //ensure contract doesn't own itself
-        //address(this).requireNotEqualAndNotNull(thisOwner);
+        thisOwner.requireNotNull(
+            //'owner is null, cannot transfer ownership'
+        );
+        //address(this).requireNotEqual(
+            //thisOwner
+            ////'contract cannot own itself'
+        //);
         
         _safeTransferOwnership(ownable, thisOwner);
         
-        //assert(ownable.owner().equal(thisOwner));
+        //ownable.owner().requireEqual(
+            //thisOwner
+        //);
     }
     /// @dev if this contract owns `ownable`, transfer ownership to newOwner
     ///

@@ -53,7 +53,7 @@ abstract contract EncoderEIP1261ABC is iEncoderEIP1261,
     /// 
     function requestMembership(
         uint[] calldata attributeIndexes
-    )external view returns(
+    )external view override returns(
         bytes memory
     ){
         return abiEncoderEIP1261.requestMembership(

@@ -15,9 +15,9 @@ contract EncoderEIP1261Factory is EIP2470SingletonFactory
 {
     using AddressLogic for address;
     
-    bytes32 private constant _HASH = keccak256(bytes('solidarity.ENCODER_EIP1261_FACTORY'));
+    bytes32 private constant _HASH = keccak256(bytes('solidarity.ENCODER_EIP1261_MEMBERSHIP_VERIFICATION_TOKEN_FACTORY'));
     
-    bytes private constant _BYTE_CODE = type(EncoderERC1261).creationCode;
+    bytes private constant _BYTE_CODE = type(EncoderEIP1261).creationCode;
     
     bytes32 public constant HASH_ENCODER_EIP1261 = keccak256(_BYTE_CODE);
     

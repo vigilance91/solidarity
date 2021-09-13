@@ -2,48 +2,45 @@
 
 pragma solidity >=0.6.4 <0.7.0;
 pragma experimental ABIEncoderV2;
-
-//import "../TokenIdentifier/iTokenIdentifier.sol";
 ///
-/// @dev the EIP1261 Transaction Encoder Library
+/// @dev the EIP-1261 Transaction Encoder Library
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 29/8/2021, All Rights Reserved
 ///
 library abiEncoderEIP1261
-    ////iTokenIdentifier
 {
     //
     //void getter function signatures
     //
-    bytes public constant SIG_FORFEIT_MEMBERSHIP = 'forfeitMembership()';
+    bytes internal constant SIG_FORFEIT_MEMBERSHIP = 'forfeitMembership()';
     //
-    bytes public constant SIG_GET_ALL_MEMBERS = abi.encodeWithSignature('getAllMembers()');
-    bytes public constant SIG_GET_CURRENT_MEMBER_COUNT = abi.encodeWithSignature('getCurrentMemberCount()');
+    bytes internal constant SIG_GET_ALL_MEMBERS = abi.encodeWithSignature('getAllMembers()');
+    bytes internal constant SIG_GET_CURRENT_MEMBER_COUNT = abi.encodeWithSignature('getCurrentMemberCount()');
     //
-    bytes public constant SIG_GET_ATTRIBUTE_NAMES = abi.encodeWithSignature('getAttributeNames()');
+    bytes internal constant SIG_GET_ATTRIBUTE_NAMES = abi.encodeWithSignature('getAttributeNames()');
     //
     //function stubs
     //
-    string public constant STUB_ADD_ATTRIBUTE_SET = 'addAttributeSet(bytes32,bytes32[])';
-    string public constant STUB_MODIFY_ATTRIBUTE_SET = 'modifyAttributeByIndex(address,uint,uint)'; 
+    string internal constant STUB_ADD_ATTRIBUTE_SET = 'addAttributeSet(bytes32,bytes32[])';
+    string internal constant STUB_MODIFY_ATTRIBUTE_SET = 'modifyAttributeByIndex(address,uint,uint)'; 
     //
-    string public constant STUB_REQUEST_MEMBERSHIP = 'requestMembership(uint[])'; 
+    string internal constant STUB_REQUEST_MEMBERSHIP = 'requestMembership(uint[])'; 
     //
-    string public constant STUB_APPROVE_REQUEST = 'approveRequest(address)'; 
-    string public constant STUB_DISCARD_REQUEST = 'discardRequest(address)'; 
+    string internal constant STUB_APPROVE_REQUEST = 'approveRequest(address)'; 
+    string internal constant STUB_DISCARD_REQUEST = 'discardRequest(address)'; 
     //
-    string public constant STUB_ASSIGN_TO = 'assignTo(address,uint[])'; 
-    string public constant STUB_REVOKE_FROM = 'revokeFrom(address)'; 
+    string internal constant STUB_ASSIGN_TO = 'assignTo(address,uint[])'; 
+    string internal constant STUB_REVOKE_FROM = 'revokeFrom(address)'; 
     //
-    string public constant STUB_IS_CURRENT_MEMBER = 'isCurrentMember(address)'; 
+    string internal constant STUB_IS_CURRENT_MEMBER = 'isCurrentMember(address)'; 
     //
-    string public constant STUB_GET_ATTRIBUTE_EXHAUSTIVE_COLLECTION = 'getAttributeExhaustiveCollection(bytes32)'; 
+    string internal constant STUB_GET_ATTRIBUTE_EXHAUSTIVE_COLLECTION = 'getAttributeExhaustiveCollection(bytes32)'; 
     //
-    //string public constant STUB_ = 'getAllMembers()'; 
-    //string public constant STUB_ = 'getCurrentMemberCount()'; 
+    //string internal constant STUB_ = 'getAllMembers()'; 
+    //string internal constant STUB_ = 'getCurrentMemberCount()'; 
     //
-    //string public constant STUB_ = 'getAttributeNames()';
-    string public constant STUB_GET_ATTRIBUTES = 'getAttributes(address)';
-    string public constant STUB_ATTRIBUTES_BY_INDEX = 'getAttributeByIndex(address,uint)';
+    //string internal constant STUB_ = 'getAttributeNames()';
+    string internal constant STUB_GET_ATTRIBUTES = 'getAttributes(address)';
+    string internal constant STUB_GET_ATTRIBUTE_BY_INDEX = 'getAttributeByIndex(address,uint)';
     /// 
     /// @return {bytes}
     /// 
@@ -192,7 +189,7 @@ library abiEncoderEIP1261
         bytes memory
     ){
         return abi.encodeWithSignature(
-            STUB_GET_ATTRIBUTES_BY_INDEX,
+            STUB_GET_ATTRIBUTE_BY_INDEX,
             account,
             attributeIndex
         );

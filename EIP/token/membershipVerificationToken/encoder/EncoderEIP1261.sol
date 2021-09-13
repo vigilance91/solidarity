@@ -7,7 +7,9 @@ import "https://github.com/vigilance91/solidarity/EIP/token/membershipVerificati
 
 import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/ERC165.sol";
 
-//interface iEncoderEIP1261MVT is iEncoderEIP1261
+//interface iEncoderEIP1261MVT is iERC165,
+//    iEncoderTokenIdentifier,
+//    iEncoderEIP1261
 //{
 //}
 ///
@@ -21,10 +23,11 @@ abstract contract EncoderEIP1261 is ERC165,
     constructor(
     )public
         ERC165()
-        EncoderTokenIdentifierABC()
+        EncoderEIP1261ABC()
     {
         //todo register appropriate interface in derived class which inherits from ERC-165
         //_registerInterface(type(iEncoderTokenIdentifier).interfaceId);
         _registerInterface(type(iEncoderEIP1261).interfaceId);
+        //_registerInterface(type(iEncoderEIP1261MVT).interfaceId);
     }
 }
