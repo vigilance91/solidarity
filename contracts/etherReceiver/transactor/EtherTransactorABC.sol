@@ -60,7 +60,7 @@ abstract contract EtherTransactorABC is EtherReceiverABC,
             //require(success, 'transfer failed');
         //}
         
-        //_registerInterface(type(iEtherSender).interfaceId);
+        //_registerInterface(type(iEtherReceiver).interfaceId);
         //_registerInterface(type(iEtherTransactor).interfaceId);
     }
     /// @dev can recipient receive `amount` of ETH
