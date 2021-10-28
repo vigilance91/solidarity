@@ -9,7 +9,7 @@ import "https://github.com/vigilance91/solidarity/contracts/token/TokenIdentifie
 /// @title optional metadata extension for ERC-721 Non-Fungible Token Standard
 /// @dev See https://eips.ethereum.org/EIPS/eip-721
 ///
-interface iERC721Metadata is iERC721
+interface iERC721Metadata is iERC721,
     iTokenIdentifier
 {
     /// @return {string} the Uniform Resource Identifier (URI) for `tokenId` token
