@@ -16,13 +16,13 @@ interface iERC721 is iERC165
     function balanceOf(
         address owner
     )external view returns(
-        uint256 balance
+        uint256
     );
     
     /// @return {uint256} number of `caller`'s tokens
     //function balanceOf(
     //)external view returns(
-        //uint256 balance
+        //uint256
     //);
     ///
     /// @return {address} owner of token `tokenId`
@@ -33,7 +33,7 @@ interface iERC721 is iERC165
     function ownerOf(
         uint256 tokenId
     )external view returns(
-        address owner
+        address
     );
     ///
     /// @dev Safely transfers `tokenId` token from `from` to `to`,
@@ -100,7 +100,7 @@ interface iERC721 is iERC165
     function getApproved(
         uint256 tokenId
     )external view returns(
-        address operator
+        address
     );
     ///
     /// @dev Approve or remove `operator` as an operator for the caller
