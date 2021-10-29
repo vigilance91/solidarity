@@ -25,7 +25,7 @@ interface iERC721Enumerable is iERC721
         address owner,
         uint256 index
     )external view returns(
-        uint256 tokenId
+        uint256
     );
     ///
     /// @return {uint256} token ID at `index` of all the tokens stored by the contract

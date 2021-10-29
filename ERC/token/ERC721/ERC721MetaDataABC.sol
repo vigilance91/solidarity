@@ -9,7 +9,7 @@ import "https://github.com/vigilance91/solidarity/contracts/token/TokenIdentifie
 
 //solidarity/libraies/.../toString.sol";
 
-abstract contract ERC721MetaDataABC is TokenIdenifierABC
+abstract contract ERC721MetaDataABC is TokenIdentifierABC
 {
     // Base URI
     string private _baseURI;
@@ -20,7 +20,7 @@ abstract contract ERC721MetaDataABC is TokenIdenifierABC
         string memory tokenURI
     )internal
         //Context()
-        TokenIdenifierABC(
+        TokenIdentifierABC(
             collectionName,
             collectionSymbol
         )
