@@ -267,4 +267,24 @@ abstract contract SafeERC20Mint is SafeERC20BurnableToken,
         _safeRenounceOwnership(ownable);
     }
     */
+    ///
+    ///@dev prevent renouncment of ownership while contract is paused 
+    ///
+    //function renounceOwnership(
+    //)external virtual override onlyOwner whenNotPaused nonReentrant
+    //{
+        //super.renounceOwnership();
+    //}
+    ///
+    ///@dev prevent transfer of ownership while contract is paused
+    ///
+    //function transferOwnership(
+        //address newOwner
+    //)external virtual override onlyOwner whenNotPaused nonReentrant
+    //{
+        //newOwner.requireNotNull(
+            ////_CONTRACT_NAME.concatenate("transferOwnership")
+        //);
+        //super.transferOwnership(newOwner);
+    //}
 }

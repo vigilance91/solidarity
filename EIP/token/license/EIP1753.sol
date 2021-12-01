@@ -62,7 +62,7 @@ library mixinEIP1753
     }
     function requireInitialized(
         LicenseStorage storage self
-    )public view
+    )internal view
     {
         self.initalized.requireTrue(
             //'not initialized'
@@ -71,7 +71,7 @@ library mixinEIP1753
     function isValidIssuer(
         LicenseStorage storage self,
         address owner
-    )public view returns(
+    )internal view returns(
         bool
     ){
         self.issuer.requireNotEqualAndNotNull(owner);
@@ -83,7 +83,7 @@ library mixinEIP1753
     function isValidTime(
         LicenseStorage storage self,
         uint time
-    )public view returns(
+    )internal view returns(
         bool
     ){
         //if(time.greaterThan(self.issuedTime) &&
@@ -96,7 +96,7 @@ library mixinEIP1753
     function isValidBlock(
         LicenseStorage storage self,
         uint blockNumber
-    )public view returns(
+    )internal view returns(
         bool
     ){
         //if(blockNumber.greaterThan(self.issuedBlock) &&

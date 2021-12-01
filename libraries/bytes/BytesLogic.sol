@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 pragma solidity >=0.6.4 <0.8.0;
-
+pragma experimental ABIEncoderV2;
 /**
  * todo create struct or contract for a mapping of addresses to byte32, for user account passwords!
  * libraries with internal functions have to function body injected into all callsites (this increases size and gas cost)
@@ -14,9 +14,11 @@ pragma solidity >=0.6.4 <0.8.0;
     //return string(abi.encodePacked(s, rhs));
 //}
 
+/// 
 /// @title Bytes Logic Library
 /// @author Tyler R. Drury - 4/3/2021, All Rights Reserved
 /// @notice trivial functions for the bytes data type not provided natively by Solidity.
+/// 
 library BytesLogic
 {
     //bytes public constant EMPTY = 0x00;    //bytes("");
@@ -111,7 +113,7 @@ library BytesLogic
     )internal pure returns(
         bool
     ){
-        return lhs == EMPTY
+        return lhs == EMPTY;
     }
     
     function notEmpty(
@@ -119,7 +121,7 @@ library BytesLogic
     )internal pure returns(
         bool
     ){
-        return lhs != EMPTY
+        return lhs != EMPTY;
     }
     /**
     function notEmptyAndNotEqual(

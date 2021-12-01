@@ -56,4 +56,32 @@ abstract contract NoncesABC
             _currentNonce(account).hexadecimal()
         );
     }
+    
+    //function _asHexAndSalt(
+    //)internal view returns(
+        //string memory
+    //){
+        //return _this.hexadecimal().concatenate(
+            //_currentNonce(_this).hexadecimal()
+        //);
+    //}
+    
+    //function _accountNonceHash(
+        //address account
+    //)internal view returns(
+        //bytes32
+    //){
+        //return keccak256(
+            //bytes(_asHexAndSalt(account))
+        //);
+    //}
+    
+    //function _thisNonceHash(
+    //)internal view returns(
+        //bytes32
+    //){
+        //return keccak256(
+            //bytes(_asHexAndSalt(address(this)))
+        //);
+    //}
 }

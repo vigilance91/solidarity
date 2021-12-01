@@ -72,7 +72,7 @@ abstract contract SafeERC20StaticCapMint is SafeERC20BurnableToken,
         //initialSupply.requireLessThanOrEqual(tokenCap);
         //
         //if(initialSupply > 0){
-            //_mint(sender, initialSupply);
+            //_safeMint(sender, initialSupply);
         //}
     }
     ///
@@ -86,8 +86,8 @@ abstract contract SafeERC20StaticCapMint is SafeERC20BurnableToken,
         address to,
         uint256 amount
     )external virtual nonReentrant
-        //onlyRole(ROLE_MINTER)
     {
+        //_requireRoleOrAdmin(ROLE_MINTER, sender);
         require(
             hasRole(ROLE_MINTER, _msgSender())
             //_NAME.concatenate("must have minter role to mint")
@@ -121,6 +121,7 @@ abstract contract SafeERC20StaticCapMint is SafeERC20BurnableToken,
                 "supply cap exceeded"
             );
         }
+        
         super._beforeTokenTransfer(
             from,
             to,
