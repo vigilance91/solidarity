@@ -167,7 +167,7 @@ abstract contract MsgValueConstraintsABC
         );
     }
 }
-
+/*
 contract MsgValueTest is MsgValueConstraintsABC
 {
     constructor(
@@ -200,3 +200,4 @@ contract MsgValueTest is MsgValueConstraintsABC
         return address(this).balance;
     }
 }
+*/
