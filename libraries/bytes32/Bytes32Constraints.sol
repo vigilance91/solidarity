@@ -5,13 +5,14 @@ pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/libraries/bytes32/Bytes32Logic.sol";
 import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
-
+/// 
 /// @title Bytes32 Constraints Library
 /// @author Tyler R. Drury - 3/1/2021, All Rights Reserved
 /// @notice This library provides trivial functions for constaining the state of the EVM (using require) based on the bytes32 data type.
 /// @dev This library is base on utils Btyes32Logic and is NOT vulnerable to timing attacks,
 /// and is designed and intended for use in cryptographically secure applications,
 /// which require constraining the state of the EVM for Bytes32 types, reverting on failure.
+/// 
 library Bytes32Constraints
 {
     using LogicConstraints for bool;
@@ -19,7 +20,7 @@ library Bytes32Constraints
     
     //using stringUtilities for string;
     
-    //string private constant LIB_NAME = 'bytes32Constraints: ';
+    //string private constant _NAME = 'bytes32Constraints: ';
     
     function requireEqual(
         bytes32 lhs,
@@ -27,7 +28,7 @@ library Bytes32Constraints
     )public pure
     {
         lhs.equal(rhs).requireTrue(
-            //LIB_NAME.concatenate('lhs != rhs');
+            //_NAME.concatenate('lhs != rhs');
         );
     }
     function requireNotEqual(
@@ -36,7 +37,7 @@ library Bytes32Constraints
     )public pure
     {
         lhs.equal(rhs).requireFalse(
-            //LIB_NAME.concatenate('lhs == rhs');
+            //_NAME.concatenate('lhs == rhs');
         );
     }
     function requireEmpty(
@@ -44,16 +45,38 @@ library Bytes32Constraints
     )public pure
     {
         lhs.empty().requireTrue(
-            //LIB_NAME.concatenate('lhs != 0x0')
+            //_NAME.concatenate('lhs != 0x0')
         );
+    }
+    
+    function requireEmpty(
+        bytes32[] memory lhs
+    )public pure
+    {
+        for(uint i; i < lhs.length; i++){
+            lhs[i].empty().requireTrue(
+                //_NAME.concatenate('lhs != 0x0')
+            );
+        }
     }
     function requireNotEmpty(
         bytes32 lhs
     )public pure
     {
         lhs.empty().requireFalse(
-            //LIB_NAME.concatenate('lhs == 0x0')
+            //_NAME.concatenate('lhs == 0x0')
         );
+    }
+    
+    function requireNotEmpty(
+        bytes32[] memory lhs
+    )public pure
+    {
+        for(uint i; i < lhs.length; i++){
+            lhs[i].empty().requireFalse(
+                //_NAME.concatenate('lhs == 0x0')
+            );
+        }
     }
     
     function requireNotEmptyAndNotEqual(
@@ -62,7 +85,7 @@ library Bytes32Constraints
     )public pure
     {
         lhs.notEmptyAndNotEqual(rhs).requireTrue(
-            //LIB_NAME.concatenate('(lhs == 0x0 || rhs == 0x0) || lhs == rhs');
+            //_NAME.concatenate('(lhs == 0x0 || rhs == 0x0) || lhs == rhs');
         );
     }
     
@@ -72,7 +95,7 @@ library Bytes32Constraints
     )public pure
     {
         lhs.notEmptyAndAreEqual(rhs).requireTrue(
-            //LIB_NAME.concatenate('(lhs == 0x0 || rhs == 0x0) || lhs != rhs');
+            //_NAME.concatenate('(lhs == 0x0 || rhs == 0x0) || lhs != rhs');
         );
     }
 }

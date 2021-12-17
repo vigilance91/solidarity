@@ -117,14 +117,23 @@ library uint256Logic
     /**
      * Common convenience operations
     */
+    function isZero(
+        uint256 lhs
+    )internal pure returns(
+        bool
+    ){
+        return equal(lhs, ZERO);
+    }
     function greaterThanZero(
         uint256 lhs
     )internal pure returns(
-        bool ret
+        bool
     ){
-        assembly{
-            ret := not(iszero(lhs))
-        }
+        //note this is broken
+        //assembly{
+        //    ret := not(iszero(lhs))
+        //}
+        return greaterThan(lhs, 0);
     }
     //function lessThanMax(
         //uint256 lhs
@@ -137,4 +146,29 @@ library uint256Logic
             //ret := lt(lhs, MAX)
         //}
     //}
+
+    /// @dev require `lhs` is within the inclusive range between `min` and `max`
+    function inRange(
+        uint256 lhs,
+        uint256 min,
+        uint256 max
+    )public pure returns(
+        bool
+    ){
+        require(max > min, 'min cannot be > max');
+
+        return greaterThanOrEqual(lhs, min) && lessThanOrEqual(lhs, max);
+    }
+    /// @dev require `lhs` is within the exclusive range between `min` and `max`
+    function inXRange(
+        uint256 lhs,
+        uint256 min,
+        uint256 max
+    )public pure returns(
+        bool
+    ){
+        require(max > min, 'min cannot be > max');
+
+        return greaterThan(lhs, min) && lessThan(lhs, max);
+    }
 }

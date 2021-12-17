@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 pragma solidity >=0.6.4 <0.8.0;
+pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
 import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256Logic.sol";
@@ -96,6 +97,14 @@ library uint256Constraints
             //LIB_NAME
         );
     }
+    function requireIsZero(
+        uint256 lhs
+    ) public pure
+    {
+        lhs.isZero().requireTrue(
+            //LIB_NAME
+        );
+    }
     /**
      * Less Than < operators
     */
@@ -114,9 +123,31 @@ library uint256Constraints
     ) public pure
     {
         lhs.lessThanOrEqual(rhs).requireTrue(
-            //LIB_NAME
+            //_NAME
         );
     }
+    /// @dev require `lhs` is within the inclusive range between `min` and `max`
+    function requireInRange(
+        uint256 lhs,
+        uint256 min,
+        uint256 max
+    )public pure
+    {
+        lhs.inRange(min, max).requireTrue(
+            //_NAME
+        );
+    }
+    /// @dev require `lhs` is within the exclusive range between `min` and `max`
+    function requireInXRange(
+        uint256 lhs,
+        uint256 min,
+        uint256 max
+    )public pure
+    {
+        lhs.inXRange(min, max).requireTrue(
+        );
+    }
+
     //function requireLessThanMax(uint256 lhs) public pure
     //{
         //requireLessThan(lhs, 0xFF);

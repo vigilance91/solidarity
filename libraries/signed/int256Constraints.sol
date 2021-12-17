@@ -162,4 +162,25 @@ library int256Constraints
     //{
         //requireGreaterMin(lhs, 0xFFFFF);
     //}
+    /// @dev require `lhs` is within the inclusive range between `min` and `max`
+    function requireInRange(
+        int256 lhs,
+        int256 min,
+        int256 max
+    )public pure
+    {
+        lhs.inRange(min, max).requireTrue(
+            //_NAME
+        );
+    }
+    /// @dev require `lhs` is within the exclusive range between `min` and `max`
+    function requireInXRange(
+        int256 lhs,
+        int256 min,
+        int256 max
+    )public pure
+    {
+        lhs.inXRange(min, max).requireTrue(
+        );
+    }
 }

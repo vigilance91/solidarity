@@ -7,6 +7,8 @@ import "https://github.com/vigilance91/solidarity/contracts/etherReceiver/transa
 import "https://github.com/vigilance91/solidarity/contracts/etherReceiver/transactor/iEtherTransactor.sol";
 
 import "https://github.com/vigilance91/solidarity/EIP/introspection/Canary/EIP801Canary.sol";
+
+//import "https://github.com/vigilance91/solidarity/libraries/msg/value/msgValueConstraints.sol";
 ///
 /// @title External Ether Transactor Contract
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 1/5/2021, All Rights Reserved
@@ -20,6 +22,7 @@ contract ExternalEtherTransactor is EIP801Canary,
     using SafeMath for uint256;
     
     using LogicConstraints for bool;
+    
     using AddressConstraints for address;
     using AddressConstraints for address payable;
     
@@ -35,15 +38,10 @@ contract ExternalEtherTransactor is EIP801Canary,
         
     //}
     constructor(
-    )public //payable
+    )public
         EIP801Canary()
         EtherTransactorABC()
     {
-        //if(msg.value > 0){
-            //(bool success, ) = payable(address(this)).call{value:msg.value}("");
-            //require(success, 'transfer failed');
-        //}
-        
         _registerInterface(type(iEtherReceiver).interfaceId);
         _registerInterface(type(iEtherTransactor).interfaceId);
     }
@@ -55,10 +53,12 @@ contract ExternalEtherTransactor is EIP801Canary,
         
         _msgSender().requireNotEqualAndNotNull(O);
         
+        //_requireMsgValueGreatherThanZero();
         require(msg.value > 0, 'msg.value must be non-zero');
         //note, this contract becomes the new msg.sender in the receiver() function
         (bool success, ) = payable(O).call{value:msg.value}("");
-        success.requireTrue('transferToThis failed');
+        
+        success.requireTrue('ethTransferToOwner failed');
     }
     /// @dev transfer ETH from this contract to recipient
     function ethThisTransferTo(
@@ -69,6 +69,7 @@ contract ExternalEtherTransactor is EIP801Canary,
         recipient.requireNotEqualAndNotNull(owner());
         
         _requireBalanceGreaterThanOrEqual(amount);
+        
         _ethThisTransferTo(recipient, amount);
     }
     /// @dev convenience wrapper to transfer ETH from this contract's balance to owner
@@ -77,14 +78,17 @@ contract ExternalEtherTransactor is EIP801Canary,
     )external virtual override onlyOwner nonReentrant
     {
         _requireBalanceGreaterThanOrEqual(amount);
+        
         _ethThisTransferTo(owner(), amount);
     }
     function ethTransferToThis(
     )external virtual override payable nonReentrant
     {
+        //_requireMsgValueGreatherThanZero();
         require(msg.value > 0, 'msg.value must be non-zero');
         //note, this contract becomes the new msg.sender in the receiver() function
         (bool success, ) = payable(address(this)).call{value:msg.value}("");
-        success.requireTrue('transferToThis failed');
+        
+        success.requireTrue('ethTtransferToThis failed');
     }
 }

@@ -5,9 +5,10 @@ pragma experimental ABIEncoderV2;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/utils/EnumerableSet.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/utils/Address.sol";
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/GSN/Context.sol";
 
-import "https://github.com/vigilance91/solidarity/contracts/accessControl/AccessControl.sol";
+import "https://github.com/vigilance91/solidarity/contracts/accessControl/AccessControlABC.sol";
+
+import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/ERC165.sol";
 ///
 /// @title Access Control Blacklist Abstract Base Contract
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 2/5/2021, All Rights Reserved
@@ -22,7 +23,10 @@ import "https://github.com/vigilance91/solidarity/contracts/accessControl/Access
 /// for a list of known malicious, bug or otherwise vulnerable tokens can be found here:
 ///     https://tokensniffer.com/
 ///
-abstract contract BlacklistABC is AccessControl
+abstract contract BlacklistABC is AccessControlABC
+    //NoncesABC,
+    //NonPayable,
+    //ContractConstraints
 {
     using EnumerableSet for EnumerableSet.AddressSet;
     
@@ -31,10 +35,23 @@ abstract contract BlacklistABC is AccessControl
 
     string private constant _NAME = ' BlacklistABC: ';
     
-    bytes32 public constant ROLE_BANNED = keccak256('solidarity.blacklist.role.banned');
+    bytes32 private constant _STORAGE_SLOT = keccak256('solidarity.accessControl.blacklistABC.STORAGE_SLOT');
+    //
+    //bytes32 public constant ROLE_BLACKLIST_ADMIN = keccak256('solidarity.accessControl.blacklistABC.role.ADMIN');     //has both assignor and revoker rights but can not assign other admins
+    //
+    //bytes32 public constant ROLE_ASSIGNOR = keccak256('solidarity.accessControl.blacklistABC.role.ASSIGNOR');     //can issue bans
+    //bytes32 public constant ROLE_REVOKER = keccak256('solidarity.accessControl.blacklistABC.role.REVOKER');   //can revoke bans
+    //
+    bytes32 public constant ROLE_BANNED = keccak256('solidarity.accessControl.blacklistABC.role.BANNED');       //role assigned to banned addresses
     
     constructor(
-    )internal AccessControl()
+    )internal
+        //NoncesABC()
+        AccessControlABC(
+            //_STORAGE_SLOT
+        )
+        //NonPayable()
+        //ContractConstraints()
     {
     }
     
@@ -45,6 +62,13 @@ abstract contract BlacklistABC is AccessControl
     ){
         return hasRole(ROLE_BANNED, account);
     }
+    //function _isBanner(
+        //address account
+    //)internal view returns(
+        //bool
+    //){
+        //return hasRole(ROLE_BANNER, account);
+    //}
     ///
     ///constraints
     ///
@@ -70,6 +94,20 @@ abstract contract BlacklistABC is AccessControl
             //"address is not banned"
         );
     }
+    //function _requireThisBanned(
+    //)internal view
+    //{
+        //_requireBanned(
+            //address(this)
+        //);
+    //}
+    function _requireThisNotBanned(
+    )internal view
+    {
+        _requireNotBanned(
+            address(this)
+        );
+    }
     function _bannedAddressCount(
     )internal view returns(
         uint256
@@ -83,6 +121,8 @@ abstract contract BlacklistABC is AccessControl
         _requireNotBanned(account);
         
         _grantRole(ROLE_BANNED, account);
+        
+        //_incrementNonce(account);
     }
     function _revokeBan(
         address account
@@ -91,5 +131,7 @@ abstract contract BlacklistABC is AccessControl
         _requireBanned(account);
         
         _revokeRole(ROLE_BANNED, account);
+        
+        //_incrementNonce(account);
     }
 }

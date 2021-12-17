@@ -20,6 +20,16 @@ library frameworkAccessControl
     
     string private constant _NAME = 'frameworkAccessControl: ';
     
+    string internal constant STUB_HAS_ROLE = 'hasRole(bytes32,address)';
+    //
+    string internal constant STUB_GET_ROLE_ADMIN = 'getRoleAdmin(bytes32)';
+    string internal constant STUB_GET_ROLE_MEMBER = 'getRoleMember(bytes32,uint256)';
+    string internal constant STUB_GET_ROLE_MEMBER_COUNT = 'getRoleMemberCount(bytes32)';
+    //
+    string internal constant STUB_GRANT_ROLE = 'grantRole(bytes32,address)';
+    string internal constant STUB_REVOKE_ROLE = 'revokeRole(bytes32,address)';
+    string internal constant STUB_TRANSFER_ROLE = 'transferRole(bytes32,address,address)';
+    
     bytes4 private constant _iACCESS_CONTROL_ID = type(iAccessControl).interfaceId;
     
     function _requireSupportsInterface(
@@ -27,7 +37,7 @@ library frameworkAccessControl
     )private view
     {
         target.supportsInterface(_iACCESS_CONTROL_ID).requireTrue(
-            'contract does not implement iWhitelist'
+            'contract does not implement iAccessControl'
         );
     }
     
@@ -144,13 +154,14 @@ library frameworkAccessControl
         
         (bool success, bytes memory result) = target.staticcall(
             abi.encodeWithSignature(
-                'hasRole(bytes32,address)',
+                STUB_HAS_ROLE,
                 role,
                 account
             )
         );
         success.requireTrue('staticcall failed');
         
+        //ret = result.decodeBool();
         (ret) = abi.decode(result, (bool));
     }
     ///
@@ -167,12 +178,13 @@ library frameworkAccessControl
         
         (bool success, bytes memory result) = target.staticcall(
             abi.encodeWithSignature(
-                'getRoleMemberCount(bytes32)',
+                STUB_GET_ROLE_MEMBER_COUNT,
                 role
             )
         );
         success.requireTrue('staticcall failed');
         
+        //ret = result.decodeUint256();
         (ret) = abi.decode(result, (uint256));
     }
     ///
@@ -199,13 +211,14 @@ library frameworkAccessControl
         
         (bool success, bytes memory result) = target.staticcall(
             abi.encodeWithSignature(
-                'getRoleMember(bytes32,uint256)',
+                STUB_GET_ROLE_MEMBER,
                 role,
                 index
             )
         );
         success.requireTrue('staticcall failed');
         
+        //ret = result.decodeAddress();
         (ret) = abi.decode(result, (address));
     }
     ///
@@ -223,7 +236,7 @@ library frameworkAccessControl
         
         (bool success, bytes memory result) = target.staticcall(
             abi.encodeWithSignature(
-                'getRoleAdmin(bytes32)',
+                STUB_GET_ROLE_ADMIN,
                 role
             )
         );
@@ -252,7 +265,7 @@ library frameworkAccessControl
         
         (bool success, ) = target.call(
             abi.encodeWithSignature(
-                'grantRole(bytes32,address)',
+                STUB_GRANT_ROLE,
                 role,
                 account
             )
@@ -276,7 +289,7 @@ library frameworkAccessControl
         
         (bool success, ) = target.call(
             abi.encodeWithSignature(
-                'revokeRole(bytes32,address)',
+                STUB_REVOKE_ROLE,
                 role,
                 account
             )
@@ -318,7 +331,7 @@ library frameworkAccessControl
         
         (bool success, ) = target.call(
             abi.encodeWithSignature(
-                'transferRole(bytes32,address,address)',
+                STUB_TRANSFER_ROLE,
                 role,
                 from,
                 to

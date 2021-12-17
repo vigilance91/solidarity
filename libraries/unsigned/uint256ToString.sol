@@ -140,7 +140,7 @@ library uint256ToString
         //return Secure.saltAndHash(hexadecimal(lhs),hexadecimal(uint256(rhs)));
         return keccak256(abi.encodePacked(
             hexadecimal(lhs),
-            hexadecimal(uint256(rhs))
+            hexadecimal(rhs)
         ));
     }
     

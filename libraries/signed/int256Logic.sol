@@ -168,4 +168,28 @@ library int256Logic
             //ret := sgt(lhs, MIN)
         //}
     //}
+    /// @return true if `lhs` is within the inclusive range between `min` and `max`, otherwise false
+    function inRange(
+        int256 lhs,
+        int256 min,
+        int256 max
+    )public pure returns(
+        bool
+    ){
+        require(max > min, 'min cannot be > max');
+
+        return greaterThanOrEqual(lhs, min) && lessThanOrEqual(lhs, max);
+    }
+    /// @return true `lhs` is within the exclusive range between `min` and `max`, otherwise false
+    function inXRange(
+        int256 lhs,
+        int256 min,
+        int256 max
+    )public pure returns(
+        bool
+    ){
+        require(max > min, 'min cannot be > max');
+
+        return greaterThan(lhs, min) && lessThan(lhs, max);
+    }
 }

@@ -21,8 +21,8 @@ import "https://github.com/vigilance91/solidarity/libraries/address/AddressConst
 ///    https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/access/AccessControl.sol
 /// 
 /// OpenZeppelin, respectfully, owns all rights to their original source in respects to its MIT license, however,
-/// Solidarity's version of AccessControl has been significantly rewritten from the ground up to not only increase readability,
-/// reduce comment bloat, add functionality, fixes some logic issues/potential bugs/invariants and reduces contract bytecode size
+/// Solidarity's version of AccessControl has been significantly rewritten from the ground up to not only increase readability but also
+/// reduce comment bloat, add functionality, fixe some logic issues/potential bugs/invariants and reduce contract bytecode size
 ///
 /// Additionally, this version leverages encapsulation techniques pioneered by Solidarity,
 /// including the use of Constraints, Mixins, Protocols and Frameworks to extend usability,
@@ -84,7 +84,7 @@ import "https://github.com/vigilance91/solidarity/libraries/address/AddressConst
 ///     `DEFAULT_ADMIN_ROLE` is also its own admin thus,
 ///     it has permission to grant and revoke this role
 ///     Extra precautions should be taken to secure accounts that have been granted it,
-///     and is recommended that is should role should only be assigned to a single address,
+///     and is recommended that this role should only be assigned to a single address,
 ///     potentilly either the contract deployer or owner (if ERC-173 compaliant)
 ///
 abstract contract AccessControl is Context,
@@ -108,6 +108,7 @@ abstract contract AccessControl is Context,
     //mapping (bytes32 => RoleData) private _roles;
 
     bytes32 public constant DEFAULT_ADMIN_ROLE = 0x00;
+    //bytes32 private constant _STORAGE_SLOT = keccak256();
     
     constructor(
     )internal Context()

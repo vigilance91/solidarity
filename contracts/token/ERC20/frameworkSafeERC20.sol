@@ -26,7 +26,8 @@ library frameworkSafeERC20
     
     bytes private constant _ERC20_RECEIVE_SIGNATURE = abi.encodeWithSignature('canReceiveERC20()');
     bytes4 private constant _iERC20_RECEIVER_ID = type(iERC20Receiver).interfaceId;
-    bytes4 public constant _ERC20_RECEIVED = iERC20Receiver.onERC20Received.selector;
+    
+    bytes4 internal constant _ERC20_RECEIVED = iERC20Receiver.onERC20Received.selector;
     
     function _requireSupportsInterface(
         address target
@@ -38,7 +39,7 @@ library frameworkSafeERC20
     }
     function canReceiveERC20(
         address target
-    )public view returns(
+    )internal view returns(
         bool ret
     ){
         target.requireNotNull(
@@ -62,7 +63,7 @@ library frameworkSafeERC20
         address recipient,
         address from,
         uint256 amount
-    )public returns(
+    )internal returns(
         bool
     ){
         recipient.requireNotNull();
@@ -92,7 +93,7 @@ library frameworkSafeERC20
     function safeTransferToOwner(
         address target,
         uint256 amount
-    )public returns(
+    )internal returns(
         bool
     ){
         //target.supportsInterface(_iERC173_ID).requireTrue(

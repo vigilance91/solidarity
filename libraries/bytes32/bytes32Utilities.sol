@@ -4,64 +4,81 @@ pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
-//import "./BytesUtilities.sol";
-import "https://github.com/vigilance91/solidarity/libraries/bytes32/Bytes32Logic.sol";
-import "https://github.com/vigilance91/solidarity/libraries/bytes32/Bytes32Constraints.sol";
 //
-//import "https://github.com/vigilance91/solidarity/libraries/string/StringLogic.sol";
-//import "https://github.com/vigilance91/solidarity/libraries/string/StringConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/bytes/BytesLogic.sol";
+import "https://github.com/vigilance91/solidarity/libraries/bytes/BytesConstraints.sol";
 /// 
-/// @title bytes32 Utilities
-/// @author Tyler R. Drury - 30/11/2021, All Rights Reserved
+/// @title bytes Utilities
+/// @author Tyler R. Drury - 1/12/2021, All Rights Reserved
 /// @notice trivial bytes32 convenience utility functions not provided natively by Solidity.
 /// 
-library bytes32Utilities
+library bytesUtilities
 {
-    using Bytes32Logic for bytes32;
-    using Bytes32Constraints for bytes32;
+    using BytesLogic for bytes;
+    using BytesConstraints for bytes;
     
     //using AddressLogic for address;
     //using StringLogic for string;
     
     function concatenate(
-        bytes32 lhs,
-        bytes32 rhs
+        bytes memory lhs,
+        bytes memory rhs
     )internal pure returns(
         bytes memory
     ){
         return abi.encodePacked(lhs, rhs);
     }
+    //unpacked concatenation (note: inputs will not be padded to 32 bytes)
+    //function concatenateAndHash(
+        //bytes memory lhs,
+        //bytes memory rhs
+    //)internal pure returns(
+        //bytes memory
+    //){
+        //return keccak256(
+            //abi.encode(lhs, rhs)
+        //);
+    //}
     function concatenateAndHash(
-        bytes32 lhs,
-        bytes32 rhs
+        bytes memory lhs,
+        bytes memory rhs
     )internal pure returns(
-        bytes32
+        bytes memory
     ){
         return keccak256(
             abi.encodePacked(lhs, rhs)
         );
     }
+
+    //function concatenateAndHashSignature(
+        //bytes memory lhs,
+        //bytes memory rhs
+    //)internal pure returns(
+        //bytes4
+    //){
+        //return bytes4(keccak256(
+            //abi.encodePacked(lhs, rhs)
+        //));
+    //}
     function hash(
-        bytes32 self
+        bytes memory self
     )internal pure returns(
         bytes32
     ){
-        return keccak256(
-            abi.encodePacked(self)
-        );
+        return keccak256(self);
     }
     /// convenience function to get first 4 bytes of a hash of a bytes32,
     function hashSignature(
-        bytes32 self
+        bytes memory self
     )internal pure returns(
         bytes4
     ){
         return bytes4(
-            hash(self)
+            keccak256(self)
         );
     }
     function hashSignatureEquals(
-        bytes32 lhs,
+        bytes memory lhs,
         bytes4 rhs
     )internal pure returns(
         bool
@@ -70,11 +87,11 @@ library bytes32Utilities
     }
     
     function hashSignatureEquals(
-        bytes32 lhs,
-        bytes32 rhs
+        bytes memory lhs,
+        bytes memory rhs
     )internal pure returns(
         bool
     ){
-        return hashSignature(lhs) ^ hashSignature(rhs) == 0;
+        return hashSignature(lhs) ^ hashSignature(rhs) == 0x00000000;
     }
 }
