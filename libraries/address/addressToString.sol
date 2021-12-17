@@ -104,29 +104,29 @@ library addressToString
         ));
     }
     //raw encodes the arguments as bytes, concatenating them together then returning the resulting sha3 hash
-    //function encodeAndHash(
-        //address lhs,
-        //address rhs
-    //)internal pure returns(
-        //bytes32
-    //){
-        //return keccak256(abi.encode(
-            //lhs,
-            //rhs
-        //));
-    //}
+    function encodeAndHash(
+        address lhs,
+        address rhs
+    )internal pure returns(
+        bytes32
+    ){
+        return keccak256(abi.encode(
+            lhs,
+            rhs
+        ));
+    }
     //raw encodes the arguments as bytes packed to 32 bytes each, then concatenates them together, returning the resulting sha3 hash
-    //function encodePackedAndHash(
-        //address lhs,
-        //address rhs
-    //)internal pure returns(
-        //bytes32
-    //){
-        //return keccak256(abi.encodePacked(
-            //lhs,
-            //rhs
-        //));
-    //}
+    function encodePackedAndHash(
+        address lhs,
+        address rhs
+    )internal pure returns(
+        bytes32
+    ){
+        return keccak256(abi.encodePacked(
+            lhs,
+            rhs
+        ));
+    }
     
     function encodeAndHashSignature(
         address lhs,

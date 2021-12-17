@@ -208,7 +208,7 @@ library mixinContract
         SCID.thisHash = SCID.thisHex.saltAndHash(chainId);
         //SCID.domainNameSeperator = keccak256(
             //abi.encode(
-                //keccak256('EIP712Domain(uint256 chainId,bytes32 slot,address deployer,address deployedContract, uint blockNumber)'),   //string name,string version
+                //keccak256('EIP712Domain(uint256 chainId,bytes32 slot,address deployer,address deployedContract,uint blockNumber)'),   //string name,string version
                 //chainId,
                 //slot,
                 ////_msgSender(),
