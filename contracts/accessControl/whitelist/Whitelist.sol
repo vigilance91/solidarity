@@ -8,16 +8,28 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contr
 
 //import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/access/AccessControl.sol";
 
+//import "https://github.com/vigilance91/solidarity/contracts/finances/NonPayable.sol";
+
 import "https://github.com/vigilance91/solidarity/contracts/nonces/NoncesABC.sol";
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/AccessControl.sol";
 
+//import "https://github.com/vigilance91/solidarity/contracts/accessControl/whitelist/WhitelistABC.sol";
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/whitelist/iWhitelist.sol";
 
 import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/ERC165.sol";
+
+//interface iAccessControlWhitelist is iAccessControl,
+//    iWhitelist
+//{
+//}
+
+//interface iSafeMortalWhitelist is iSafeMortalCanary,
+//    iWhitelist
+//{
+//}
 ///
 /// @title Access Control Address Whitelist
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 2/5/2021, All Rights Reserved
-/// @dev 0x9cF2b03628F83E2b73B19D652959CDB2C06153f2
 ///
 /// deployment cost:
 ///     = transaction cost: 1,891,498 gas + execution cost 1,399,630 gas 
@@ -41,9 +53,10 @@ import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/ERC16
 /// with the blacklist banning malicious, buggy or nefarious contracts or known hackers by default,
 ///     and then by allowing only non-blacklisted addresses to be permitted onto the whitelist to access functionality
 ///
-contract Whitelist is ERC165,
-    AccessControl,
-    NoncesABC,
+contract Whitelist is ERC165,   //SafeMortalCanary
+    WhitelistABC,
+    //NonPayable,
+    //ContractConstraints,
     iWhitelist
 {
     using EnumerableSet for EnumerableSet.AddressSet;
@@ -56,26 +69,48 @@ contract Whitelist is ERC165,
     
     using addressToString for address;
 
-    bytes32 public constant ROLE_PERMITTED = keccak256('solidarity.whitelist.role.permitted');
+    bytes32 private constant _WHITELIST_STORAGE_SLOT = keccak256('solidarity.accessControl.whitelistABC.STORAGE_SLOT');
     
-    string private _thisHex;
-    
-    //string intnernal constant _NAME = ' Whitelist: ';
+    //string private constant _NAME = ' Whitelist: ';
     
     constructor(
     )public
         ERC165()
-        AccessControl()
-        NoncesABC()
+        //MortalCanary()
+        //WhitelistABC(_STORAGE_SLOT, [])
+        WhitelistABC()
     {
         _thisHex = address(this).hexadecimal();
+        
+        _setRoleAdmin(ROLE_PERMITTED, DEFAULT_ADMIN_ROLE);
         
         _setupRole(ROLE_PERMITTED, _msgSender());
         _setupRole(ROLE_PERMITTED, address(this));
         
-        _registerInterface(type(iAccessControl).interfaceId);
         _registerInterface(type(iWhitelist).interfaceId);
+        //_registerInterface(type(iAccessControl).interfaceId);
+        //_registerInterface(iAccessControlWhitelist).interfaceId);
     }
+    //function init(
+        //address[] memory permitted,
+        //address[] memory assignors,
+        //address[] memory revokers
+    //)external _onlyDefaultAdmin initializer
+    //{
+        //for(uint i; i < permitted.length; i++){
+            //_setupRole(ROLE_PERMITTED, permitted[i]);
+        //}
+        
+        //for(uint i; i < assignors.length; i++){
+            //_setupRole(ROLE_ASSIGNORS, assignors[i]);
+        //}
+        
+        //address a;
+        //
+        //for(uint i; i < revokers.length; i++){
+            //_setupRole(ROLE_REVOKERS, revokers[i]);
+        //}
+    //}
     ///
 	/// @dev admin grants the signer of the hashed address and signature access to this contract
     /// transaction cost: 195,085 gas + execution cost 166,837 gas === 361,922 total gas
@@ -95,6 +130,7 @@ contract Whitelist is ERC165,
         address sender = _msgSender();
         //sender must be admin and also be permitted to use this contract
         //_requirePermitted(sender);
+        //_requireIsAssignorOrAdmin(sender);
         _requireHasAdminRole(ROLE_PERMITTED, sender);
         
         address signer = ECDSA.recover(
@@ -118,7 +154,7 @@ contract Whitelist is ERC165,
             'invalid signer hash'
         );
         // require signer has not already been granted permission
-        _requireNotHasRole(ROLE_PERMITTED,signer);
+        _requireNotHasRole(ROLE_PERMITTED, signer);
         
         //caller of permit() can not be the transaction signer
         //return (
@@ -228,25 +264,65 @@ contract Whitelist is ERC165,
         address account
     )internal view
     {
-        hasRole(ROLE_PERMITTED, account).requireTrue(
-            //"address not white-listed"
+        _hasRole(ROLE_PERMITTED, account).requireTrue(
+            //_NAME.concatentate("address not white-listed")
         );
     }
     function _requireNotPermitted(
         address account
     )internal view
     {
-        hasRole(ROLE_PERMITTED, account).requireFalse(
-            //"address is white-listed"
+        _hasRole(ROLE_PERMITTED, account).requireFalse(
+            //_NAME.concatentate("address is white-listed")
+        );
+    }
+    function _requireThisPermitted(
+    )internal view
+    {
+        _requirePermitted(
+            address(this)
+        );
+    }
+    function _requireThisNotPermitted(
+    )internal view
+    {
+        _requireNotPermitted(
+            address(this)
         );
     }
     function isPermitted(
         address account
-    )public view override returns(
+    )public view virtual override returns(
         bool
     ){
-        return hasRole(ROLE_PERMITTED, account);
+        //if(account.equal(owner())){
+            //return true;
+        //}
+        
+        return _hasRole(ROLE_PERMITTED, account);
     }
+    //function isAssignor(
+        //address account
+    //)public view override returns(
+        //bool
+    //){
+        //if(account.equal(owner())){
+            //return true;
+        //}
+        //
+        //return _hasRole(ROLE_ASSIGNOR, account);
+    //}
+    //function isRevoker(
+        //address account
+    //)public view override returns(
+        //bool
+    //){
+        //if(account.equal(owner())){
+            //return true;
+        //}
+        //
+        //return _hasRole(ROLE_REVOKER, account);
+    //}
     ///
     /// @return {uint256} the number of white-listed accounts,
     /// can be used together with {getRoleMember} to enumerate all white-listed accounts
@@ -256,8 +332,42 @@ contract Whitelist is ERC165,
         uint256
     ){
         //return _roleAt(ROLE_PERMITTED).members.length();
-        return getRoleMemberCount(ROLE_PERMITTED);
+        return _roleMemberCount(ROLE_PERMITTED);
     }
+    ///
+    /// @return {uint256} the number of role assignors,
+    /// 
+    //function getAssignorMemberCount(
+    //)public view override returns(
+        //uint256
+    //){
+        //return _roleMemberCount(ROLE_ASSIGNOR);
+    //}
+    ///
+    /// @return {uint256} the number of role assignors,
+    /// 
+    //function getRevokerMemberCount(
+    //)public view override returns(
+        //uint256
+    //){
+        //return _roleMemberCount(ROLE_REVOKER);
+    //}
+    
+    //get the addresses associated with the assignor's admin role
+    //function assignorAdmin(
+    //)public view override returns(
+        //address
+    //){
+        // return ;
+    //}
+    
+    //get the addresses associated with the revoker's admin role
+    //function revokerAdmin(
+    //)public view override returns(
+        //address
+    //){
+        // return ;
+    //}
     ///
     /// @dev Revokes `account` from whitelist
     /// emits a {RoleRevoked} event
@@ -268,12 +378,71 @@ contract Whitelist is ERC165,
     ///
     function revokePermission(
         address account
-    )external virtual override
-        //onlyDefaultAdminOrRoleAdmin
+    )external virtual virtual override  //NonReentrant
+        //onlyOwnerAdminOrRole(ROLE_REVOKER)
     {
+        //address sender = _msgSender();
+        //address O = owner();
+        
+        //if(sender.equal(O) || _hasDefaultAdminRole(sender)){
+            //prevent owner from or admin from revoking owner's permissions
+            //_requireNotOwner(account);
+        //}
+        //
         _requireHasAdminRole(ROLE_PERMITTED, _msgSender());
-        _requireHasRole(ROLE_PERMITTED,account);
+        //
+        //if(!_hasDefaultAdminRole(sender)){
+            _requireNotHasAdminRole(ROLE_PERMITTED, account);
+        //}
+        _requireHasRole(ROLE_PERMITTED, account);
+        
+        _incrementNonce(account);
         
         _revokeRole(ROLE_PERMITTED, account);
     }
+    ///
+    /// @dev Caller renounces their access to whitelist
+    /// emits a {RoleRevoked} event
+    ///
+    /// Requirements:
+    ///     - caller cannot be this contract
+    ///     - reverts if caller has not previously been white-listed
+    ///
+    //function renouncePermission(
+    //)external virtual override  //NonReentrant
+    //{
+        //address sender = _msgSender();
+        //
+        //this contract must have permission revoked, can not renounce own permission, otherwise bugs
+        //_requireNotNullAndNotThis(sender);
+        //_requireHasRole(ROLE_PERMITTED, sender);
+        //
+        //_incrementNonce(sender);
+        //
+        //_revokeRole(ROLE_PERMITTED, sender);
+    //}
+    ///
+    /// @dev Transfers permission from caller to `account`
+    /// emits a {RoleRevoked} and {RoleGranted} events
+    ///
+    /// Requirements:
+    ///     - reverts if caller is not an admin
+    ///     - reverts if caller is not whitelisted
+    ///     - reverts if `account` is null, caller or has previously been whitelisted
+    ///
+    //function transferPermission(
+        //address account
+    //)external virtual override  //NonReentrant
+        //onlyDefaultAdminOrRoleAdmin
+    //{
+        //_requireHasAdminRole(ROLE_PERMITTED, _msgSender());
+        //_requireNotHasRole(ROLE_PERMITTED, account);
+        //
+        //_transferRole(ROLE_PERMITTED, sender, account);
+        //
+        //_incrementNonce(sender);
+        //_incrementNonce(account);
+        //
+        //NOTE: if caller is an admin they will retain the admin role for this contract
+    //}
 }
