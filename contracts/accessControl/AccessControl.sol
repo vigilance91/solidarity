@@ -3,16 +3,8 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/utils/EnumerableSet.sol";
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/utils/Address.sol";
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/GSN/Context.sol";
-
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/iAccessControl.sol";
-import "https://github.com/vigilance91/solidarity/contracts/accessControl/mixinAccessControl.sol";
-//import "./iAccessControl.sol";
-//import "./mixinAccessControl.sol";
-
-import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
+import "https://github.com/vigilance91/solidarity/contracts/accessControl/AccessControlABC.sol";
 ///
 /// @title Access Control
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 19/4/2021, All Rights Reserved
@@ -22,7 +14,7 @@ import "https://github.com/vigilance91/solidarity/libraries/address/AddressConst
 /// 
 /// OpenZeppelin, respectfully, owns all rights to their original source in respects to its MIT license, however,
 /// Solidarity's version of AccessControl has been significantly rewritten from the ground up to not only increase readability but also
-/// reduce comment bloat, add functionality, fixe some logic issues/potential bugs/invariants and reduce contract bytecode size
+/// reduces comment bloat, addes functionality, fixes some logic issues/potential bugs/invariants and reduce contract bytecode size
 ///
 /// Additionally, this version leverages encapsulation techniques pioneered by Solidarity,
 /// including the use of Constraints, Mixins, Protocols and Frameworks to extend usability,
@@ -38,8 +30,8 @@ import "https://github.com/vigilance91/solidarity/libraries/address/AddressConst
 /// Vigilance does not profit from the use or distribution of this contract.
 /// 
 /// Further modification to this software is permitted,
-/// only in respects to the terms specified by the MIT license and must cite the original author, OpenZeppelin,
-/// as well as Vigilance
+/// only in respects to the original terms specified by the MIT license and must cite the original author, OpenZeppelin,
+/// as well as Vigilance and maintain the appropriate copyright notice and license.
 ///
 /// For more information please visit OpenZeppelin's documentation at:
 ///     https://docs.openzeppelin.com/contracts/3.x/
@@ -87,7 +79,7 @@ import "https://github.com/vigilance91/solidarity/libraries/address/AddressConst
 ///     and is recommended that this role should only be assigned to a single address,
 ///     potentilly either the contract deployer or owner (if ERC-173 compaliant)
 ///
-abstract contract AccessControl is Context,
+abstract contract AccessControl is AccessControlABC,    //Context,
     iAccessControl
 {
     using EnumerableSet for EnumerableSet.AddressSet;
@@ -99,87 +91,14 @@ abstract contract AccessControl is Context,
     using AddressConstraints for address;
     
     //using mixinAccessControl for address;
-    
-    //struct RoleData {
-        //EnumerableSet.AddressSet members;
-        //bytes32 adminRole;
-    //}
 
-    //mapping (bytes32 => RoleData) private _roles;
-
-    bytes32 public constant DEFAULT_ADMIN_ROLE = 0x00;
     //bytes32 private constant _STORAGE_SLOT = keccak256();
     
     constructor(
-    )internal Context()
+    )internal
+        //Context()
+        AccessControlABC()
     {
-        _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
-    }
-    function _mutableRoles(
-    )private returns(
-        mapping(bytes32=>mixinAccessControl.RoleData) storage
-    ){
-        return mixinAccessControl.storageAccessControl().roles;
-    }
-    function _readOnlyRoles(
-    )private view returns(
-        mapping(bytes32=>mixinAccessControl.RoleData) storage
-    ){
-        return mixinAccessControl.storageAccessControl().roles;
-    }
-    function _roleAt(
-        bytes32 role
-    )internal view returns(
-        mixinAccessControl.RoleData storage
-    ){
-        return _readOnlyRoles()[role];
-    }
-    ///
-    ///constraints
-    ///
-    //function _requireIsDefaultAdmin(
-        //address account
-    //)internal view
-    //{
-        //hasRole(DEFAULT_ADMIN_ROLE, account).requireTrue(
-            ////"AccessControl: sender does not have role"
-        //);
-    //}
-    function _requireHasRole(
-        bytes32 role,
-        address account
-    )internal view
-    {
-        hasRole(role, account).requireTrue(
-            //"AccessControl: sender does not have role"
-        );
-    }
-    function _requireNotHasRole(
-        bytes32 role,
-        address account
-    )internal view
-    {
-        hasRole(role, account).requireFalse(
-            //"AccessControl: sender already has role"
-        );
-    }
-    function _requireHasAdminRole(
-        bytes32 role,
-        address account
-    )internal view
-    {
-        hasRole(_roleAt(role).adminRole, account).requireTrue(
-            //"AccessControl: sender must be an admin"
-        );
-    }
-    function _requireNotHasAdminRole(
-        bytes32 role,
-        address account
-    )internal view
-    {
-        hasRole(_roleAt(role).adminRole, account).requireFalse(
-            //"AccessControl: sender must not be an admin"
-        );
     }
     /**
     modifier onlyRole(
@@ -260,12 +179,26 @@ abstract contract AccessControl is Context,
     function hasRole(
         bytes32 role,
         address account
-    )public view override returns(
+    )external view override returns(
         bool
     ){
-        account.requireNotNull();
-        
-        return _roleAt(role).members.contains(account);
+        //account.requireNotNull();
+        //return _roleAt(role).members.contains(account);
+        return _hasRole(role, account);
+    }
+    ///
+    /// @return {bool} `true` if `account` has been granted `role`
+    /// 
+    /// Requirements:
+    ///     -account can not be zero address
+    ///
+    function hasRole(
+        bytes32 role,
+        address[] memory accounts
+    )external view override returns(
+        bool[] memory
+    ){
+        return _hasRole(role, accounts);
     }
     ///
     /// @return {uint256} the number of accounts that have `role`,
@@ -285,6 +218,7 @@ abstract contract AccessControl is Context,
     /// NOTE:
     ///     Role bearers are not sorted in any particular way,
     ///     and their ordering may change at any point
+    /// 
     /// WARNING:
     ///     When using {getRoleMember} and {getRoleMemberCount},
     ///     make sure you perform all queries on the same block
@@ -300,6 +234,15 @@ abstract contract AccessControl is Context,
     ){
         return _roleAt(role).members.at(index);
     }
+    //function sliceRoleMembers(
+        //bytes32 role,
+        //uint256 start,
+        //uint256 end
+    //)public view override returns(
+        //address
+    //){
+        //return _roleAt(role).members.at(index);
+    //}
     ///
     /// @return {bytes32} admin role that controls `role`
     /// See {grantRole} and {revokeRole}
@@ -331,9 +274,28 @@ abstract contract AccessControl is Context,
         //onlyDefaultAdminOrRoleAdmin
     {
         _requireHasAdminRole(role, _msgSender());
-        _requireNotHasRole(role,account);
         
         _grantRole(role, account);
+    }
+    ///
+    /// @dev Grants `role` to each account in `accounts`
+    /// emits multiple {RoleGranted} event
+    ///
+    /// Requirements:
+    ///     - the caller must have `role`'s admin role or be default admin
+    ///     - reverts if an account in `account` has previously been granted `role`
+    ///
+    function grantRole(
+        bytes32 role,
+        address[] memory accounts
+    )public virtual override
+        //onlyDefaultAdminOrRoleAdmin
+    {
+        _requireHasAdminRole(role, _msgSender());
+        
+        for(uint i; i < accounts.length; i++){
+            _grantRole(role, accounts[i]);
+        }
     }
     ///
     /// @dev Revokes `role` from `account`
@@ -347,14 +309,29 @@ abstract contract AccessControl is Context,
         bytes32 role,
         address account
     )public virtual override
-        //onlyDefaultAdminOrRoleAdmin
     {
-        //address sender = _msgSender();
-        //sender.requireNotEqual(account);
         _requireHasAdminRole(role, _msgSender());
-        _requireHasRole(role,account);
         
         _revokeRole(role, account);
+    }
+    ///
+    /// @dev Revokes `role` from `account`
+    /// emits a {RoleRevoked} event
+    ///
+    /// Requirements:
+    ///     - the caller must have ``role``'s admin role
+    ///     - reverts if `account` has not previously been granted `role`
+    ///
+    function revokeRole(
+        bytes32 role,
+        address[] memory accounts
+    )public virtual override
+    {
+        _requireHasAdminRole(role, _msgSender());
+        
+        for(uint i; i < accounts.length; i++){
+            _revokeRole(role, accounts[i]);
+        }
     }
     ///
     /// @dev Revokes `role` from the calling account
@@ -368,16 +345,16 @@ abstract contract AccessControl is Context,
     ///     - caller must have been previously granted Role, otherwise revert
     ///
     function renounceRole(
-        bytes32 role,
-        address account
+        bytes32 role
+        //address account
     )public virtual override
     {
-        account.requireEqual(
-            _msgSender()
-            //"AccessControl: can only renounce roles for self"
-        );
+        //account.requireEqual(
+            //_msgSender()
+            //"can only renounce roles for self"
+        //);
 
-        _revokeRole(role, account);
+        _revokeRole(role, _msgSender());
     }
     ///
     /// @dev Admin forces transfer of `role` from address `from` to address `to`
@@ -404,91 +381,5 @@ abstract contract AccessControl is Context,
         _requireHasAdminRole(role, _msgSender());
         
         _transferRole(role, from, to);
-    }
-    ///
-    /// @dev Grants `role` to `account`
-    /// emits a {RoleGranted} event
-    ///
-    /// NOTE:
-    ///     unlike {grantRole}, no checks are performed on the calling account
-    /// WARNING:
-    ///     This function should only be called from the constructor when setting up the initial roles for the system
-    ///     Using this function in any other way is effectively circumventing the admin system imposed by {AccessControl}
-    ///
-    function _setupRole(
-        bytes32 role,
-        address account
-    )internal virtual
-    {
-        _grantRole(role, account);
-    }
-    ///
-    /// @dev Sets `adminRole` as ``role``'s admin role
-    /// Emits a {RoleAdminChanged} event
-    ///
-    function _setRoleAdmin(
-        bytes32 role,
-        bytes32 adminRole
-    )internal virtual
-    {
-        mapping(bytes32=>mixinAccessControl.RoleData) storage mr = _mutableRoles();
-        
-        role.emitRoleAdminChanged(
-            mr[role].adminRole,
-            adminRole
-        );
-        mr[role].adminRole = adminRole;
-    }
-    function _grantRole(
-        bytes32 role,
-        address account
-    )internal
-    {
-        if(_mutableRoles()[role].members.add(account)){
-            role.emitRoleGranted(
-                account,
-                _msgSender()
-            );
-        }
-    }
-    function _revokeRole(
-        bytes32 role,
-        address account
-    )internal
-    {
-        if(_mutableRoles()[role].members.remove(account)){
-            role.emitRoleRevoked(
-                account,
-                _msgSender()
-            );
-        }
-    }
-    ///
-    /// @dev Admin forces transfer of `role` from address `from` to address `to`
-    /// emits a {RoleRevoked} even for `from` and {RoleGranted} event for `to`
-    ///
-    /// Requirements:
-    ///     - the caller must have `role`'s admin role or be default admin
-    ///     - `from` must not be null and currently have the role `role`
-    ///     - `to` must not be null and not have been assigned the role `role`
-    ///
-    /// NOTE:
-    ///     Be careful, default admin role can be transfered (only with the privallegaes it provides),
-    ///     this is useful along with transfering ownership via ERC173
-    ///     however, if default admin role is transfered, this will immediately prevent any further admin operations,
-    ///     thus it should be the last role transfered, if at all
-    ///
-    function _transferRole(
-        bytes32 role,
-        address from,
-        address to
-    )internal
-        //onlyDefaultAdminOrRoleAdmin
-    {
-        _requireHasRole(role,from);
-        _requireNotHasRole(role,to);
-        
-        _grantRole(role, to);
-        _revokeRole(role, from);
     }
 }

@@ -3,20 +3,12 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/utils/EnumerableSet.sol";
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/cryptography/ECDSA.sol";
-
-//import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/access/AccessControl.sol";
-
-//import "https://github.com/vigilance91/solidarity/contracts/finances/NonPayable.sol";
-
-import "https://github.com/vigilance91/solidarity/contracts/nonces/NoncesABC.sol";
-import "https://github.com/vigilance91/solidarity/contracts/accessControl/AccessControl.sol";
-
-//import "https://github.com/vigilance91/solidarity/contracts/accessControl/whitelist/WhitelistABC.sol";
-import "https://github.com/vigilance91/solidarity/contracts/accessControl/whitelist/iWhitelist.sol";
-
 import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/ERC165.sol";
+
+//import "https://github.com/vigilance91/solidarity/contracts/etherReceiver/NonPayable.sol";
+
+import "https://github.com/vigilance91/solidarity/contracts/accessControl/whitelist/WhitelistABC.sol";
+import "https://github.com/vigilance91/solidarity/contracts/accessControl/whitelist/iWhitelist.sol";
 
 //interface iAccessControlWhitelist is iAccessControl,
 //    iWhitelist
@@ -31,10 +23,7 @@ import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/ERC16
 /// @title Access Control Address Whitelist
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 2/5/2021, All Rights Reserved
 ///
-/// deployment cost:
-///     = transaction cost: 1,891,498 gas + execution cost 1,399,630 gas 
-///     = 3,291,128 gas
-///
+/// deplpoyment cost: 1,988,787 (previous version required 1,399,630 gas)
 ///
 /// inspired by OpenZeppelin's AccessControl contract at:
 ///    https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/access/AccessControl.sol
@@ -44,31 +33,20 @@ import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/ERC16
 /// automatically denying access to non-whitelisted addresses
 /// 
 /// This is the preferred method, oppossed to using a black-list,
-/// since a white-list requires explicit granting of access before being granted access to functionality,
+/// since a white-list requires explicit granting of access before accessesing functionality,
 /// where as a black list, by deafault allows access, unless an address is on the black list,
 /// which is reactive, first requiring being the victim of a hostile action to know what addresses to blacklist,
-/// oppossed to a whitelist, which is proactive (dnying all access by default)
+/// oppossed to a whitelist, which is proactive (denying all access by default)
 ///
 /// Additionally, both black and white lists can be used in concert,
 /// with the blacklist banning malicious, buggy or nefarious contracts or known hackers by default,
 ///     and then by allowing only non-blacklisted addresses to be permitted onto the whitelist to access functionality
 ///
 contract Whitelist is ERC165,   //SafeMortalCanary
+    //NonPayable
     WhitelistABC,
-    //NonPayable,
-    //ContractConstraints,
     iWhitelist
 {
-    using EnumerableSet for EnumerableSet.AddressSet;
-    
-    using LogicConstraints for bool;
-    using AddressConstraints for address;
-    using Bytes32Constraints for bytes32;
-    
-    using stringUtilities for string;
-    
-    using addressToString for address;
-
     bytes32 private constant _WHITELIST_STORAGE_SLOT = keccak256('solidarity.accessControl.whitelistABC.STORAGE_SLOT');
     
     //string private constant _NAME = ' Whitelist: ';
@@ -80,16 +58,7 @@ contract Whitelist is ERC165,   //SafeMortalCanary
         //WhitelistABC(_STORAGE_SLOT, [])
         WhitelistABC()
     {
-        _thisHex = address(this).hexadecimal();
-        
-        _setRoleAdmin(ROLE_PERMITTED, DEFAULT_ADMIN_ROLE);
-        
-        _setupRole(ROLE_PERMITTED, _msgSender());
-        _setupRole(ROLE_PERMITTED, address(this));
-        
         _registerInterface(type(iWhitelist).interfaceId);
-        //_registerInterface(type(iAccessControl).interfaceId);
-        //_registerInterface(iAccessControlWhitelist).interfaceId);
     }
     //function init(
         //address[] memory permitted,
@@ -123,178 +92,33 @@ contract Whitelist is ERC165,   //SafeMortalCanary
     ///     - reverts if recovered signer's address hash (combined with that acount's nonce) does not equal `signerHash`
     /// 
     function grantPermission(
-        bytes32 signerHash,
-        bytes memory signature
+        address account
     )external virtual override //returns(address)  //,bytes32,bytes32, bytes32)  //override nonReentrant
     {
+        _requireThisPermitted();
+
         address sender = _msgSender();
         //sender must be admin and also be permitted to use this contract
         //_requirePermitted(sender);
+        //_requireThisPermitted();
         //_requireIsAssignorOrAdmin(sender);
         _requireHasAdminRole(ROLE_PERMITTED, sender);
-        
-        address signer = ECDSA.recover(
-            ECDSA.toEthSignedMessageHash(signerHash),   //messageHash,
-            signature
-        );
-        //prevent signer from self-permitting
-        signer.requireNotEqual(
-            sender
-            //'admin can not be signer'
-        );
-        
-        //ensure the recovered signer's address matchs the original hash sent in the message,
-        //otherwise, someone who isn't the hashed account tried to send a fraudulent messsage,
-        //signed by a different account
-        //_addressHash(signer).requireEqual(
-            //signerHash
-        //);
-        require(
-            _addressHash(signer) == signerHash,
-            'invalid signer hash'
-        );
+        //
         // require signer has not already been granted permission
-        _requireNotHasRole(ROLE_PERMITTED, signer);
+        _requireNotHasRole(ROLE_PERMITTED, account);
+
+        _incrementNonce(account);
         
-        //caller of permit() can not be the transaction signer
-        //return (
-            //signer,
-            //signerHash,
-            //_addressHash(signer),
-            //messageHash
-        //);
-        
-        _incrementNonce(signer);
-        
-        _grantRole(ROLE_PERMITTED, signer);
-        
-        //return signer;
+        _grantRole(ROLE_PERMITTED, account);
     }
-    /// @dev `sender` whitelists an external, verified, contract `target`, granting permission to utilize the network's infrastructure
-    function _grantContractPermission(
-        address sender,
-        address target,
-        bytes32 targetHash,
-        bytes memory signature
-    )internal //returns(address)  //,bytes32,bytes32, bytes32)  //override nonReentrant
-    {
-        //address sender = _msgSender();
-        //sender must be admin and also be permitted to use this contract
-        //_requirePermitted(sender);
-        _requireHasAdminRole(ROLE_PERMITTED, sender);
-        
-        address signer = ECDSA.recover(
-            ECDSA.toEthSignedMessageHash(targetHash),
-            signature
-        );
-        //signer must be the sender and also a permitted admin
-        signer.requireEqual(
-            sender
-            //'admin can not be signer'
-        );
-        
-        //ensure the recovered traget contract address matchs the original hash sent in the signed message by the admin,
-        //otherwise, any contract can be aritrarily signed and granted permission
-        //_addressHash(signer).requireEqual(
-            //signerHash
-        //);
-        require(
-            _addressHash(target) == targetHash,
-            'invalid signer hash'
-        );
-        // require signer has not already been granted permission
-        _requireNotHasRole(ROLE_PERMITTED,target);
-        
-        //caller of permit() can not be the transaction signer
-        //return (
-            //signer,
-            //signerHash,
-            //_addressHash(signer),
-            //messageHash
-        //);
-        
-        _incrementNonce(target);
-        
-        _grantRole(ROLE_PERMITTED, target);
-        
-        //return signer;
-    }
-    // @dev owner may use this to whitelist external,
-    // verified contracts (such as other Solidarity products, Tether, Uniswap, 1inch, Bancor, etc),
-    // in combination with Whitelist's `grantPermission` signed message function
-    //function _contractAddressHash(
-        //address target
-    //)internal view returns(
-        //bytes32
-    //){
-        //target.isContract().requireTrue(
-            //'target must be contract address'
-        //);
-        //return _addressHash(target);
-    //}
-    /// 
-    /// @return {bytes32} hash of the hexadecimal string of this address concatentated with account's hexadecimal repressentation, combined with that account's current nonce
-    /// @dev this will be unique after each successful call to permit, or similar transactions, which increments the account's nonce
-    /// 
-    function _addressHash(
-        address account
-    )internal view returns(
-        bytes32
-    ){
-        account.requireNotNull();
-        
-        return _thisHex.saltAndHash(
-            _asHexAndSalt(account)
-        );
-    }
-    /// 
-    /// @dev concatentate hex repressentation of this contract's address, caller's address,
-    /// and caller's nonce, then hash result. Use this result for argument `signerHash` in {permit}
-    /// 
-    function callerAddressHash(
-    )external view override returns(
-        bytes32
-    ){
-        return _addressHash(_msgSender());
-    }
-    ///
-    ///constraints
-    ///
-    function _requirePermitted(
-        address account
-    )internal view
-    {
-        _hasRole(ROLE_PERMITTED, account).requireTrue(
-            //_NAME.concatentate("address not white-listed")
-        );
-    }
-    function _requireNotPermitted(
-        address account
-    )internal view
-    {
-        _hasRole(ROLE_PERMITTED, account).requireFalse(
-            //_NAME.concatentate("address is white-listed")
-        );
-    }
-    function _requireThisPermitted(
-    )internal view
-    {
-        _requirePermitted(
-            address(this)
-        );
-    }
-    function _requireThisNotPermitted(
-    )internal view
-    {
-        _requireNotPermitted(
-            address(this)
-        );
-    }
+    
     function isPermitted(
         address account
     )public view virtual override returns(
         bool
     ){
+        _requireThisPermitted();
+
         //if(account.equal(owner())){
             //return true;
         //}
@@ -322,6 +146,18 @@ contract Whitelist is ERC165,   //SafeMortalCanary
         //}
         //
         //return _hasRole(ROLE_REVOKER, account);
+    //}
+    ///
+    /// @return {uint256} the number of white-listed accounts,
+    /// can be used together with {getRoleMember} to enumerate all white-listed accounts
+    ///
+    //function permittedAddresses(
+    //)public view returns(
+        //address[] memory
+    //){
+        //_requireHasAdminRole(ROLE_PERMITTED, _msgSender());
+        //
+        //return _roleAt(ROLE_PERMITTED).members;
     //}
     ///
     /// @return {uint256} the number of white-listed accounts,
@@ -378,10 +214,13 @@ contract Whitelist is ERC165,   //SafeMortalCanary
     ///
     function revokePermission(
         address account
-    )external virtual virtual override  //NonReentrant
+    )external virtual override  //NonReentrant
         //onlyOwnerAdminOrRole(ROLE_REVOKER)
     {
-        //address sender = _msgSender();
+        //revoke this contract's permission to disable functionality permanently!
+        _requireThisPermitted();
+
+        address sender = _msgSender();
         //address O = owner();
         
         //if(sender.equal(O) || _hasDefaultAdminRole(sender)){
@@ -389,13 +228,32 @@ contract Whitelist is ERC165,   //SafeMortalCanary
             //_requireNotOwner(account);
         //}
         //
-        _requireHasAdminRole(ROLE_PERMITTED, _msgSender());
+        //if(account == _this()){
+            //_requireDefaultAdmin(sender);
+        //}
+        //else{
+            _requireHasAdminRole(ROLE_PERMITTED, sender);
+        //}
         //
         //if(!_hasDefaultAdminRole(sender)){
             _requireNotHasAdminRole(ROLE_PERMITTED, account);
         //}
         _requireHasRole(ROLE_PERMITTED, account);
-        
+        //
+        //if(role.equal(ROLE_PERMITTED)){
+            //if(_hasRole(ROLE_REVOKER)){
+                //_renounceRole(ROLE_REVOKER, sender);
+            //}
+            //
+            //if(_hasRole(ROLE_ASSIGNOR)){
+                //_renounceRole(ROLE_ASSIGNOR, sender);
+            //}
+            
+            //if(_hasRole(ROLE_ADMIN)){
+                //_renounceRole(ROLE_ADMIN, sender);
+            //}
+        //}
+        //
         _incrementNonce(account);
         
         _revokeRole(ROLE_PERMITTED, account);
@@ -416,6 +274,20 @@ contract Whitelist is ERC165,   //SafeMortalCanary
         //this contract must have permission revoked, can not renounce own permission, otherwise bugs
         //_requireNotNullAndNotThis(sender);
         //_requireHasRole(ROLE_PERMITTED, sender);
+        //
+        //if(role.equal(ROLE_PERMITTED)){
+            //if(_hasRole(ROLE_REVOKER)){
+                //_renounceRole(ROLE_REVOKER, sender);
+            //}
+            //
+            //if(_hasRole(ROLE_ASSIGNOR)){
+                //_renounceRole(ROLE_ASSIGNOR, sender);
+            //}
+            
+            //if(_hasRole(ROLE_ADMIN)){
+                //_renounceRole(ROLE_ADMIN, sender);
+            //}
+        //}
         //
         //_incrementNonce(sender);
         //

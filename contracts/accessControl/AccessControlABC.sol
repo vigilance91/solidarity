@@ -50,14 +50,7 @@ abstract contract AccessControlABC is Context
         
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     }
-    function _mutableRoles(
-    )private returns(
-        mapping(bytes32=>mixinAccessControl.RoleData) storage
-    ){
-        return mixinAccessControl.storageAccessControl(
-            //_storageSlot
-        ).roles;
-    }
+    
     function _readOnlyRoles(
     )private view returns(
         mapping(bytes32=>mixinAccessControl.RoleData) storage
@@ -212,6 +205,24 @@ abstract contract AccessControlABC is Context
         return _roleAt(role).members.contains(account);
     }
     ///
+    /// @return ret {bool[]} `true` for each corresponding`account in `accounts` has been granted `role`, otherwise false
+    /// 
+    /// Requirements:
+    ///     -account can not be zero address
+    ///
+    function _hasRole(
+        bytes32 role,
+        address[] memory accounts
+    )internal view returns(
+        bool[] memory ret
+    ){
+        ret = new bool[](accounts.length);
+
+        for(uint i; i < accounts.length; i++){
+            ret[i] = _hasRole(role, accounts[i]);
+        }
+    }
+    ///
     /// @return {uint256} the number of accounts that have `role`,
     /// can be used together with {getRoleMember} to enumerate all bearers of a role
     ///
@@ -289,7 +300,9 @@ abstract contract AccessControlABC is Context
         bytes32 adminRole
     )internal virtual
     {
-        mapping(bytes32=>mixinAccessControl.RoleData) storage mr = _mutableRoles();
+        mapping(bytes32=>mixinAccessControl.RoleData) storage mr = mixinAccessControl.storageAccessControl(
+            //_storageSlot
+        ).roles;
         
         //aside from DEFAULT_ADMIN_ROLE (which is its own admin), roles can not be their own admin
         //role.requireNotEqual(adminRole);
@@ -310,7 +323,9 @@ abstract contract AccessControlABC is Context
     {
         //_requireCanReceiveAccessControl(recipient);   //, role);
         
-        _mutableRoles()[role].members.add(recipient).requireTrue(
+        mixinAccessControl.storageAccessControl(
+            //_storageSlot
+        ).roles[role].members.add(recipient).requireTrue(
             "_grantRole failed"
         );
         
@@ -326,7 +341,9 @@ abstract contract AccessControlABC is Context
         address account
     )internal
     {
-        _mutableRoles()[role].members.remove(account).requireTrue(
+        mixinAccessControl.storageAccessControl(
+            //_storageSlot
+        ).roles[role].members.remove(account).requireTrue(
             "_revokeRole failed"
         );
         

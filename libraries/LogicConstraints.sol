@@ -13,6 +13,9 @@ import "https://github.com/vigilance91/solidarity/EIP/StatusCodes/logicCodes.sol
 /// 
 library LogicConstraints
 {
+    //bool internal constant TRUE = true;
+    //bool internal constant FALSE = false;
+    
     //using stringUtilities fro string;
     
     // todo change LogicConstraints to Logic

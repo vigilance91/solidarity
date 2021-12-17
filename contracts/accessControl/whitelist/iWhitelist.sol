@@ -3,12 +3,12 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 //
-import "https://github.com/vigilance91/solidarity/contracts/accessControl/iAccessControl.sol";
+//import "https://github.com/vigilance91/solidarity/contracts/accessControl/iAccessControl.sol";
 ///
 /// @title Whitelist Interface
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 12/5/2021, All Rights Reserved
 ///
-interface iWhitelist is iAccessControl
+interface iWhitelist //is iAccessControl
 {
     ///
 	/// @dev admin grants the signer of the hashed address and signature access to this contract
@@ -33,17 +33,8 @@ interface iWhitelist is iAccessControl
     ///     - reverts if recovered signer's address hash (combined with that acount's nonce) does not equal `signerHash`
     /// 
     function grantPermission(
-        bytes32 signerHash,
-        bytes memory signature
+        address account
     )external;
-    /// 
-    /// @dev concatentate hex repressentation of this contract's address, caller's address,
-    /// and caller's nonce, then hash result. Use this result for argument `signerHash` in {permit}
-    /// 
-    function callerAddressHash(
-    )external view returns(
-        bytes32
-    );
     ///
     /// @return {uint256} the number of white-listed accounts,
     /// can be used together with {getRoleMember} to enumerate all white-listed accounts

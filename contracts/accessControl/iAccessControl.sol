@@ -19,6 +19,13 @@ interface iAccessControl
         bool
     );
     
+    function hasRole(
+        bytes32 role,
+        address[] memory account
+    )external view returns(
+        bool[] memory
+    );
+    
     function getRoleMemberCount(
         bytes32 role
     )external view returns(
@@ -31,6 +38,14 @@ interface iAccessControl
     )external view returns(
         address
     );
+
+    //function sliceRoleMembers(
+        //bytes32 role,
+        //uint256 start,
+        //uint256 end
+    //)external view returns(
+        //address[] memory
+    //);
     
     function getRoleAdmin(
         bytes32 role
@@ -51,8 +66,7 @@ interface iAccessControl
     )external;
     
     function renounceRole(
-        bytes32 role,
-        address account
+        bytes32 role
     )external;
     
     function transferRole(
@@ -60,4 +74,22 @@ interface iAccessControl
         address from,
         address to
     )external;
+    //
+    //batched mutable interface
+    //
+    function grantRole(
+        bytes32 role,
+        address[] memory account
+    )external;
+    
+    function revokeRole(
+        bytes32 role,
+        address[] memory account
+    )external;
+    
+    //function transferRole(
+        //bytes32 role,
+        //address[] memory from,
+        //address[] memory to
+    //)external;
 }

@@ -20,10 +20,6 @@ library frameworkWhitelist
     
     string private constant _NAME = 'frameworkWhitelist: ';
     
-    bytes private constant _CALLER_ADDRESS_HASH_SIGNATURE = abi.encodeWithSignature(
-        'callerAddressHash()'
-    );
-    
     bytes private constant _ROLE_PERMITTED_SIGNATURE = abi.encodeWithSignature(
         'ROLE_PERMITTED()'
     );
@@ -33,6 +29,7 @@ library frameworkWhitelist
     );
     
     bytes4 private constant _iWHITELIST_ID = type(iWhitelist).interfaceId;
+    //bytes4 private constant _iACCESS_CONTROL_ID = type(iAccessControl).interfaceId;
     
     function _requireSupportsInterface(
         address target
@@ -133,17 +130,15 @@ library frameworkWhitelist
     ///
     function grantPermission(
         address target,
-        bytes32 signerHash,
-        bytes memory signature
+        address account
     )internal
     {
         _requireSupportsInterface(target);
         
         (bool success, ) = target.call(
             abi.encodeWithSignature(
-                'grantPermission(bytes32,bytes)',
-                signerHash,
-                signature
+                'grantPermission(address)',
+                account
             )
         );
         success.requireTrue('call failed');
@@ -226,20 +221,6 @@ library frameworkWhitelist
         (ret) = abi.decode(result, (bytes32));
     }
     
-    function callerAddressHash(
-        address target
-    )internal view returns(
-        bytes32 ret
-    ){
-        _requireSupportsInterface(target);
-        
-        (bool success, bytes memory result) = target.staticcall(
-            _CALLER_ADDRESS_HASH_SIGNATURE
-        );
-        success.requireTrue('static call failed');
-        
-        (ret) = abi.decode(result, (bytes32));
-    }
     function getPermittedMemberCount(
         address target
     )internal view returns(
