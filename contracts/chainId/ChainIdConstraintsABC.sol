@@ -8,7 +8,7 @@ import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol
 //import "https://github.com/vigilance91/solidarity/libraries/bytes32/bytes32Constraints.sol";
 import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256Constraints.sol";
 
-import "https://github.com/vigilance91/solidarity/contracts/chainId/mixinChainID.sol";
+import "https://github.com/vigilance91/solidarity/contracts/chainId/mixinChainId.sol";
 /// 
 /// @title Chain ID Constraints Abstract Base Contract
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 16/9/2021, All Rights Reserved
