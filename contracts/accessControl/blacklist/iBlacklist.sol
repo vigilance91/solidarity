@@ -3,16 +3,16 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/contracts/accessControl/iAccessControl.sol";
+//import "https://github.com/vigilance91/solidarity/contracts/accessControl/iAccessControl.sol";
 ///
 /// @title Blacklist Interface
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 12/5/2021, All Rights Reserved
 ///
-interface iBlacklist is iAccessControl
+interface iBlacklist //is iAccessControl
 {
-    ///
-    /// @return {bool} true if msg.sender is banned, otherwise false
-    ///
+    //
+    // @return {bool} true if msg.sender is banned, otherwise false
+    //
     //function isBanned(
     //)external view returns(
         //bool
@@ -24,6 +24,14 @@ interface iBlacklist is iAccessControl
         address account
     )external view returns(
         bool
+    );
+    ///
+    /// @return {bool} true if account is banned, otherwise false
+    ///
+    function isBanned(
+        address[] memory account
+    )external view returns(
+        bool[] memory
     );
     ///
     /// @return {uint256} the number of black-listed accounts,
@@ -38,21 +46,43 @@ interface iBlacklist is iAccessControl
     /// emits a {RoleGranted} event
     ///
     /// Requirements:
-    ///     - the caller must have ``role``'s admin role
+    ///     - the caller must have `role`'s admin role
     ///     - reverts if `account` has previously been banned
     ///
     function ban(
         address account
     )external;
     ///
-    /// @dev Revokes `account` from whitelist
+    /// @dev blacklist `account`
+    /// emits a {RoleGranted} event
+    ///
+    /// Requirements:
+    ///     - the caller must have `role`'s admin role
+    ///     - reverts if `account` has previously been banned
+    ///
+    function ban(
+        address[] memory accounts
+    )external;
+    ///
+    /// @dev Revokes `account` from blacklist
     /// emits a {RoleRevoked} event
     ///
     /// Requirements:
-    ///     - the caller must have ``role``'s admin role
-    ///     - reverts if `account` has not previously been banned
+    ///     - the caller must have `role`'s admin role
+    ///     - atomic, reverts if any account in `accounts` has not previously been banned
     ///
     function revokeBan(
         address account
+    )external;
+    ///
+    /// @dev Revokes each account in `account` from blacklist, if they have been previousyl banned
+    /// emits a {RoleRevoked} event
+    ///
+    /// Requirements:
+    ///     - the caller must have `role`'s admin role
+    ///     - atomic, reverts if an account in `accounts` has not previously been banned
+    ///
+    function revokeBan(
+        address[] memory accounts
     )external;
 }

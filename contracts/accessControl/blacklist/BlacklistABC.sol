@@ -23,10 +23,10 @@ import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/ERC16
 /// for a list of known malicious, bug or otherwise vulnerable tokens can be found here:
 ///     https://tokensniffer.com/
 ///
-abstract contract BlacklistABC is AccessControlABC
-    //NoncesABC,
+abstract contract BlacklistABC is ContractConstraintsABC,
+    NoncesABC,
+    AccessControlABC
     //NonPayable,
-    //ContractConstraints
 {
     using EnumerableSet for EnumerableSet.AddressSet;
     
@@ -35,7 +35,7 @@ abstract contract BlacklistABC is AccessControlABC
 
     string private constant _NAME = ' BlacklistABC: ';
     
-    bytes32 private constant _STORAGE_SLOT = keccak256('solidarity.accessControl.blacklistABC.STORAGE_SLOT');
+    //bytes32 private constant _STORAGE_SLOT = keccak256('solidarity.accessControl.blacklistABC.STORAGE_SLOT');
     //
     //bytes32 public constant ROLE_BLACKLIST_ADMIN = keccak256('solidarity.accessControl.blacklistABC.role.ADMIN');     //has both assignor and revoker rights but can not assign other admins
     //
@@ -46,12 +46,12 @@ abstract contract BlacklistABC is AccessControlABC
     
     constructor(
     )internal
-        //NoncesABC()
+        ContractConstraintsABC()
+        NoncesABC()
         AccessControlABC(
             //_STORAGE_SLOT
         )
         //NonPayable()
-        //ContractConstraints()
     {
     }
     
@@ -60,10 +60,10 @@ abstract contract BlacklistABC is AccessControlABC
     )internal view returns(
         bool
     ){
-        return hasRole(ROLE_BANNED, account);
+        return _hasRole(ROLE_BANNED, account);
     }
     //function _isBanner(
-        //address account
+        //address accounts
     //)internal view returns(
         //bool
     //){
@@ -94,20 +94,24 @@ abstract contract BlacklistABC is AccessControlABC
             //"address is not banned"
         );
     }
-    //function _requireThisBanned(
-    //)internal view
-    //{
-        //_requireBanned(
-            //address(this)
-        //);
-    //}
+    //
+    //this contract roles
+    //
+    function _requireThisBanned(
+    )internal view
+    {
+        _requireBanned(
+            _this()
+        );
+    }
     function _requireThisNotBanned(
     )internal view
     {
         _requireNotBanned(
-            address(this)
+            _this()
         );
     }
+    //
     function _bannedAddressCount(
     )internal view returns(
         uint256
@@ -122,7 +126,7 @@ abstract contract BlacklistABC is AccessControlABC
         
         _grantRole(ROLE_BANNED, account);
         
-        //_incrementNonce(account);
+        _incrementNonce(account);
     }
     function _revokeBan(
         address account
@@ -132,6 +136,6 @@ abstract contract BlacklistABC is AccessControlABC
         
         _revokeRole(ROLE_BANNED, account);
         
-        //_incrementNonce(account);
+        _incrementNonce(account);
     }
 }

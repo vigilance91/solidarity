@@ -6,10 +6,11 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contr
 
 import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
 import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256Constraints.sol";
-
+/// 
 /// @title Safe Transaction Library
 /// @author Tyler R. Drury - 3/1/2021, All Rights Reserved
 /// @dev library for performing financial transactions with pre and post logic checks to ensure state
+/// 
 library SafeTransaction
 {
     using SafeMath for uint256;
@@ -34,7 +35,7 @@ library SafeTransaction
     function withdraw(
         uint256 accountBalance,
         uint256 amount
-    )public pure returns(
+    )internal pure returns(
         uint256 res
     ) //_requireNonzero(amount)
     {
@@ -52,7 +53,7 @@ library SafeTransaction
     function deposit(
         uint256 accountBalance,
         uint256 amount
-    )public pure returns(
+    )internal pure returns(
         uint256 res
     ) //_requireNonzero(amount)
     {
@@ -70,7 +71,7 @@ library SafeTransaction
         uint256 fromBalance,
         uint256 toBalance,
         uint256 amount
-    )public pure returns(
+    )internal pure returns(
         bool
     ){
         withdraw(fromBalance, amount);
@@ -86,7 +87,7 @@ library SafeTransaction
         uint256 fromBalance,
         uint256 toBalance,
         uint256 amount
-    )public pure
+    )internal pure
     {
         transact(
             fromBalance,
@@ -96,6 +97,28 @@ library SafeTransaction
             //'txn failed'
         );
     }
+    
+    //function requireTransactionSuccessful(
+        //uint256[] memory fromBalances,
+        //uint256[] memory toBalances,
+        //uint256[] memory amounts
+    //)internal pure
+    //{
+        //require(fromBalance.length == toBalances.length);
+        //require(fromBalance.length == amounts.length);
+        
+        //uint L = fromBalances.length;
+        
+        //for(uint i; i < L; i++){
+            //transact(
+                //fromBalances[i],
+                //toBalances[i],
+                //amounts[i]
+            //).requireTrue(
+                ////'txn failed'
+            //);
+        //}
+    //}
     /**
     /// @dev remove amount from all entries in array,
     /// such as when poker players all contribute a blind to a pot
@@ -129,7 +152,7 @@ library SafeTransaction
         uint256 balance0,
         uint256 balance1,
         uint256 amount
-    )public pure returns(
+    )internal pure returns(
         uint256 newBalance0,
         uint256 newBalance1
     ){
@@ -138,12 +161,42 @@ library SafeTransaction
             withdraw(balance1, amount)
         );
     }
+    //function parallelWithdraw(
+        //uint256 from,
+        //uint256[] memory to,
+        //uint256 amount
+    //)internal pure returns(
+        //uint256 newBalance0,
+        //uint256[] memory newBalances
+    //){
+        //uint256[] results = new uint256[](to.length);
+        
+        //for(uint i; i < to.length) i++){
+            //results[i] = withdraw(from, amount);
+        //}
+        
+        //return results;
+    //}
+    //function parallelWithdraw(
+        //uint256[] memory from,
+        //uint256 amount
+    //)internal pure returns(
+        //uint256[] memory balances,
+    //){
+        //uint256[] balances = new uint256[](from.length);
+        
+        //for(uint i; i < from.length; i++){
+            //results[i] = withdraw(from[i], amount);
+        //}
+        
+        //return results;
+    //}
     /// @dev attemp sanity checks for carrying out two deposits in serial to two separate account balances, typicall one is a personal balance, the other is a total balance for all accounts
     function parallelDeposit(
         uint256 balance0,
         uint256 balance1,
         uint256 amount
-    )public pure returns(
+    )internal pure returns(
         uint256 newBalance0,
         uint256 newBalance1
     ){
@@ -152,12 +205,43 @@ library SafeTransaction
             deposit(balance1, amount)
         );
     }
+    //function parallelDeposit(
+        //uint256 from,
+        //uint256[] memory to,
+        //uint256 amount
+    //)internal pure returns(
+        //uint256 newBalance0,
+        //uint256[] memory newBalances
+    //){
+        //uint256[] balances = new uint256[](to.length);
+        
+        //for(uint i; i < to.length) i++){
+            //balances[i] = deposit(from, amount);
+            //from = from.sub(amount);
+        //}
+        
+        //return balances;
+    //}
+    //function parallelDeposit(
+        //uint256[] memory to,
+        //uint256 amount
+    //)internal pure returns(
+        //uint256[] memory balances,
+    //){
+        //uint256[] balances = new uint256[](to.length);
+        
+        //for(uint i; i < to.length; i++){
+            //balances[i] = deposit(to[i], amount);
+        //}
+        
+        //return results;
+    //}
     /**
     function parallelTransact(
         uint256 balance0,
         uint256 balance1,
         uint256 amount
-    )public pure returns(
+    )internal pure returns(
         uint256 newBalance0,
         uint256 newBalance1
     ){
@@ -170,7 +254,7 @@ library SafeTransaction
         uint256 balance0,
         uint256 balance1,
         uint256 amount
-    )public pure returns(
+    )internal pure returns(
         uint256 newBalance0,
         uint256 newBalance1
     ){
