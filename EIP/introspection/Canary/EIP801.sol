@@ -211,7 +211,8 @@ abstract contract EIP801 is iEIP801
     /**
     //average between block age and the approximate time taken to calculate the blocks
     //which have been processed since this contract's creation
-    function blockAdjustedAge()public view
+    function blockAdjustedAge(
+    )public view
     {
         //return _readOnlyCanaryStorage().blockAdjustedAge(15);
         

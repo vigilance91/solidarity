@@ -5,7 +5,7 @@ pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256Constraints.sol";
 
-import "https://github.com/vigilance91/solidarity/libraries/msg/sender/value/msgValueLogic.sol";
+import "https://github.com/vigilance91/solidarity/libraries/msg/value/msgValueLogic.sol";
 /// 
 /// @title msg.value Contraints, where right hand operands is type Uint256
 /// @author Tyler R. Drury - 27/4/2021, All Rights Reserved

@@ -9,28 +9,32 @@ pragma experimental ABIEncoderV2;
 library uint256Logic
 {
     uint256 public constant ZERO = 0x0;
-    //uint256 public constant MAX = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
+    //uint256 public constant MAX = type(uint256).max; //0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
     
     function equal(
         uint256 lhs,
         uint256 rhs
     )internal pure returns(
-        bool ret
+        bool
     ){
-        assembly{
-            ret := eq(lhs, rhs)
-        }
+        //assembly{
+            //ret := eq(lhs, rhs)
+        //}
+        
+        return lhs == rhs;
     }
     
     function notEqual(
         uint256 lhs,
         uint256 rhs
     )internal pure returns(
-        bool ret
+        bool
     ){
-        assembly{
-            ret := not(eq(lhs, rhs))
-        }
+        //assembly{
+            //ret := not(eq(lhs, rhs))
+        //}
+        
+        return lhs != rhs;
     }
     
     function _and(
