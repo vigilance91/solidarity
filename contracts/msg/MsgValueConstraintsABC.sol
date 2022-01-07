@@ -98,10 +98,10 @@ abstract contract MsgValueConstraintsABC
             //_NON_ZERO
         );
     }
-    function _requireMsgValueEqualZero(
+    function _requireMsgValueIsZero(
     )internal view
     {
-        msgValueConstraints.requireMsgValueEqualZero(
+        msgValueConstraints.requireMsgValueIsZero(
             //_ZERO
         );
     }
