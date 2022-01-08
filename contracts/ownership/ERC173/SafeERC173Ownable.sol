@@ -144,11 +144,12 @@ abstract contract SafeERC173Ownable is ERC173Ownable,
             //thisOwner
         //);
     }
+    /// 
     /// @dev if this contract owns `ownable`, transfer ownership to newOwner
     ///
     /// Requirements:
     ///     * `ownable` cannot be null, this contract nor this contract's owner
-    ///     * `newOwner` cannot be null and if a contract address, must implement iERC173Receiver
+    ///     * `newOwner` cannot be null and if a contract address, must implement iERC173Owner
     ///     * `newOwner` cannot be this contract, prevent redundant transaction
     ///
     function externalSafeTransferOwnership(

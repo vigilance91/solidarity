@@ -13,7 +13,7 @@ import "https://github.com/vigilance91/solidarity/contracts/etherReceiver/framew
 /// @title Ether Receiver Constraints Abstract Base Contract
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 18/4/2021, All Rights Reserved
 ///
-abstract contract EtherReceiverConstraintsABC //is MsgValueConstraintsABC
+abstract contract EtherReceiverConstraintsABC
 {
     using LogicConstraints for bool;
     //using AddressConstraints for address;
@@ -23,7 +23,6 @@ abstract contract EtherReceiverConstraintsABC //is MsgValueConstraintsABC
     
     constructor(
     )internal
-        //MsgValueConstraintsABC()
     {
     }
     

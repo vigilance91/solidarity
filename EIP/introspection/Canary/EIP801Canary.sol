@@ -2,15 +2,18 @@
 
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
-
-import "https://github.com/vigilance91/solidarity/EIP/introspection/Canary/eventsEIP801.sol";
-import "https://github.com/vigilance91/solidarity/EIP/introspection/Canary/EIP801.sol";
+//
 //note: ERC173 is unsafe by allowing ownership transfers to contracts which can not,
 //      instead of directly inehriting from ERC173, this implementation of EIP801Canary
 //      derives from SafeERC173Ownable instead, which automatically reverts if transfering
 //      ownership to a contract which does not implement iERC173Receiver or inherits from SafeERC173Ownable
+//
 //import "https://github.com/vigilance91/solidarity/ERC/ERC173/ERC173Ownable.sol";
 import "https://github.com/vigilance91/solidarity/contracts/ownership/ERC173/SafeERC173Ownable.sol";
+
+import "https://github.com/vigilance91/solidarity/EIP/introspection/Canary/EIP801.sol";
+import "https://github.com/vigilance91/solidarity/EIP/introspection/Canary/eventsEIP801.sol";
+
 /**
 interface iEIP801Canary is iSafeERC173Ownable,
     iEIP801

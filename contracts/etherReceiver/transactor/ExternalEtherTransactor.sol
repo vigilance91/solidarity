@@ -35,8 +35,11 @@ contract ExternalEtherTransactor is EIP801Canary,
     
     //enable proxying to execute optional callback when making an ETH transfer?
     //fallback()external payable{
-        
+        //LogicConstraints.alwaysRevert(
+            //'fallback() '.concatenate(ContractErrors.FUNCTION_DELETED)
+        //);
     //}
+    
     constructor(
     )public
         EIP801Canary()
@@ -51,7 +54,9 @@ contract ExternalEtherTransactor is EIP801Canary,
     {
         address O = owner();
         
+        //_requireNotThisAndNotNull(O, sender);   //prevent self ownership, this contract does not support ERC-173
         _msgSender().requireNotEqualAndNotNull(O);
+        //_requireCanReceiveEther(sender);
         
         //_requireMsgValueGreatherThanZero();
         require(msg.value > 0, 'msg.value must be non-zero');
@@ -66,7 +71,11 @@ contract ExternalEtherTransactor is EIP801Canary,
         uint256 amount
     )external virtual override onlyOwner nonReentrant
     {
+        //_requireNotThisAndNotNull(recipient);
         recipient.requireNotEqualAndNotNull(owner());
+        //_requireCanReceiveEther(recipient);
+        
+        //_requireTransact(_this(), recipient, amount);
         
         _requireBalanceGreaterThanOrEqual(amount);
         
@@ -77,6 +86,9 @@ contract ExternalEtherTransactor is EIP801Canary,
         uint256 amount
     )external virtual override onlyOwner nonReentrant
     {
+        //_requireNotThisAndNotNull(O);
+        //_requireCanReceiveEther(O);
+        //_requireTransact(_this(), O, amount);
         _requireBalanceGreaterThanOrEqual(amount);
         
         _ethThisTransferTo(owner(), amount);
@@ -85,6 +97,7 @@ contract ExternalEtherTransactor is EIP801Canary,
     )external virtual override payable nonReentrant
     {
         //_requireMsgValueGreatherThanZero();
+        
         require(msg.value > 0, 'msg.value must be non-zero');
         //note, this contract becomes the new msg.sender in the receiver() function
         (bool success, ) = payable(address(this)).call{value:msg.value}("");
