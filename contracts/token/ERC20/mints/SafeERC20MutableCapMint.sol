@@ -98,18 +98,20 @@ abstract contract SafeERC20MutableCapMint is SafeERC20BurnableToken,  //ERC20Mut
     /// See {ERC20._mint}
     /// 
     /// Requirements:
-    ///     - the caller must have the `MINTER_ROLE`
+    ///     - the caller must have the `ROLE_MINTER`
     ///
     function mint(
         address to,
         uint256 amount
     )external virtual nonReentrant
-        //onlyRole(MINTER_ROLE)
+        //onlyRole(ROLE_MINTER)
     {
-        require(
-            hasRole(ROLE_MINTER, _msgSender())
+        _requireHasRole(
+            ROLE_MINTER,
+            _msgSender()
             //_NAME.concatenate("must have minter role to mint")
         );
+
         _mint(to, amount);
     }
     ///
@@ -126,10 +128,12 @@ abstract contract SafeERC20MutableCapMint is SafeERC20BurnableToken,  //ERC20Mut
     {
         address sender = _msgSender();
         
-        require(
-            hasRole(ROLE_BURNER, sender)
+        _requireHasRole(
+            ROLE_BURNER,
+            sender
             //_NAME.concatenate("must have minter role to mint")
         );
+        
         _burn(
             sender,
             amount
@@ -153,10 +157,12 @@ abstract contract SafeERC20MutableCapMint is SafeERC20BurnableToken,  //ERC20Mut
     {
         address sender = _msgSender();
         
-        require(
-            hasRole(ROLE_BURNER, sender)
+        _requireHasRole(
+            ROLE_BURNER,
+            sender
             //_NAME.concatenate("must have minter role to mint")
         );
+
         sender.requireNotEqual(account);
         
         uint256 A = _allowance(

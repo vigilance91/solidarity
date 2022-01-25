@@ -3,13 +3,20 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/GSN/Context.sol";
+//import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/GSN/Context.sol";
 
 import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
 
 import "https://github.com/vigilance91/solidarity/contracts/eventsPausable.sol";
 
-// interface iPausable
+// interface iPausableView
+// {
+    // function paused(
+    // )external view returns(
+        //bool
+    //);
+//}
+// interface iPausableMutable
 // {
     // function pause(
     // )external;
@@ -17,6 +24,12 @@ import "https://github.com/vigilance91/solidarity/contracts/eventsPausable.sol";
     // function unpause(
     // )external;
 // }
+
+//interface iPausable is iPausableView,
+    //iPausableMutable
+//{
+    //
+//}
 
 ///
 /// @title Pausable Abstract Base Contract
@@ -47,10 +60,28 @@ import "https://github.com/vigilance91/solidarity/contracts/eventsPausable.sol";
 ///     `whenNotPaused`, `whenPaused`, `pauseAfter` or `unpauseAfer`
 /// to functions of derived contracts
 ///
-abstract contract Pausable is Context
+abstract contract Pausable
+    //iPausable
 {
     using LogicConstraints for bool;
-    using eventsPausable for address payable;
+    
+    using eventsPausable for address;
+
+    string private constant _NAME = " - Pausable: ";
+
+    string private constant _ERR_UNPAUSED = string(
+        abi.encodePacked(
+            _NAME,
+            "unpaused"
+        )
+    );
+
+    string private constant _ERR_PAUSED = string(
+        abi.encodePacked(
+            _NAME,
+            "paused"
+        )
+    );
 
     bool private _paused;
     /// @dev Initializes contract in unpaused state
@@ -66,54 +97,109 @@ abstract contract Pausable is Context
     ){
         return _paused;
     }
-    /// @dev modified function is only callable when contract is NOT paused
-    modifier whenNotPaused(){
-        _paused.requireFalse(
-            "paused"
+    function _requirePaused(
+    )internal view
+    {
+        _paused.requireTrue(
+            _ERR_UNPAUSED
         );
+    }
+    function _requireNotPaused(
+    )internal view
+    {
+        _paused.requireFalse(
+            _ERR_PAUSED
+        );
+    }
+    /// @dev modified function is only callable when contract is NOT paused
+    modifier whenNotPaused(
+    ){
+        _requireNotPaused();
+        
         _;
     }
     /// @dev modified function is only callable when is paused
-    modifier whenPaused(){
-        _paused.requireTrue(
-            "not paused"
-        );
+    modifier whenPaused(
+    ){
+        _requirePaused();
+
         _;
     }
-    /**
-    /// @dev execute modified function only if contract is paused, then unpausing after execution
-    modifier unpauseAfter(){
-        _paused.requireTrue(
-            "not paused"
-        );
+    /// @dev modified function is only callable when contract is NOT paused after function is called
+    modifier _isNotPausedAfter(
+    ){
+        _;
+        
+        _requireNotPaused();
+    }
+    /// @dev modified function is only callable if contract is paused after function is called
+    modifier _isPausedAfter(
+    ){
+        _;
+        
+        _requirePaused();
+    }
+    /// @dev function is only callable when NOT paused state is persistent before and after modified call
+    modifier _isNotPausedPersistent(
+    ){
+        _requireNotPaused();
         
         _;
         
-        _unpause();
+        _requireNotPaused();
+    }
+    /// @dev function is only callable when paused state is persistent before and after modified call
+    modifier _isPausedPersistent(
+    ){
+        _requirePaused();
+        
+        _;
+        
+        _requirePaused();
+    }
+    
+    /// @dev execute modified function only if contract is paused, then unpausing after execution
+    modifier _unpauseAfter(
+    ){
+        _requirePaused();
+        
+        _;
+        
+        _unpause(_msgSender());
     }
     /// @dev execute modified function only if contract is NOT paused, then pausing after execution
-    modifier pauseAfter(){
-        _paused.requireFalse(
-            "paused"
-        );
+    modifier _pauseAfter(
+    ){
+        _requireNotPaused();
         
         _;
         
-        _pause();
+        _pause(_msgSender());
     }
-    */
+    
     /// @dev pause, must not already be paused
     function _pause(
+        address sender
     )internal virtual whenNotPaused
     {
         _paused = true;
-        _msgSender().emitPaused();
+        
+        sender.emitPaused();
     }
     /// @dev unpause, must already be paused
     function _unpause(
+        address sender
     )internal virtual whenPaused
     {
         _paused = false;
-        _msgSender().emitUnpaused();
+        
+        sender.emitUnpaused();
     }
+
+    //derived contract should iherit iPausable and override these functions
+    //function pause(
+    //)public virtual;
+    
+    //function unpause(
+    //)public virtual;
 }

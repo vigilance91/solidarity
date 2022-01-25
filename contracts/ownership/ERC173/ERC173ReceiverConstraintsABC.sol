@@ -9,8 +9,10 @@ import "https://github.com/vigilance91/solidarity/contracts/ownership/ERC173/fra
 ///
 /// @title ERC173 Receiver Constraints Abstract Base Contract
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 18/4/2021, All Rights Reserved
+/// @dev contrain the state of the EVM based on compliance with a contract receiving ERC-173 ownership transfers,
+/// reverting if a contract does not support receiving ERC173 ownership or the contract explicitly returns false from `onERC173Received`
 ///
-abstract contract ERC173ReceiverConstraintsABC //is ContractConstraintsABC
+abstract contract ERC173ReceiverConstraintsABC
 {
     using LogicConstraints for bool;
     //using AddressConstraints for address;
@@ -22,7 +24,7 @@ abstract contract ERC173ReceiverConstraintsABC //is ContractConstraintsABC
     constructor(
     )internal{
     }
-    
+    /// @dev require `recipient` to implement ERC-173 ownership or be an EOA
     function _requireCanReceiveERC173(
         address recipient
     )internal view
@@ -31,6 +33,7 @@ abstract contract ERC173ReceiverConstraintsABC //is ContractConstraintsABC
             _TRANSFER_FAILED
         );
     }
+    /// @dev require `recipient` to have received ownership from `from`
     function _requireOnERC173Received(
         address recipient,
         address from

@@ -34,8 +34,8 @@ abstract contract MortalERC20StaticCapMint is MortalPermissionERC20BurnableToken
     
     //using stringUtilities for string;
     
-    bytes32 public constant ROLE_MINTER = keccak256("SafeERC20StaticCapMint.MINTER_ROLE");
-    bytes32 public constant ROLE_BURNER = keccak256("SafeERC20StaticCapMint.BURNER_ROLE");
+    bytes32 public constant ROLE_MINTER = keccak256("SafeERC20StaticCapMint.ROLE_MINTER");
+    bytes32 public constant ROLE_BURNER = keccak256("SafeERC20StaticCapMint.ROLE_BURNER");
     
     //string private constant _NAME = ' SafeERC20StaticCapMint: ';
     
@@ -81,7 +81,7 @@ abstract contract MortalERC20StaticCapMint is MortalPermissionERC20BurnableToken
     /// See {ERC20._mint}
     /// 
     /// Requirements:
-    ///     - the caller must have the `MINTER_ROLE`
+    ///     - the caller must have the `ROLE_MINTER`
     ///
     function mint(
         address to,

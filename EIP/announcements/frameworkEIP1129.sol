@@ -32,6 +32,23 @@ library frameworkEIP1129
     );
     bytes4 private constant _iEIP1129_ID = type(iEIP1129).interfaceId;
     
+    //function castEIP1129
+        //address announcements
+    //)internal pure returns(
+        //iEIP1129
+    //){
+        //_requireSupportsInterfaceEIP1129(announcements);
+        //
+        //return iEIP1129(announcements);
+    //}
+    //function thisCastEIP1129(
+    //)internal pure returns(
+        //iEIP1129
+    //){
+        //return castEIP1129(
+            //address(this)
+        //);
+    //}
     ///
     ///read-only interface
     ///

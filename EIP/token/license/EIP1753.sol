@@ -434,8 +434,8 @@ abstract contract EIP1753 is //iERC1753,
             //sender
         //);
         
-        ////_assignRoleAdmin(ROLE_ISSUER, DEFAULT_ADMIN_ROLE);
-        ////_assignRoleAdmin(ROLE_REVOKER, DEFAULT_ADMIN_ROLE);
+        ////_assignRoleAdmin(ROLE_ISSUER, ROLE_DEFAULT_ADMIN);
+        ////_assignRoleAdmin(ROLE_REVOKER, ROLE_DEFAULT_ADMIN);
         
         //_grantRole(ROLE_ISSUER, sender);
         //_grantRole(ROLE_REVOKER, sender);
@@ -501,7 +501,7 @@ abstract contract EIP1753 is //iERC1753,
     ){
         account.requireNotNull();
         
-        return hasRole(ROLE_ISSUING_AUTHORITY, account);    //|| hasRole(DEFAULT_ADMIN_ROLE, account);
+        return hasRole(ROLE_ISSUING_AUTHORITY, account);    //|| hasRole(ROLE_DEFAULT_ADMIN, account);
     }
     function _isRevoker(
         address account
@@ -510,7 +510,7 @@ abstract contract EIP1753 is //iERC1753,
     ){
         account.requireNotNull();
         
-        return hasRole(ROLE_REVOKER, account);    // || hasRole(DEFAULT_ADMIN_ROLE, account);
+        return hasRole(ROLE_REVOKER, account);    // || hasRole(ROLE_DEFAULT_ADMIN, account);
     }
     //function hasAuthority(
     //)external view returns(

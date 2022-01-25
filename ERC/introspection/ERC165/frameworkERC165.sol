@@ -79,6 +79,19 @@ library frameworkERC165
         
         (ret) = abi.decode(data, (bool));
     }
+    //function thisSupportsInterfaceERC165(
+    //)internal view returns(
+        //bool
+    //){
+        //return supportsInterface(address(this));
+    //}
+    //function thisSupportsInterface(
+        //bytes4 interfaceId
+    //)internal view returns(
+        //bool
+    //){
+        //return supportsInterface(address(this), interfaceId);
+    //}
     function requireSupportsInterface(
         address target
     )internal view
@@ -87,6 +100,11 @@ library frameworkERC165
             "not supported"  //_LIB_NAME.concatenate("not supported")
         );
     }
+    //function requireThisSupportsInterfaceERC165(
+    //)internal view
+    //{
+        //requireSupportsInterfaceERC165(address(this));
+    //}
     function requireSupportsInterface(
         address target,
         bytes4 interfaceId
@@ -99,6 +117,15 @@ library frameworkERC165
             "interface not supported"   //_LIB_NAME.concatenate("interface not supported")
         );
     }
+    //function requireThisSupportsInterface(
+        //bytes4 interfaceId
+    //)internal view
+    //{
+        //requireSupportsInterface(
+            //address(this),
+            //interfaceId
+        //);
+    //}
     function requireNotSupportsInterface(
         address target
     )internal view
@@ -107,6 +134,11 @@ library frameworkERC165
             "ERC-165: target supports interface"
         );
     }
+    //function requireThisNotSupportsInterfaceERC165(
+    //)internal view
+    //{
+        //requireNotSupportsInterfaceERC165(address(this));
+    //}
     function requireNotSupportsInterface(
         address target,
         bytes4 interfaceId
@@ -119,4 +151,31 @@ library frameworkERC165
             "target supports interface"
         );
     }
+    //function requireThisNotSupportsInterface(
+        //bytes4 interfaceId
+    //)internal view
+    //{
+        //requireNotSupportsInterface(
+            //address(this),
+            //interfaceId
+        //);
+    //}
+    
+    //function castERC165
+        //address token
+    //)internal pure returns(
+        //iERC165
+    //){
+        //_requireSupportsInterface165(token);
+        //
+        //return iERC165(token);
+    //}
+    //function thisCastERC165(
+    //)internal pure returns(
+        //iERC165
+    //){
+        //return castERC165(
+            //address(this)
+        //);
+    //}
 }

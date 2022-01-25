@@ -26,8 +26,8 @@ library frameworkERC20
     //bytes private constant _ERC20_RECEIVE_SIGNATURE = abi.encodeWithSignature('canReceiveERC20()');
     
     bytes4 private constant _iERC20_ID = type(iERC20).interfaceId;
-    //bytes4 private constant _iSTATIC_TOKEN_SUPPLY_ID = type(iStaticTokenSupply).interfaceId;
-    //bytes4 private constant _iTOKEN_IDENTIFIER_ID = type(iTokenIdentifier).interfaceId;
+    //bytes4 private constant _IID_STATIC_TOKEN_SUPPLY = type(iStaticTokenSupply).interfaceId;
+    //bytes4 private constant _IID_TOKEN_IDENTIFIER = type(iTokenIdentifier).interfaceId;
     
     function _requireSupportsInterface(
         address token
@@ -42,6 +42,31 @@ library frameworkERC20
             'contract does not implement iERC20'
         );
     }
+    //function _requireThisSupportsInterfaceERC20(
+    //)internal
+    //{
+        //_requireSupportsInterface(address(this));
+    //}
+    
+    //function castERC20(
+        //address token
+    //)internal pure returns(
+        //iERC20
+    //){
+        //_requireSupportsInterface(token);
+        //
+        //return iERC20(token);
+    //}
+    //function thisCastERC20(
+    //)internal pure returns(
+        //iERC20
+    //){
+        //address t = address(this);
+        //
+        //_requireSupportsInterface(t);
+        //
+        //return iERC20(t);
+    //}
     /**
     function _requireSupportsTokenIdentifierInterface(
         address token
@@ -108,6 +133,7 @@ library frameworkERC20
     )internal view returns(
         uint256
     ){
+        //return castERC20(token).balanceOf(account);
         _requireSupportsInterface(token);
         
         return iERC20(token).balanceOf(account);
@@ -126,6 +152,17 @@ library frameworkERC20
         return ret;
         */
     }
+    //function balanceOf(
+        //address account
+    //)internal view returns(
+        //uint256
+    //){
+        //address T = address(this);
+        //
+        //_requireSupportsInterface(T);
+        //
+        //return iERC20(T).balanceOf(account);
+    //}
     ///
     /// @dev Moves `amount` tokens from the caller's account to `recipient`
     /// @return {bool} true if the operation succeeded, otherwise false
@@ -137,6 +174,7 @@ library frameworkERC20
     )external returns(
         bool
     ){
+        //return castERC20(token).transfer(recipient, amount);
         _requireSupportsInterface(token);
         
         return iERC20(token).transfer(recipient, amount);
@@ -155,6 +193,7 @@ library frameworkERC20
     )external view returns(
         uint256
     ){
+        //return castERC20(token).allownace(owner,spender);
         _requireSupportsInterface(token);
         
         return iERC20(token).allownace(owner,spender);
@@ -170,6 +209,7 @@ library frameworkERC20
     )internal returns(
         bool
     ){
+        //return castERC20(token).approve(spender, amount);
         _requireSupportsInterface(token);
         
         return iERC20(token).approve(spender, amount);
@@ -188,6 +228,72 @@ library frameworkERC20
     ){
         _requireSupportsInterface(token);
         
+        //return castERC20(token).transferFrom(sender, recipient, amount);
         return iERC20(token).transferFrom(sender, recipient, amount);
     }
+    /*
+    ///
+    /// @dev Moves `amount` tokens from the caller's account to `recipient`
+    /// @return {bool} true if the operation succeeded, otherwise false
+    ///
+    function thisTransfer(
+        address recipient,
+        uint256 amount
+    )external returns(
+        bool
+    ){
+        return castERC20(
+            address(this)
+        ).transfer(recipient, amount);
+    }
+    ///
+    /// @dev return {uint256} amount of tokens `spender` is allowed to spend/withdrawl on behalf of `owner` through {transferFrom}
+    ///
+    /// NOTE:
+    ///     this value is zero by default and
+    ///     changes when {approve}, {increaseAllownace}, {decreaseAllowance} or {transferFrom} are called
+    ///
+    function thisAllowance(
+        address owner,
+        address spender
+    )external view returns(
+        uint256
+    ){
+        return castERC20(
+            address(this)
+        ).allownace(owner,spender);
+    }
+    ///
+    /// @dev Sets `amount` as the allowance of `spender` over the caller's tokens
+    /// @return {bool} true if the operation succeeded, otherwise false
+    ///
+    function approve(
+        address token,
+        address spender,
+        uint256 amount
+    )internal returns(
+        bool
+    ){
+        return castERC20(
+            address(this)
+        ).approve(spender, amount);
+    }
+    ///
+    /// @dev Move `amount` tokens from `sender` to `recipient`
+    /// @return {bool} true if the operation succeeded, otherwise false
+    ///
+    function transferFrom(
+        address sender,
+        address recipient,
+        uint256 amount
+    )internal returns(
+        bool
+    ){
+        address T = address(this);
+        
+        _requireThisSupportsInterfaceERC20();
+        
+        return iERC20(T).transferFrom(sender, recipient, amount);
+    }
+    */
 }

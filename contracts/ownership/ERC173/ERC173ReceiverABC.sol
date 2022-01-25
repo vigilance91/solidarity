@@ -3,10 +3,12 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/ERC165.sol";
+//import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/ERC165.sol";
 
 import "https://github.com/vigilance91/solidarity/contracts/ownership/ERC173/iERC173Receiver.sol";
 import "https://github.com/vigilance91/solidarity/contracts/ownership/ERC173/eventsERC173Receiver.sol";
+
+import "https://github.com/vigilance91/solidarity/contracts/ownership/ERC173/ERC173ReceiverConstraintsABC.sol";
 ///
 /// @title ERC173 Receiver Abstract Base Contract
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 18/4/2021, All Rights Reserved

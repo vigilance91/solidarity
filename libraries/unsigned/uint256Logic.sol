@@ -8,8 +8,8 @@ pragma experimental ABIEncoderV2;
 /// @notice trivial library for logical or bitwise operations on uint256 not provided natively by Solidity.
 library uint256Logic
 {
-    uint256 public constant ZERO = 0x0;
-    //uint256 public constant MAX = type(uint256).max; //0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
+    uint256 internal constant ZERO = 0x0;
+    //uint256 internal constant MAX = type(uint256).max; //0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
     
     function equal(
         uint256 lhs,
@@ -156,7 +156,7 @@ library uint256Logic
         uint256 lhs,
         uint256 min,
         uint256 max
-    )public pure returns(
+    )internal pure returns(
         bool
     ){
         require(max > min, 'min cannot be > max');
@@ -168,7 +168,7 @@ library uint256Logic
         uint256 lhs,
         uint256 min,
         uint256 max
-    )public pure returns(
+    )internal pure returns(
         bool
     ){
         require(max > min, 'min cannot be > max');

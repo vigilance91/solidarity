@@ -32,22 +32,32 @@ import "https://github.com/vigilance91/solidarity/ERC/ERC173/mixinERC173.sol";
 ///
 abstract contract ERC173 is Context,
     ReentrancyGuard,
+    //ContractConstraintsABC,
     iERC173
 {
     using AddressConstraints for address;
     
+    using mixinERC173 for bytes32;
+    
     //string private constant _NAME = ' ERC173: ';
+    bytes32 private _storageSlotERC173;
     
     /// @dev Initializes the contract setting the deployer as the initial owner
     constructor(
-    )internal Context()
+        bytes32 storageSlot
+    )internal
+        Context()
         ReentrancyGuard()
+        //ContractConstraintsABC()
     {
-        mixinERC173.transferOwnership(_msgSender());
+        _storageSlotERC173 = storageSlot;
+        
+        //_storageSlotERC173.set(_msgSender());
+        _storageSlotERC173.transferOwnership(_msgSender());
     }
     /// @dev reverts if called by any account other than owner
     modifier onlyOwner(){
-        mixinERC173.requireOwner(_msgSender());
+        _storageSlotERC173.requireOwner(_msgSender());
         _;
     }
     ///modifier to allow only a specific address to execute a contract's function
@@ -55,11 +65,11 @@ abstract contract ERC173 is Context,
         //address account
     //){
         //account.requireNotNull(
-            ////_CONTRACT_NAME.concatenate("onlyOwner, owner can not be NULL")
+            ////_NAME.concatenate("onlyOwner, owner can not be NULL")
         //);
         //account.requireEqual(
             //_msgSender()
-            ////_CONTRACT_NAME.concatenate("onlyOwner, caller is not owner")
+            ////_NAME.concatenate("onlyOwner, caller is not owner")
         //);
         //_;
     //}
@@ -78,20 +88,20 @@ abstract contract ERC173 is Context,
     {
         //account.requireNotNull();
         account.requireNotEqual(
-            owner()
+            _storageSlotERC173.owner()
         );
     }
     function _requireOwnerNull(
     )internal view
     {
-        owner().requireIsNull(
+        _storageSlotERC173.owner().requireIsNull(
             //_NAME.concatenate('')
         );
     }
     function _requireOwnerNotNull(
     )internal view
     {
-        owner().requireNotNull(
+        _storageSlotERC173.owner().requireNotNull(
             //_NAME.concatenate('')
         );
     }
@@ -100,25 +110,18 @@ abstract contract ERC173 is Context,
     {
         _requireNotOwner(address(this));
     }
-    //function _owner(
-    //)public view returns(
-        //address
-    //){
-        //return mixinERC173.owner();
-    //}
-    /// @dev Returns the address of the current owner.
+    /// @return {address} current owner of this contract
     function owner(
     )public view override returns(
         address
     ){
-        //return _owner();
-        return mixinERC173.owner();
+        return _storageSlotERC173.owner();
     }
-    function ownerPayable(
+    function _ownerPayable(
     )internal view returns(
         address payable
     ){
-        return mixinERC173.ownerPayable();
+        return _storageSlotERC173.ownerPayable();
     }
     ///
     /// @dev Leaves the contract without owner. It will not be possible to call
@@ -129,7 +132,7 @@ abstract contract ERC173 is Context,
     function renounceOwnership(
     )external virtual override onlyOwner nonReentrant
     {
-        mixinERC173.renounceOwnership();
+        _storageSlotERC173.renounceOwnership();
     }
     ///
     /// @dev Transfer ownership of this contract to a new address (`newOwner`),
@@ -143,11 +146,11 @@ abstract contract ERC173 is Context,
     )external virtual override onlyOwner nonReentrant
     {
         newOwner.requireNotNull(
-            //_CONTRACT_NAME.concatenate("transferOwnership")
+            //_NAME.concatenate("transferOwnership")
         );
         //contract can not own itself
         _requireNotThis(newOwner);
         
-        mixinERC173.transferOwnership(newOwner);
+        _storageSlotERC173.transferOwnership(newOwner);
     }
 }

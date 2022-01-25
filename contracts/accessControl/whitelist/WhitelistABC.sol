@@ -51,11 +51,11 @@ abstract contract WhitelistABC is ContractConstraintsABC,
             //_STORAGE_SLOT
         )
     {
-        ////_setRoleAdmin(ROLE_WHITELIST_ADMIN, DEFAULT_ADMIN_ROLE);
+        ////_setRoleAdmin(ROLE_WHITELIST_ADMIN, ROLE_DEFAULT_ADMIN);
         
         //_setRoleAdmin(ROLE_ASSIGNOR, ROLE_WHITELIST_ADMIN_ROLE);
         //_setRoleAdmin(ROLE_REVOKER, ROLE_WHITELIST_ADMIN_ROLE);
-        _setRoleAdmin(ROLE_PERMITTED, DEFAULT_ADMIN_ROLE);  //ROLE_WHITELIST_ADMIN_ROLE);
+        _setRoleAdmin(ROLE_PERMITTED, ROLE_DEFAULT_ADMIN);  //ROLE_WHITELIST_ADMIN_ROLE);
         
         _setupRole(ROLE_PERMITTED, _msgSender());
         _setupRole(ROLE_PERMITTED, address(this));

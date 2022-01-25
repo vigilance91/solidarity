@@ -88,13 +88,13 @@ abstract contract MortalERC20Mint is MortalERC20BurnableToken,
     /// See {ERC20._mint}
     /// 
     /// Requirements:
-    ///     - the caller must have the `MINTER_ROLE`
+    ///     - the caller must have the `ROLE_MINTER`
     ///
     function mint(
         address to,
         uint256 amount
     )external virtual nonReentrant
-        //onlyRole(MINTER_ROLE)
+        //onlyRole(ROLE_MINTER)
     {
         require(
             hasRole(ROLE_MINTER, _msgSender())

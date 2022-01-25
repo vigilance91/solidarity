@@ -42,7 +42,7 @@ import "https://github.com/vigilance91/solidarity/contracts/accessControl/whitel
 /// with the blacklist banning malicious, buggy or nefarious contracts or known hackers by default,
 ///     and then by allowing only non-blacklisted addresses to be permitted onto the whitelist to access functionality
 ///
-contract Whitelist is ERC165,   //SafeMortalCanary
+contract Whitelist is ERC165,   //SafeCanary
     //NonPayable
     WhitelistABC,
     iWhitelist

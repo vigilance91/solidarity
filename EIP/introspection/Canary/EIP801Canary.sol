@@ -15,7 +15,7 @@ import "https://github.com/vigilance91/solidarity/EIP/introspection/Canary/EIP80
 import "https://github.com/vigilance91/solidarity/EIP/introspection/Canary/eventsEIP801.sol";
 
 /**
-interface iEIP801Canary is iSafeERC173Ownable,
+interface iEIP801Canary is iSafeERC173OwnableOwner,
     iEIP801
 {
 }
@@ -27,7 +27,7 @@ interface iEIP801Canary is iSafeERC173Ownable,
 /// @dev ligi, "EIP-801: ERC-801 Canary Standard [DRAFT]," Ethereum Improvement Proposals, no. 801, December 2017. [Online serial].
 /// Available: https://eips.ethereum.org/EIPS/eip-801
 /// 
-contract EIP801Canary is SafeERC173Ownable, //ERC173Ownable,
+contract EIP801Canary is SafeERC173Ownable, //ERC173OwnableOwner,
     EIP801
 {
     using eventsEIP801 for address;

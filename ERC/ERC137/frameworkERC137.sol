@@ -67,6 +67,25 @@ library frameworkERC173
             "not supported"
         );
     }
+    
+    //function castERC137
+        //address registry
+    //)internal pure returns(
+        //iERC137
+    //){
+        //_requireSupportsInterface1820(ensRegistry);
+        //
+        //return iERC137(ensRegistry);
+    //}
+    //function thisCastERC137(
+    //)internal pure returns(
+        //iERC137
+    //){
+        //return castERC137(
+            //address(this)
+        //);
+    //}
+    
     function owner(
         address target
     )internal view returns(

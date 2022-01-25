@@ -18,7 +18,7 @@ library mixinAccessControl
         EnumerableSet.AddressSet members;
     }
     
-    //bytes32 public constant DEFAULT_ADMIN_ROLE = 0x00;
+    //bytes32 public constant ROLE_DEFAULT_ADMIN = 0x00;
     bytes32 internal constant STORAGE_SLOT = keccak256("solidarity.access.control.storage.slot");
     
     struct AccessControlStorage{

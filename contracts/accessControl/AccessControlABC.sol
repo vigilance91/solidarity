@@ -9,8 +9,6 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contr
 
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/iAccessControl.sol";
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/mixinAccessControl.sol";
-//import "./iAccessControl.sol";
-//import "./mixinAccessControl.sol";
 
 import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
 ///
@@ -21,14 +19,18 @@ import "https://github.com/vigilance91/solidarity/libraries/address/AddressConst
 abstract contract AccessControlABC is Context
 {
     using EnumerableSet for EnumerableSet.AddressSet;
-    using Address for address;
-    
-    using eventsAccessControl for bytes32;
     
     using LogicConstraints for bool;
+    
+    using Address for address;
+    
     using AddressConstraints for address;
     
+    //using stringUtilities for string;
+    
     //using mixinAccessControl for bytes32;
+    
+    using eventsAccessControl for bytes32;
     
     //struct RoleData {
         //EnumerableSet.AddressSet members;
@@ -39,7 +41,58 @@ abstract contract AccessControlABC is Context
     
     //mapping (bytes32 => RoleData) private _roles;
 
-    bytes32 public constant DEFAULT_ADMIN_ROLE = 0x00;
+    bytes32 public constant ROLE_DEFAULT_ADMIN = 0x00;
+    
+    string private constant _NAME = " - AccessControlABC: ";
+    //
+    string private constant _ERR_REQUIRE_ROLE_DEFAULT_ADMIN = string(
+        abi.encodePacked(
+            _NAME,
+            "must be default admin, ",
+            _ERR_STR_ADDRESS
+        )
+    );
+    string private constant _ERR_REQUIRE_NOT_ROLE_DEFAULT_ADMIN = string(
+        abi.encodePacked(
+            _NAME,
+            "can not be default admin, ",
+            _ERR_STR_ADDRESS
+        )
+    );
+    //
+    string private constant _ERR_REQUIRE_ROLE =  string(
+        abi.encodePacked(
+            _NAME,
+            "sender does not have role, ",
+            _ERR_STR_ROLE
+        )
+    );
+    string private constant _ERR_REQUIRE_NOT_ROLE = string(
+        abi.encodePacked(
+            _NAME,
+            "sender can not have role, ",
+            _ERR_STR_ROLE
+        )
+    );
+    //
+    string private constant _ERR_GRANT_ROLE_FAILED =  string(
+        abi.encodePacked(
+            _NAME,
+            "_grantRole failed, ",
+            _ERR_STR_ROLE
+        )
+    );
+    string private constant _ERR_REVOKE_ROLE_FAILED =  string(
+        abi.encodePacked(
+            _NAME,
+            "_revokeRole failed, ",
+            _ERR_STR_ROLE
+        )
+    );
+
+    string internal constant _STR_COMMA = ',';
+    string internal constant _ERR_STR_ROLE = " role: ";
+    string internal constant _ERR_STR_ADDRESS = " address: ";
     
     constructor(
         //bytes32 storageSlot
@@ -48,7 +101,7 @@ abstract contract AccessControlABC is Context
     {
         //_storageSlot = storageSlot;
         
-        _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
+        _setupRole(ROLE_DEFAULT_ADMIN, _msgSender());
     }
     
     function _readOnlyRoles(
@@ -76,21 +129,48 @@ abstract contract AccessControlABC is Context
     ///
     ///constraints
     ///
-    //function _requireIsDefaultAdmin(
-        //address account
-    //)internal view
-    //{
-        //hasRole(DEFAULT_ADMIN_ROLE, account).requireTrue(
-            ////"AccessControl: sender does not have role"
-        //);
-    //}
+    function _requireIsDefaultAdmin(
+        address account
+    )internal view
+    {
+        _hasRole(ROLE_DEFAULT_ADMIN, account).requireTrue(
+            string(
+                abi.encodePacked(
+                    _ERR_REQUIRE_ROLE_DEFAULT_ADMIN,     //_NAME.concatenate(_ERR_REQUIRE_ROLE_DEFAULT_ADMIN)
+                    //_ERR_STR_ADDRESS,
+                    account
+                )
+            )
+        );
+    }
+    function _requireIsNotDefaultAdmin(
+        address account
+    )internal view
+    {
+        _hasRole(ROLE_DEFAULT_ADMIN, account).requireFalse(
+            string(
+                abi.encodePacked(
+                    _ERR_REQUIRE_NOT_ROLE_DEFAULT_ADMIN, //_NAME.concatenate(_ERR_REQUIRE_NOT_ROLE_DEFAULT_ADMIN)
+                    //_ERR_STR_ADDRESS,
+                    account
+                )
+            )
+        );
+    }
     function _requireHasRole(
         bytes32 role,
         address account
     )internal view
     {
         _hasRole(role, account).requireTrue(
-            //"AccessControl: sender does not have role"
+            string(
+                abi.encodePacked(
+                    _ERR_REQUIRE_ROLE,   //_NAME.concatenate(_ERR_REQUIRE_ROLE)
+                    role
+                    //_ERR_STR_ADDRESS,
+                    //address
+                )
+            )
         );
     }
     function _requireNotHasRole(
@@ -99,7 +179,15 @@ abstract contract AccessControlABC is Context
     )internal view
     {
         _hasRole(role, account).requireFalse(
-            //_NAME.concat("sender already has role")
+            string(
+                abi.encodePacked(
+                    _ERR_REQUIRE_NOT_ROLE,   //_NAME.concatenate(_ERR_REQUIRE_NOT_ROLE)
+                    role,
+                    _STR_COMMA,
+                    _ERR_STR_ADDRESS,
+                    account
+                )
+            )
         );
     }
     function _requireHasAdminRole(
@@ -107,8 +195,9 @@ abstract contract AccessControlABC is Context
         address account
     )internal view
     {
+        //(_hasRole(_roleAt(role).adminRole, account) || _isDefaultAdmin(account))
         _hasRole(_roleAt(role).adminRole, account).requireTrue(
-            //_NAME.concat("sender must be an admin")
+            //_ERR_"sender must be an admin")
         );
     }
     function _requireNotHasAdminRole(
@@ -116,8 +205,9 @@ abstract contract AccessControlABC is Context
         address account
     )internal view
     {
+        //(!_hasRole(_roleAt(role).adminRole, account) && !_isDefaultAdmin(account))
         _hasRole(_roleAt(role).adminRole, account).requireFalse(
-            //_NAME.concat("sender must not be an admin"
+            //_ERR_"sender must not be an admin")
         );
     }
     /**
@@ -151,7 +241,7 @@ abstract contract AccessControlABC is Context
     modifier onlyDefaultAdmin(
     )internal view
     {
-        _requireRoleHasMembers(DEFAULT_ADMIN_ROLE);
+        _requireRoleHasMembers(ROLE_DEFAULT_ADMIN);
         _requireIsDefaultAdmin(_msgSender());
         _;
     }
@@ -304,7 +394,7 @@ abstract contract AccessControlABC is Context
             //_storageSlot
         ).roles;
         
-        //aside from DEFAULT_ADMIN_ROLE (which is its own admin), roles can not be their own admin
+        //aside from ROLE_DEFAULT_ADMIN (which is its own admin), roles can not be their own admin
         //role.requireNotEqual(adminRole);
         ////mr[role].adminRole.requireZero("adminRole already set");
         
@@ -326,7 +416,15 @@ abstract contract AccessControlABC is Context
         mixinAccessControl.storageAccessControl(
             //_storageSlot
         ).roles[role].members.add(recipient).requireTrue(
-            "_grantRole failed"
+            string(
+                abi.encodePacked(
+                    _ERR_GRANT_ROLE_FAILED,
+                    role,
+                    _STR_COMMA,
+                    _ERR_STR_ADDRESS,
+                    recipient
+                )
+            )
         );
         
         role.emitRoleGranted(
@@ -344,7 +442,15 @@ abstract contract AccessControlABC is Context
         mixinAccessControl.storageAccessControl(
             //_storageSlot
         ).roles[role].members.remove(account).requireTrue(
-            "_revokeRole failed"
+            string(
+                abi.encodePacked(
+                    _ERR_REVOKE_ROLE_FAILED,
+                    role,
+                    _STR_COMMA,
+                    _ERR_STR_ADDRESS,
+                    account
+                )
+            )
         );
         
         role.emitRoleRevoked(

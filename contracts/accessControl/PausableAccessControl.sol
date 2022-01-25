@@ -6,6 +6,8 @@ pragma experimental ABIEncoderV2;
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/AccessControl.sol";
 import "https://github.com/vigilance91/solidarity/contracts/Pausable.sol";
 
+//import "https://github.com/vigilance91/solidarity/contracts/accessConstrol/iPausableAccessControl.sol";
+
 //interface iPausableAccessControl is iAccessControl,
 //    iPausable
 //{
@@ -17,48 +19,61 @@ import "https://github.com/vigilance91/solidarity/contracts/Pausable.sol";
 ///
 abstract contract PausableAccessControl is AccessControl,
     Pausable
+    //iPausableAccessControl
 {
     //string private constant _NAME = ' PausableAccessControl: ';
     
-    bytes32 public constant PAUSER_ROLE = keccak256("ACCESS_CONTROL.PAUSER_ROLE");
+    bytes32 public constant ROLE_PAUSER = keccak256("solidarity.accessControl.PausableAccessControl.ROLE_PAUSER");
     
     constructor(
     )internal 
         AccessControl()
         Pausable()
     {
-        _setupRole(PAUSER_ROLE, _msgSender());
+        //
+        //set pause role admin to default admin
+        _setRoleAdmin(ROLE_PAUSER, ROLE_DEFAULT_ADMIN);
+        //
+        _setupRole(ROLE_PAUSER, _msgSender());
+        //
+        //allow contract to pause/unpause itself
+        //_setupRole(ROLE_PAUSER, address(this));
     }
     ///
     /// @dev Pauses Contract
     ///
     /// Requirements:
-    ///     - the caller must have `PAUSER_ROLE`
+    ///     - the caller must have `ROLE_PAUSER`
     ///
     function pause(
     )public virtual
-        //onlyRole(PAUSER_ROLE)
     {
-        require(
-            hasRole(PAUSER_ROLE, _msgSender())
-            //_NAME.concatenate("must have pauser role to pause")
-        );
-        _pause();
+        address sender = _msgSender();
+        
+        _requireHasRole(ROLE_PAUSER, sender);
+        
+        _pause(sender);
     }
     ///
     /// @dev Unpauses Contract
     ///
     /// Requirements:
-    ///     - the caller must have `PAUSER_ROLE`
+    ///     - the caller must have `ROLE_PAUSER`
     ///
     function unpause(
     )public virtual
-        //onlyRole(PAUSER_ROLE)
     {
-        require(
-            hasRole(PAUSER_ROLE, _msgSender())
-            //_NAME.concatenate("must have pauser role to unpause")
-        );
-        _unpause();
+        address sender = _msgSender();
+        
+        _requireHasRole(ROLE_PAUSER, sender);
+        
+        _unpause(sender);
+    }
+    function _hasRolePauser(
+        address account
+    )internal view returns(
+        bool
+    ){
+        return _hasRole(ROLE_PAUSER, account);
     }
 }

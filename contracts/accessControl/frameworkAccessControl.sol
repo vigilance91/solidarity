@@ -135,7 +135,7 @@ library frameworkAccessControl
         
         (bool success, bytes memory result) = target.staticcall(
             abi.encodeWithSignature(
-                'DEFAULT_ADMIN_ROLE()'
+                'ROLE_DEFAULT_ADMIN()'
             )
         );
         success.requireTrue('staticcall failed');

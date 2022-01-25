@@ -12,7 +12,7 @@ library eventsAccessControl
     ///
     /// @dev Emitted when `newAdminRole` is set as ``role``'s admin role, replacing `previousAdminRole`
     ///
-    /// `DEFAULT_ADMIN_ROLE` is the starting admin for all roles, despite
+    /// `ROLE_DEFAULT_ADMIN` is the starting admin for all roles, despite
     /// {RoleAdminChanged} not being emitted signaling this.
     ///
     ///
@@ -20,6 +20,8 @@ library eventsAccessControl
         bytes32 role,
         bytes32 previousAdminRole,
         bytes32 newAdminRole
+        //uint time,
+        //uint blockNumber
     );
     ///
     /// @dev Emitted when `account` is granted `role` by `sender`
@@ -30,6 +32,8 @@ library eventsAccessControl
         bytes32 role,
         address account,
         address sender
+        //uint time,
+        //uint blockNumber
     );
     ///
     /// @dev Emitted when `account` is revoked `role`
@@ -41,6 +45,8 @@ library eventsAccessControl
         bytes32 role,
         address account,
         address sender
+        //uint time,
+        //uint blockNumber
     );
     /// @dev Emitted when `account`'s admin role is changed to `newAdminRole`
     function emitRoleAdminChanged(

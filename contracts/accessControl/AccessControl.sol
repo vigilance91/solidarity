@@ -69,11 +69,11 @@ import "https://github.com/vigilance91/solidarity/contracts/accessControl/Access
 ///
 /// Each role has an associated admin which assigns or revokes roles dynamically via {grantRole} and {revokeRole}
 /// 
-/// `DEFAULT_ADMIN_ROLE` is the default admin role for all roles,
+/// `ROLE_DEFAULT_ADMIN` is the default admin role for all roles,
 /// only addresses with this role are able to grant or revoke other roles
 ///
 /// WARNING:
-///     `DEFAULT_ADMIN_ROLE` is also its own admin thus,
+///     `ROLE_DEFAULT_ADMIN` is also its own admin thus,
 ///     it has permission to grant and revoke this role
 ///     Extra precautions should be taken to secure accounts that have been granted it,
 ///     and is recommended that this role should only be assigned to a single address,
@@ -131,8 +131,9 @@ abstract contract AccessControl is AccessControlABC,    //Context,
     modifier onlyDefaultAdmin(
     )internal view
     {
-        _requireRoleHasMembers(DEFAULT_ADMIN_ROLE);
+        _requireRoleHasMembers(ROLE_DEFAULT_ADMIN);
         _requireIsDefaultAdmin(_msgSender());
+        
         _;
     }
     //modifier onlyDefaultAdminOrRoleAdmin(
@@ -358,7 +359,7 @@ abstract contract AccessControl is AccessControlABC,    //Context,
     }
     ///
     /// @dev Admin forces transfer of `role` from address `from` to address `to`
-    /// emits a {RoleRevoked} even for `from` and {RoleGranted} event for `to`
+    /// emits a {RoleRevoked} event for `from` and {RoleGranted} event for `to`
     ///
     /// Requirements:
     ///     - the caller must have `role`'s admin role or be default admin
@@ -376,10 +377,30 @@ abstract contract AccessControl is AccessControlABC,    //Context,
         address from,
         address to
     )public virtual override
-        //onlyDefaultAdminOrRoleAdmin
+        //onlyDefaultAdminOrRoleAdmin(role)
     {
         _requireHasAdminRole(role, _msgSender());
         
         _transferRole(role, from, to);
     }
+    /// 
+    /// @dev caller transfers their role `role` to address `to`
+    /// emits a {RoleRevoked} event for `from` and {RoleGranted} event for `to`
+    /// 
+    /// Requirements:
+    ///     - the caller must have role `role`, `role`'s admin or default admin
+    ///     - `to` must not be null and not have been assigned the role `role`
+    ///
+    //function callerTransferRole(
+        //bytes32 role,
+        //address to
+    //)public virtual override
+        ////onlyDefaultAdminOrRoleAdmin(role)
+    //{
+        //address sender = _msgSender();
+        //
+        ////_requireHasAdminRole(role, sender);
+        //
+        //_transferRole(role, sender, to);
+    //}
 }

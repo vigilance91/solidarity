@@ -146,4 +146,76 @@ library stringUtilities
         );
     }
     */
+    
+    /// 
+    /// @dev this method does not take into consideration character encodings (only raw bytes),
+    /// thus does not return the expected number if wanting to get the total
+    /// number of human readable characters in a string.
+    /// Please use characterCount for that use case.
+    /// 
+    /// @return {uint} number in individual bytes within a string `s`
+    /// 
+    /// @param s {string}
+    /// 
+    function byteLength(
+        string memory s
+    )internal pure returns(
+        uint
+    ){
+        return bytes(s).length;
+    }
+    /// 
+    /// @dev determines the number of characters in a string (the string's true length)
+    /// as used in the ENS domain repository here:
+    ///     https://github.com/ensdomains/ens-contracts/blob/52d8297b1634dbed7dc1b4b8a2c3b9faa6b7de77/contracts/wrapper/BytesUtil.sol
+    /// 
+    /// @return {uint} length of string `s` in characters
+    /// 
+    /// @param s {string}
+    /// 
+    function characterCount(
+        string memory s
+    )internal pure returns(
+        uint
+    ){
+        uint len;   //defaults to 0
+        uint i = 0; //defaults to 0
+        
+        bytes B = bytes(s);
+        uint L = B.length;
+        
+        bytes1 b = 0x00;
+        
+        //todo make constants and move to library bytes1Logic
+        bytes1 _80 = 0x80;  //> 128 range characters (uft-8 characters above ascii DEL)
+        bytes1 _E0 = 0xE0;  //> 224 range characters (3 bytes)
+        bytes1 _F0 = 0xF0;  //> 240 range characters (4 bytes)
+        bytes1 _F8 = 0xF8;  //> 248 range characters (5 bytes)
+        bytes1 _FC = 0xFC;  //> 252 range characters (6 bytes)
+        
+        for(len = 0; i < L; len++){
+            b = B[i];
+            
+            if(b < _80){
+                i += 1;
+            }
+            else if(b < _E0){
+                i += 2;
+            }
+            else if(b < _F0){
+                i += 3;
+            }
+            else if(b < _F8){
+                i += 4;
+            }
+            else if(b < _FC){
+                i += 5;
+            }
+            else{
+                i += 6;
+            }
+        }
+        
+        return len;
+    }
 }

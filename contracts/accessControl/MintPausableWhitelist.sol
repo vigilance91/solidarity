@@ -24,8 +24,8 @@ abstract contract MintPausableWhitelist is PausableWhitelist
 {
     //string private constant _NAME = ' MintPausableWhitelistAccessControl: ';
     
-    bytes32 public constant ROLE_MINTER = keccak256("Solidarity.MINT_PAUSABLE_WHITELIST.MINTER_ROLE");
-    bytes32 public constant ROLE_BURNER = keccak256("Solidarity.MINT_PAUSABLE_WHITELIST.BURNER_ROLE");
+    bytes32 public constant ROLE_MINTER = keccak256("Solidarity.MINT_PAUSABLE_WHITELIST.ROLE_MINTER");
+    bytes32 public constant ROLE_BURNER = keccak256("Solidarity.MINT_PAUSABLE_WHITELIST.ROLE_BURNER");
     
     constructor(
     )internal 

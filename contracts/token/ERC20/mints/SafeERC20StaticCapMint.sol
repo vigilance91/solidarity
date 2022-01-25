@@ -33,8 +33,8 @@ abstract contract SafeERC20StaticCapMint is SafeERC20BurnableToken,
     
     //using stringUtilities for string;
     
-    bytes32 public constant ROLE_MINTER = keccak256("SafeERC20StaticCapMint.MINTER_ROLE");
-    bytes32 public constant ROLE_BURNER = keccak256("SafeERC20StaticCapMint.BURNER_ROLE");
+    bytes32 public constant ROLE_MINTER = keccak256("solidarity.safeERC20.StaticCapMint.ROLE_MINTER");
+    bytes32 public constant ROLE_BURNER = keccak256("solidarity.safeERC20.StaticCapMint.ROLE_BURNER");
     
     //string private constant _NAME = ' SafeERC20StaticCapMint: ';
     
@@ -80,7 +80,7 @@ abstract contract SafeERC20StaticCapMint is SafeERC20BurnableToken,
     /// See {ERC20._mint}
     /// 
     /// Requirements:
-    ///     - the caller must have the `MINTER_ROLE`
+    ///     - the caller must have the `ROLE_MINTER`
     ///
     function mint(
         address to,
@@ -88,10 +88,12 @@ abstract contract SafeERC20StaticCapMint is SafeERC20BurnableToken,
     )external virtual nonReentrant
     {
         //_requireRoleOrAdmin(ROLE_MINTER, sender);
-        require(
-            hasRole(ROLE_MINTER, _msgSender())
+        _requireHasRole(
+            ROLE_MINTER,
+            _msgSender()
             //_NAME.concatenate("must have minter role to mint")
         );
+        
         _mint(to, amount);
     }
     ///
