@@ -8,7 +8,8 @@ import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/frame
 import "https://github.com/vigilance91/solidarity/ERC/ERC173/ERC173Ownable.sol";
 
 import "https://github.com/vigilance91/solidarity/contracts/ownership/ERC173/ERC173ReceiverConstraintsABC.sol";
-import "https://github.com/vigilance91/solidarity/contracts/ownership/ERC173/frameworkSafeERC173.sol";
+
+import "https://github.com/vigilance91/solidarity/contracts/ownership/safeERC173/frameworkSafeERC173.sol";
 ///
 /// @title Safe ERC173 Implementation
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 22/4/2021, All Rights Reserved
