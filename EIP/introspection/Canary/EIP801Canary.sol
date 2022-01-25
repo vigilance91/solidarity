@@ -9,7 +9,7 @@ pragma experimental ABIEncoderV2;
 //      ownership to a contract which does not implement iERC173Receiver or inherits from SafeERC173Ownable
 //
 //import "https://github.com/vigilance91/solidarity/ERC/ERC173/ERC173Ownable.sol";
-import "https://github.com/vigilance91/solidarity/contracts/ownership/ERC173/SafeERC173Ownable.sol";
+import "https://github.com/vigilance91/solidarity/contracts/ownership/safeERC173/ownable/SafeERC173Ownable.sol";
 
 import "https://github.com/vigilance91/solidarity/EIP/introspection/Canary/EIP801.sol";
 import "https://github.com/vigilance91/solidarity/EIP/introspection/Canary/eventsEIP801.sol";
