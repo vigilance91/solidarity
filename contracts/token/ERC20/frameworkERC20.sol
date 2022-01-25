@@ -21,7 +21,7 @@ library frameworkERC20
     
     using frameworkERC165 for address;
     
-    //string private constant _NAME = ' frameworkERC20: ';
+    string private constant _NAME = ' frameworkERC20: ';
     
     //bytes private constant _ERC20_RECEIVE_SIGNATURE = abi.encodeWithSignature('canReceiveERC20()');
     
@@ -31,7 +31,7 @@ library frameworkERC20
     
     function _requireSupportsInterface(
         address token
-    )private
+    )private view
     {
         token.requireNotNull();
         token.isContract().requireTrue(
@@ -39,7 +39,7 @@ library frameworkERC20
         );
         
         token.supportsInterface(_iERC20_ID).requireTrue(
-            'contract does not implement iERC20'
+            'iERC20 not implemented'
         );
     }
     //function _requireThisSupportsInterfaceERC20(
@@ -48,15 +48,15 @@ library frameworkERC20
         //_requireSupportsInterface(address(this));
     //}
     
-    //function castERC20(
-        //address token
-    //)internal pure returns(
-        //iERC20
-    //){
-        //_requireSupportsInterface(token);
-        //
-        //return iERC20(token);
-    //}
+    function castERC20(
+        address token
+    )internal view returns(
+        iERC20
+    ){
+        _requireSupportsInterface(token);
+        
+        return iERC20(token);
+    }
     //function thisCastERC20(
     //)internal pure returns(
         //iERC20
@@ -132,11 +132,8 @@ library frameworkERC20
         address account
     )internal view returns(
         uint256
-    ){
-        //return castERC20(token).balanceOf(account);
-        _requireSupportsInterface(token);
-        
-        return iERC20(token).balanceOf(account);
+    ){  
+        return castERC20(token).balanceOf(account);
         /**
         (bool success, bytes memory result) = recipient.staticcall(
             abi.encodeWithSignature(
@@ -193,10 +190,7 @@ library frameworkERC20
     )external view returns(
         uint256
     ){
-        //return castERC20(token).allownace(owner,spender);
-        _requireSupportsInterface(token);
-        
-        return iERC20(token).allownace(owner,spender);
+        return castERC20(token).allowance(owner,spender);
     }
     ///
     /// @dev Sets `amount` as the allowance of `spender` over the caller's tokens

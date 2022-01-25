@@ -19,7 +19,14 @@ abstract contract EtherReceiverConstraintsABC
     //using AddressConstraints for address;
     using frameworkEtherReceiver for address;
     
-    string private constant _TRANSFER_FAILED = " EtherReceiverConstraintsABC: contract can not receive Ether transfers";
+    string private constant _NAME = ' EtherReceiverConstraintsABC: ';
+    
+    string private constant _TRANSFER_FAILED = string(
+        abi.encodePacked(
+            _NAME,
+            "can not receive Ether transfers"
+        )
+    );
     
     constructor(
     )internal

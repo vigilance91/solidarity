@@ -19,10 +19,17 @@ abstract contract ERC173ReceiverConstraintsABC
     using frameworkSafeERC173 for address;
     
     string private _NAME = ' ERC173ReceiverConstraintsABC: ';
-    string private constant _TRANSFER_FAILED = ' ERC173ReceiverConstraintsABC: address cannot receive ERC173 transfers';
+    
+    string private constant _TRANSFER_FAILED = string(
+        abi.encodePacked(
+            _NAME,
+            'address cannot receive ERC173 transfers'
+        )
+    );
     
     constructor(
-    )internal{
+    )internal
+    {
     }
     /// @dev require `recipient` to implement ERC-173 ownership or be an EOA
     function _requireCanReceiveERC173(

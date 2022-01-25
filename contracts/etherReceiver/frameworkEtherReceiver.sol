@@ -21,7 +21,7 @@ library frameworkEtherReceiver
     
     using frameworkERC165 for address;
     
-    //string private constant _NAME = ' frameworkEtherReceiver ';
+    string private constant _NAME = ' frameworkEtherReceiver: ';
     //string private constant _STUB_ON_ETHER_RECEIVED = 'onEtherReceived(address,uint256)';
     
     bytes private constant _ETHER_RECEIVE_SIGNATURE = abi.encodeWithSignature('canReceiveEther()');

@@ -14,23 +14,66 @@ import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/iERC1
 library frameworkERC165
 {
     using LogicConstraints for bool;
+    
     using AddressConstraints for address;
     using Address for address;
     
     //using stringUtilities for string;
     
-    bytes4 internal constant _INTERFACE_ID = type(iERC165).interfaceId;
-    //string internal constant _LIB_NAME = ' frameworkERC165: ';
-    string public constant SUPPORTS_INTERFACE_STUB = 'supportsInterface(bytes4)';
+    string private constant _NAME = ' frameworkERC165: ';
+    
+    string internal constant SUPPORTS_INTERFACE_STUB = 'supportsInterface(bytes4)';
     //public constant SUPPORTS_INTERFACE_SIGNATURE = abi.encodeWithSignature(
         //SUPPORTS_INTERFACE_STUB,
         //_INTERFACE_ID
     //);
     
-    ///
-    ///read-only interface
-    ///
-    ///does target support ERC165
+    string private constant _ERR_SUPPORTS_INTERFACE = string(
+        abi.encodePacked(
+            _NAME,
+            "target supports interface: "
+        )
+    );
+    string private constant _ERR_UNSUPPORTED_INTERFACE = string(
+        abi.encodePacked(
+            _NAME,
+            "unsupported interface: "
+        )
+    );
+    //error message for when a contract should not support ERC165 but does
+    string private constant _ERR_ERC165_SUPPORTED = string(
+        abi.encodePacked(
+            _NAME,
+            "interface supported: iERC165",
+            _ERR_STR_TARGET
+        )
+    );
+    //error message for when a contract should support ERC165 but does not
+    string private constant _ERR_ERC165_NOT_SUPPORTED = string(
+        abi.encodePacked(
+            _NAME,
+            "unsupported interface: iERC165",
+            _ERR_STR_TARGET
+        )
+    );
+    
+    string private constant _ERR_CALL_FAILED = string(
+        abi.encodePacked(
+            _NAME,
+            'external call failed',
+            _ERR_STR_TARGET
+        )
+    );
+    
+    string private constant _ERR_STR_TARGET = ', target: ';
+    
+    bytes4 internal constant _INTERFACE_ID = type(iERC165).interfaceId;
+    
+    //uint256 private constant _MIN_GAS = 60000;
+    //
+    //read-only interface
+    //
+    /// @return ret {bool} returns true if address `target` is a contract which supports ERC165, otherwise false
     function supportsInterface(
         address target
     )internal view returns(
@@ -40,7 +83,12 @@ library frameworkERC165
         
         target.requireNotNull();
         target.isContract().requireTrue(
-            //_LIB_NAME.concatenate("target not contract")
+            //string(
+                //abi.encodePacked(
+                    //_ERR_NOT_CONTRACT,
+                    //target
+                //)
+            //)
         );
         
         (bool result, bytes memory data) = target.staticcall{gas: 60000}(
@@ -49,7 +97,14 @@ library frameworkERC165
                 _INTERFACE_ID
             )
         );
-        result.requireTrue('call failed');
+        result.requireTrue(
+            string(
+                abi.encodePacked(
+                    _ERR_CALL_FAILED,
+                    target
+                )
+            )
+        );
         
         (ret) = abi.decode(data, (bool));
     }
@@ -62,10 +117,7 @@ library frameworkERC165
     ){
         //two calls to supportsInterface, requires at least 60,000 * 2 gas
         //msg.gas.requireGreaterThan(120000);
-        
-        supportsInterface(target).requireTrue(
-            //_LIB_NAME.concatenate("ERC-165 not supported by target")
-        );
+        requireSupportsInterface(target);
         
         (bool result, bytes memory data) = target.staticcall{gas: 60000}(
             abi.encodeWithSignature(
@@ -73,8 +125,14 @@ library frameworkERC165
                 interfaceId
             )
         );
+        
         result.requireTrue(
-            'call failed'   //_LIB_NAME.concatenate('call failed')
+            string(
+                abi.encodePacked(
+                    _ERR_CALL_FAILED,
+                    target
+                )
+            )
         );
         
         (ret) = abi.decode(data, (bool));
@@ -97,7 +155,12 @@ library frameworkERC165
     )internal view
     {
         supportsInterface(target).requireTrue(
-            "not supported"  //_LIB_NAME.concatenate("not supported")
+            string(
+                abi.encodePacked(
+                    _ERR_ERC165_NOT_SUPPORTED,
+                    target
+                )
+            )
         );
     }
     //function requireThisSupportsInterfaceERC165(
@@ -114,24 +177,38 @@ library frameworkERC165
             target,
             interfaceId
         ).requireTrue(
-            "interface not supported"   //_LIB_NAME.concatenate("interface not supported")
+            string(
+                abi.encodePacked(
+                    _ERR_UNSUPPORTED_INTERFACE,
+                    interfaceId,
+                    _ERR_STR_TARGET,
+                    target
+                )
+            )
         );
     }
-    //function requireThisSupportsInterface(
-        //bytes4 interfaceId
-    //)internal view
-    //{
-        //requireSupportsInterface(
-            //address(this),
-            //interfaceId
-        //);
-    //}
+    /// @dev require the calling contract context to support ERC-165
+    function requireThisSupportsInterface(
+        bytes4 interfaceId
+    )internal view
+    {
+        requireSupportsInterface(
+            address(this),
+            interfaceId
+        );
+    }
+    /// @dev require address `target` does NOT support ERC-165
     function requireNotSupportsInterface(
         address target
     )internal view
     {
         supportsInterface(target).requireFalse(
-            "ERC-165: target supports interface"
+            string(
+                abi.encodePacked(
+                    _ERR_ERC165_SUPPORTED,
+                    target
+                )
+            )
         );
     }
     //function requireThisNotSupportsInterfaceERC165(
@@ -139,6 +216,8 @@ library frameworkERC165
     //{
         //requireNotSupportsInterfaceERC165(address(this));
     //}
+    
+    /// @dev require address `target` does NOT support interface `interfaceId`
     function requireNotSupportsInterface(
         address target,
         bytes4 interfaceId
@@ -148,34 +227,43 @@ library frameworkERC165
             target,
             interfaceId
         ).requireFalse(
-            "target supports interface"
+            string(
+                abi.encodePacked(
+                    _ERR_SUPPORTS_INTERFACE,
+                    interfaceId,
+                    _ERR_STR_TARGET,
+                    target
+                )
+            )
         );
     }
-    //function requireThisNotSupportsInterface(
-        //bytes4 interfaceId
-    //)internal view
-    //{
-        //requireNotSupportsInterface(
-            //address(this),
-            //interfaceId
-        //);
-    //}
-    
-    //function castERC165
-        //address token
-    //)internal pure returns(
-        //iERC165
-    //){
-        //_requireSupportsInterface165(token);
-        //
-        //return iERC165(token);
-    //}
-    //function thisCastERC165(
-    //)internal pure returns(
-        //iERC165
-    //){
-        //return castERC165(
-            //address(this)
-        //);
-    //}
+    /// @dev require the calling context contract does NOT support interface ERC-165
+    function requireThisNotSupportsInterface(
+        bytes4 interfaceId
+    )internal view
+    {
+        requireNotSupportsInterface(
+            address(this),
+            interfaceId
+        );
+    }
+    /// @return {iERC165} if address `target` supports ERC-165, cast to an iERC165 implementer
+    function castERC165(
+        address target
+    )internal view returns(
+        iERC165
+    ){
+        requireSupportsInterface(target);
+        
+        return iERC165(target);
+    }
+    /// @return {iERC165} if this address supports ERC-165, cast to an iERC165 implementer
+    function thisCastERC165(
+    )internal view returns(
+        iERC165
+    ){
+        return castERC165(
+            address(this)
+        );
+    }
 }

@@ -25,7 +25,7 @@ import "./BalanceConstraints.sol";
 /// @title Ether Reciever Abstract Base Contract
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 18/4/2021, All Rights Reserved
 ///
-abstract contract EtherReceiverABC is EIP801Canary,
+abstract contract EtherReceiverABC is EIP801Canary, //SafeEIP801Canary,
     ThisUint256Balance,
     iEtherReceiver
 {

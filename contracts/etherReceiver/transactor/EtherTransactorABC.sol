@@ -2,19 +2,6 @@
 
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
-///
-/// @title Ether Transactor Abstract Base Class
-/// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 1/5/2021, All Rights Reserved
-/// @dev Abstract Base Contract which is capable of safely receiving ETH and transfering ETH to other addresses,
-/// only the owner may transfer ETH out of the contract
-///
-/// NOTE:
-///     This contract performs safe transfers of ETH to contracts,
-///     reverting if the recipient is a contract which does not implement iEtherReceiver
-///
-//import "./EtherReceiverABC.sol";
-//import "./frameworkEtherReceiver.sol";
-//import "./EtherReceiverConstraintsABC.sol";
 
 import "https://github.com/vigilance91/solidarity/contracts/etherReceiver/EtherReceiverABC.sol";
 import "https://github.com/vigilance91/solidarity/contracts/etherReceiver/frameworkEtherReceiver.sol";
@@ -25,23 +12,45 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contr
 import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
 import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256Constraints.sol";
 
+//import "https://github.com/vigilance91/solidarity/contracts/allowance/AllowanceABC.sol";
+///
+/// @title Ether Transactor Abstract Base Class
+/// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 1/5/2021, All Rights Reserved
+/// @dev Abstract Base Contract which is capable of safely receiving ETH and transfering ETH to other addresses,
+/// only the owner may transfer ETH out of the contract
+///
+/// NOTE:
+///     This contract performs safe transfers of ETH to contracts,
+///     reverting if the recipient is a contract which does not implement iEtherReceiver
+///
 abstract contract EtherTransactorABC is EtherReceiverABC,
     EtherReceiverConstraintsABC
+    //AllowanceABC
 {
     using SafeMath for uint256;
     
     using LogicConstraints for bool;
+    
     using AddressConstraints for address;
+    
     using uint256Constraints for uint256;
     
     using frameworkEtherReceiver for address;
     
     string private constant _NAME = ' EtherTransactorABC: ';
-    //string private constant _TRANSFER_FAILED = _NAME.concatenate('transfer failed');
     
-    receive()external virtual payable{
+    string private constant _TRANSFER_FAILED = string(
+        abi.encodePacked(
+            _NAME,
+            'transfer failed'
+        )
+    );
+    
+    receive(
+    )external virtual payable
+    {
         _requireOnEtherReceived(
-            address(this),
+            _this,
             msg.sender,
             msg.value
         );
@@ -54,13 +63,14 @@ abstract contract EtherTransactorABC is EtherReceiverABC,
     )internal
         EtherReceiverABC()
         EtherReceiverConstraintsABC()
+        //AllowanceABC()
     {
         //if(msg.value > 0){
             //(bool success, ) = payable(address(this)).call{value:msg.value}("");
             //require(success, 'transfer failed');
         //}
         
-        //_registerInterface(type(iEtherReceiver).interfaceId);
+        //_registerInterface(type(iEtherSender).interfaceId);
         //_registerInterface(type(iEtherTransactor).interfaceId);
     }
     /// @dev can recipient receive `amount` of ETH
@@ -71,6 +81,7 @@ abstract contract EtherTransactorABC is EtherReceiverABC,
     {
         _requireCanReceiveEther(recipient);
         //will revert if recipient's balance overflows
+        //_requireDeposit(recipient, amount);
         recipient.balance.add(amount);
     }
     
@@ -79,17 +90,16 @@ abstract contract EtherTransactorABC is EtherReceiverABC,
         uint256 amount
     )internal
     {
-        //_requireLessThanOrEqualAvailableBalance(amount);
-        
         _requireCanReceiveETH(recipient, amount);
-        recipient.requireNotEqual(address(this));
+        recipient.requireNotEqual(_this);
         //'cannot transfer to self');
         
         //uint256 preBal = thisBalance();
         
         //payable(recipient).transfer(amount);
         (bool success, ) = payable(recipient).call{value:amount}("");
-        success.requireTrue('transfer failed');
+        
+        success.requireTrue(_TRANSFER_FAILED);
         
         //assert(preBal.sub(amount) == thisBalance());
     }
@@ -98,6 +108,20 @@ abstract contract EtherTransactorABC is EtherReceiverABC,
     )public view returns(
         uint256
     ){
-        return address(this).balance;
+        return _this.balance;
     }
 }
+
+/*
+contract PayableEtherTransactorABC is EtherTransactorABC,
+    PayableMsgValueConstraintsABC
+{
+    constructor(
+    )internal payable
+        EtherTransactorABC()
+        PayableMsgValueConstraintsABC()
+    {
+
+    }
+}
+*/

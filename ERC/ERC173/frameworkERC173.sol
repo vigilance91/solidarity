@@ -22,68 +22,101 @@ library frameworkERC173
     
     bytes4 internal constant INTERFACE_ID = type(iERC173).interfaceId;
     
-    //string internal constant LIB_NAME = ' frameworkERC173: ';
+    string private constant _NAME = ' - frameworkERC173: ';
+    string private constant _ERR_STR_TARGET = ', target: ';
+    
+    string private constant _ERR_CALL_FAILED = string(
+        abi.encodePacked(
+            _NAME,
+            'external call failed',
+            _ERR_STR_TARGET
+        )
+    );
+    string private constant _ERR_ERC173_SUPPORTED = string(
+        abi.encodePacked(
+            _NAME,
+            'interface supported: iERC173',
+            _ERR_STR_TARGET
+        )
+    );
+    string private constant _ERR_ERC173_NOT_SUPPORTED = string(
+        abi.encodePacked(
+            _NAME,
+            'unsupported interface: iERC173',
+            _ERR_STR_TARGET
+        )
+    );
     
     //functions with no arguments can have their functions signautre cached, for efficiency and speed
-    bytes internal constant OWNER_SIGNATURE = abi.encodeWithSignature(
+    bytes internal constant _SIG_OWNER = abi.encodeWithSignature(
         'owner()'
     );
-    bytes internal constant RENOUNCE_OWNERSHIP_SIGNATURE = abi.encodeWithSignature(
+    bytes internal constant _SIG_RENOUNCE_OWNERSHIP = abi.encodeWithSignature(
         'renounceOwnership()'
     );
-    ///
-    /// functions which take arguments can ONLY have their function indetifier stub cached, for slight efficiency and speed increase
-    /// this stub must still be encoded before being used with .call, .staticcall or .delegatecall
-    //string internal constant TRANSFER_OWNERSHIP_STUB = 'transferOwnership(address)';
-    ///
-    ///read-only interface
-    ///
+    //
+    // functions which take arguments can ONLY have their function indetifier stub cached, for slight efficiency and speed increase
+    // this stub must still be encoded before being used with .call, .staticcall or .delegatecall
+    string internal constant _STUB_TRANSFER_OWNERSHIP = 'transferOwnership(address)';
+    //
+    //read-only interface
+    //
     function supportsInterface(
         address target
     )internal view returns(
         bool ret
     ){
-        //target.isContract().requireTrue(
-            //"target address is not a contract
-        //);
-        
-        //return target.supportsInterface(INTERFACE_ID);
-        
-        //(bool result, bytes memory data) = self.staticcall(
-            //abi.encodeWithSignature(
-                //'supportsInterface(bytes4)',
-                //INTERFACE_ID
-            //)
-        //);
-        //result.requireTrue('call failed');
-        //
-        //(ret) = abi.decode(data, (bool));
+        return target.supportsInterface(INTERFACE_ID);
     }
+    
     function requireSupportsInterface(
         address target
-    )internal
+    )internal view
     {
         supportsInterface(target).requireTrue(
-            "not supported"
+            string(
+                abi.encodePacked(
+                    _ERR_ERC173_NOT_SUPPORTED,
+                    target
+                )
+            )
         );
     }
-    //function castERC173
-        //address ownable
-    //)internal pure returns(
-        //iERC173
-    //){
-        //_requireSupportsInterface173(ownable);
-        //
-        //return iERC173(ownable);
-    //}
-    //function thisCastERC173(
-    //)internal pure returns(
-        //iERC173
-    //){
-        //return castERC173(
-            //address(this)
-        //);
-    //}
+    function requireNotSupportsInterface(
+        address target
+    )internal view
+    {
+        supportsInterface(target).requireFalse(
+            string(
+                abi.encodePacked(
+                    _ERR_ERC173_SUPPORTED,
+                    target
+                )
+            )
+        );
+    }
+    //
+    //casting
+    //
+    function castERC173Ownable(
+        address ownable
+    )internal view returns(
+        iERC173
+    ){
+        requireSupportsInterface(ownable);
+        
+        return iERC173(ownable);
+    }
+    
+    function thisCastERC173Ownable(
+    )internal view returns(
+        iERC173
+    ){
+        return castERC173Ownable(
+            address(this)
+        );
+    }
+    //
     function owner(
         address target
     )internal view returns(
@@ -92,13 +125,23 @@ library frameworkERC173
         //requireSupportsInterface(target);
         
         (bool result, bytes memory data) = target.staticcall(
-            OWNER_SIGNATURE     //abi.encodeWithSignature('owner()')
+            _SIG_OWNER
         );
+        
         result.requireTrue(
-            'call failed'
+            string(
+                abi.encodePacked(
+                    _ERR_CALL_FAILED,
+                    target
+                )
+            )
         );
+        
         (ret) = abi.decode(data, (address));
     }
+    //
+    //mutable interface
+    //
     /// note the contract which exectues this function MUST be the owner of the target contract,
     /// otherwise this function will revert
     function renounceOwnership(
@@ -108,10 +151,16 @@ library frameworkERC173
         //requireSupportsInterface(target);
         
         (bool result, ) = target.call(
-            RENOUNCE_OWNERSHIP_SIGNATURE    //abi.encodeWithSignature('renounceOwnership()')
+            _SIG_RENOUNCE_OWNERSHIP
         );
+        
         result.requireTrue(
-            'call failed'
+            string(
+                abi.encodePacked(
+                    _ERR_CALL_FAILED,
+                    target
+                )
+            )
         );
     }
     /// note the contract which exectues this function MUST be the owner of the target contract
@@ -124,12 +173,18 @@ library frameworkERC173
         
         (bool result, ) = target.call(
             abi.encodeWithSignature(
-                'transferOwnership(address)', //TRANSFER_OWNERSHIP_STUB
+                _STUB_TRANSFER_OWNERSHIP,   //'transferOwnership(address)',
                 newOwner
             )
         );
+        
         result.requireTrue(
-            'call failed'
+            string(
+                abi.encodePacked(
+                    _ERR_CALL_FAILED,
+                    target
+                )
+            )
         );
     }
 }

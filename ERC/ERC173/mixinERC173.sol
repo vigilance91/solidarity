@@ -19,12 +19,34 @@ library mixinERC173
         //bytes32 hash;
         address owner;
     }
+    string private constant _NAME = " - mixinERC173: ";
+    //error message when it's required that owner must not be null
+    string private constant _ERR_OWNER_IS_NULL = string(
+        abi.encodePacked(
+            _NAME,
+            "owner is NULL"
+        )
+    );
+    //error message when it's required that owner must be null
+    string private constant _ERR_OWNER_NOT_NULL = string(
+        abi.encodePacked(
+            _NAME,
+            "owner is not NULL"
+        )
+    );
+    //error message when caller/msg.sender of a transaction is not owner
+    string private constant _ERR_CALLER_NOT_OWNER = string(
+        abi.encodePacked(
+            _NAME,
+            "caller not owner"
+        )
+    );
     
     bytes32 private constant _TYPE_HASH = keccak256(
         "ERC173Storage(uint256 chainid,bytes32 hash,address owner)"
     );
     
-    bytes32 internal constant STORAGE_SLOT = keccak256("ERC-173.mixin.storage");
+    bytes32 internal constant STORAGE_SLOT = keccak256("solidarity.ERC-173.mixin.STORAGE_SLOT");
     
     function storageERC173(
         bytes32 slot
@@ -44,10 +66,9 @@ library mixinERC173
     ){
         return abi.encodePacked(
             _TYPE_HASH,
-            chainId,
             keccak256(
                 abi.encodePacked(
-                    chainId, 
+                    chainId,
                     owner
                 )
             ),
@@ -65,6 +86,7 @@ library mixinERC173
             owner(slot)
         );
     }
+    /// @return {address} `data` decoded as an ERC173 owner
     function decodeERC173(
         bytes memory data
     )internal pure returns(
@@ -121,31 +143,31 @@ library mixinERC173
         address O = storageERC173(slot).owner;
         //prevent paying null address
         O.requireNotNull(
-            ///"owner can not be NULL"
+            //_ERR_OWNER_IS_NULL
         );
         return payable(O);
     }
     function requireOwner(
-        //bytes32 slot,
+        bytes32 slot,
         address sender
     )internal view
     {
         address O = owner(slot);
         
         O.requireNotNull(
-            ///"owner can not be NULL"
+            //_ERR_OWNER_IS_NULL
         );
         O.requireEqual(
             sender
-            ///"caller not owner"
+            //_ERR_CALLER_NOT_OWNER
         );
     }
-    //function requireOwnerIsNull(
-        //bytes32 slot
-    //)internal view
-    //{
-        //owner(slot).requireNull();
-    //}
+    function requireOwnerIsNull(
+        bytes32 slot
+    )internal view
+    {
+        owner(slot).requireIsNull();
+    }
     ///
     ///mutable interface
     ///
@@ -166,6 +188,7 @@ library mixinERC173
         storageERC173(slot).owner = newOwner;
         //so.hash = keccak256(
             //abi.encodePacked(
+                ////_TYPE_HASH,
                 //chainId,
                 //newOwner
             //)
