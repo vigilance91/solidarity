@@ -6,7 +6,7 @@ pragma experimental ABIEncoderV2;
 //import "https://github.com/vigilance91/solidarity/libraries/block/time/blockTimeMath.sol";
 //import "https://github.com/vigilance91/solidarity/libraries/block/now/nowMath.sol";
 
-import "https://github.com/vigilance91/solidarity/contracts/chrono/blockTime/blockTimeConstraintsABC.sol";
+import "https://github.com/vigilance91/solidarity/contracts/chrono/blockTime/BlockTimeConstraintsABC.sol";
 /// 
 /// @title fully realized block timestamp based chonologic contract
 /// @author Tyler R. Drury - 8/3/2021, All Rights Reserved
