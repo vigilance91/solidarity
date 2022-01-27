@@ -21,35 +21,35 @@ library blockNumberConstraints
     //require greater Than (>) operators, for requiring transactions to be performed only after a specific block height has been reached
     function requireBlockNumberGreaterThan(
         uint rhs
-    )public pure
+    )internal pure
     {
         block.number.requireGreaterThan(rhs);
     }
     //require greater than or equal (>=) operator, preventing transactions being performed until a certain block height or higher is reached
     function requireBlockNumberGreaterThanOrEqual(
         uint rhs
-    )public pure
+    )internal pure
     {
         block.number.requireGreaterThanOrEqual(rhs);
     }
     //require less Than (<) operator, preventing transactions being performed after a certain block height is reached
     function requireBlockNumberLessThan(
         uint rhs
-    )public pure
+    )internal pure
     {
         block.number.requireLessThan(rhs);
     }
     //require less than or euqal to (<=) operator, preventing transactions being performed after a certain block height or higher is reached
     function requireBlockNumberLessThanOrEqual(
         uint rhs
-    )public pure
+    )internal pure
     {
         block.number.requireLessThanOrEqual(rhs);
     }
     /**
     * trivial not very useful
     //function requireNowGreaterThanZero(
-    //) public pure
+    //) internal pure
     //{
         //now.requireGreaterThanZero()
     //}
@@ -57,14 +57,14 @@ library blockNumberConstraints
     //not very helpful, only applies to 1 possible transaction ever
     function requireBlockNumberEqual(
         uint rhs
-    )public pure
+    )internal pure
     {
         block.number.requireEqual(rhs);
     }
     
     function requireBlockNumberNotEqual(
         uint rhs
-    )public pure
+    )internal pure
     {
         block.number.requireNotEqual(rhs);
     }

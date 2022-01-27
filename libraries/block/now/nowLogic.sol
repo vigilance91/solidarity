@@ -15,45 +15,51 @@ library nowLogic
     
     function nowGreaterThan(
         uint rhs
-    )public pure returns(
-        bool
+    )internal pure returns(
+        bool ret
     ){
-        return block.timestamp.greaterThan(rhs);
+        //return block.timestamp.greaterThan(rhs);
+        assembly{
+            ret := gt(timestamp(),rhs)
+        }
     }
     function nowGreaterThanOrEqual(
         uint rhs
-    )public pure returns(
-        bool
+    )internal pure returns(
+        bool ret
     ){
         return block.timestamp.greaterThanOrEqual(rhs);
     }
     function nowLessThan(
         uint rhs
-    )public pure returns(
-        bool
+    )internal pure returns(
+        bool ret
     ){
-        return block.timestamp.lessThan(rhs);
+        //return block.timestamp.lessThan(rhs);
+        assembly{
+            ret := lt(timestamp(),rhs)
+        }
     }
     function nowLessThanOrEqual(
         uint rhs
-    )public pure returns(
-        bool
+    )internal pure returns(
+        bool ret
     ){
         return block.timestamp.lessThanOrEqual(rhs);
     }
     /**
-    // Common convenience operations
+    // trivial convenience operations
     //
     function nowGreaterThanZero(
-    )public pure returns(
-        bool
+    )internal pure returns(
+        bool ret
     ){
         return block.timestamp.greaterThanZero();
     }
     //function lessThanMax(
         //uint lhs
-    //) public pure returns(
-        //bool
+    //) internal pure returns(
+        //bool ret
     //){
         //return block.timestamp.lessThanMax();
     //}

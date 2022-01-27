@@ -11,11 +11,13 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contr
 /// 
 library nowMath
 {
+    //uint256 private _targetSecondsPerBlock = 15;
+    
     using SafeMath for uint;
     /// @return {uint} total time, in seconds, in the past, since a specified timestamp
     function pastDelta(
         uint rhs
-    )public pure returns(
+    )internal pure returns(
         uint
     ){
         //block.timestamp.requireGreaterThan(rhs);
@@ -24,7 +26,7 @@ library nowMath
     /// @return {uint} total time, in seconds, in the future, until the timestamp specified
     function futureDelta(
         uint lhs
-    )public pure returns(
+    )internal pure returns(
         uint
     ){
         //lhs.requireGreaterThan(block.timestamp);
@@ -33,7 +35,7 @@ library nowMath
     /// @return {uint} now + `rhs`, timestamp, in seconds, in the future
     function nowAdd(
         uint rhs
-    )public pure returns(
+    )internal pure returns(
         uint
     ){
         return block.timestamp.add(rhs);
@@ -41,7 +43,7 @@ library nowMath
     /// @return {uint} now - `rhs`, timestamp, in seconds, in the future
     function nowSub(
         uint rhs
-    ) public pure returns(
+    ) internal pure returns(
         uint
     ){
         return block.timestamp.sub(rhs);
@@ -49,7 +51,7 @@ library nowMath
     /// @return {uint} `lhs` - now, timestamp, in seconds, in the future
     //function subNow(
         //uint lhs
-    //) public pure returns(
+    //) internal pure returns(
         //uint
     //){
         //return lhs.sub(now);
@@ -57,7 +59,7 @@ library nowMath
     /// @return {uint} now * `rhs`, timestamp, in seconds, in the future
     function nowMul(
         uint rhs
-    ) public pure returns(
+    ) internal pure returns(
         uint
     ){
         return block.timestamp.mul(rhs);
@@ -65,7 +67,7 @@ library nowMath
     /// @return {uint} now / `rhs`, timestamp, in seconds, in the future
     function nowDiv(
         uint rhs
-    )public pure returns(
+    )internal pure returns(
         uint
     ){
         return block.timestamp.div(rhs);
@@ -73,43 +75,44 @@ library nowMath
     /// @return {uint} now % `rhs`, timestamp, in seconds, in the future
     function nowMod(
         uint rhs
-    )public pure returns(
+    )internal pure returns(
         uint
     ){
         return block.timestamp.mod(rhs);
     }
     //function nowLShift(
         //uint8 rhs
-    //) public pure returns(
+    //) internal pure returns(
         //uint
     //){
-        //return now << rhs;
+        //return block.timestamp << rhs;
     //}
     //function nowRShift(
         //uint8 rhs
-    //)public pure returns(
+    //)internal pure returns(
         //uint
     //){
-        //return now >> rhs;
+        //return block.timestamp >> rhs;
     //}
     function aproxBlocksInFuture(
         uint futureTimestamp
         uint avgBlockDuration
-    )public pure returns(
+    )internal pure returns(
         uint
     ){
         avgBlockDuration.requireGreatThanZero();
-        //futureTimestamp.requireGreaterThan(now);
+        //futureTimestamp.requireGreaterThan(block.timestamp);
+        //avgBlockDuration.requireInRange(1,30);
         //future block estimate based on timestamp, relative to now and the average blocks processed per seconds across the range of timestamps
         //avgBlockDuration (in seconds) should be between 10-20 and should preferably be provided by an external oracle source
         //aprox number of blocks rendered between future timestamp and now
-        return futureTimestamp.sub(now).div(avgBlockDuration);
+        return futureTimestamp.sub(block.timestamp).div(avgBlockDuration);
     }
     //returns current block number - aprox blocks which have been calculated
     function aproxBlocksInPast(
         uint pastTimestamp,
         uint avgBlockDuration
-    )public pure returns(
+    )internal pure returns(
         uint
     ){
         avgBlockDuration.requireGreatThanZero();
@@ -121,7 +124,7 @@ library nowMath
     /// Default/Target block computing time based functions
     function aproxBlocksInFutureDefault(
         uint futureTimestamp
-    )public pure returns(
+    )internal pure returns(
         uint
     ){
         return aproxBlocksInFuture(
@@ -132,7 +135,7 @@ library nowMath
     /// @return {uint} current block number - aprox blocks which have been calculated
     function aproxBlocksInPastDefault(
         uint pastTimestamp
-    )public pure returns(
+    )internal pure returns(
         uint
     ){
         return aproxBlocksInPast(
@@ -146,7 +149,7 @@ library nowMath
     function aproxBlocksInFutureAverage(
         uint futureTimestamp
         uint avgBlockDuration
-    )public pure returns(
+    )internal pure returns(
         uint
     ){
         return aproxBlocksInFutureDefault(futureTimestamp).add(
@@ -156,7 +159,7 @@ library nowMath
     function aproxBlocksInPastAverage(
         uint pastTimestamp,
         uint avgBlockDuration
-    )public pure returns(
+    )internal pure returns(
         uint
     ){
         return aproxBlocksInPastDefault(pastTimestamp).add(
