@@ -26,7 +26,7 @@ abstract contract SafeERC20DeflationMint is SafeERC20BurnableToken,
 {
     using SafeMath for uint256;
 
-    using AddressLogic for address;
+    using addressLogic for address;
     
     //using stringUtilities for string;
     
@@ -38,7 +38,7 @@ abstract contract SafeERC20DeflationMint is SafeERC20BurnableToken,
     /// @dev explicitly prevent proxying
     //fallback(
     //)external view nonReentrant payable{
-        //LogicConstraints.alwaysRevert('proxying disabled');
+        //logicConstraints.alwaysRevert('proxying disabled');
     //}
     
     
@@ -162,7 +162,7 @@ abstract contract SafeERC20DeflationMint is SafeERC20BurnableToken,
         );
         
         if(from.isNull()){
-            LogicConstraints.alwaysRevert(
+            logicConstraints.alwaysRevert(
                 //_NAME.concatenate("cannot mint tokens")
                 "cannot mint tokens"
             );

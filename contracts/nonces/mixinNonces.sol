@@ -3,7 +3,7 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/address/addressConstraints.sol";
 import "https://github.com/vigilance91/solidarity/libraries/bytes32/Bytes32Constraints.sol";
 
 import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256ToString.sol";
@@ -20,7 +20,7 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contr
 library mixinNonces
 {
     using Counters for Counters.Counter;
-    using AddressConstraints for address;
+    using addressConstraints for address;
     
     using addressToString for address;
     using uint256ToString for uint256;

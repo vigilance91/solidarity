@@ -3,22 +3,23 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
-//import "https://github.com/vigilance91/solidarity/constraints/AddressConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/logicConstraints.sol";
+//import "https://github.com/vigilance91/solidarity/constraints/addressConstraints.sol";
 import "https://github.com/vigilance91/solidarity/libraries/bytes32/Bytes32Logic.sol";
 //import "./BytesUtilities.sol";
-import "https://github.com/vigilance91/solidarity/libraries/string/StringLogic.sol";
-import "https://github.com/vigilance91/solidarity/libraries/string/StringConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/string/stringLogic.sol";
+import "https://github.com/vigilance91/solidarity/libraries/string/stringConstraints.sol";
 
 /// @title String Utilities
 /// @author Tyler R. Drury - 3/1/2021, All Rights Reserved
 /// @notice trivial strings convenience functions not provided natively by Solidity.
 library stringUtilities
 {
-    //using LogicConstraints for bool;
+    //using logicConstraints for bool;
     //using Bytes32Logic for bytes32;
-    //using AddressLogic for address;
-    using StringLogic for string;
+    //using addressLogic for address;
+    
+    using stringLogic for string;
     
     function concatenate(
         string memory lhs,
@@ -26,7 +27,7 @@ library stringUtilities
     )internal pure returns(
         string memory
     ){
-        LogicConstraints.requireTrue(
+        logicConstraints.requireTrue(
             lhs.notEmpty() && rhs.notEmpty(),
             "empty string"
         );
@@ -41,7 +42,7 @@ library stringUtilities
     )internal pure returns(
         string memory
     ){
-        LogicConstraints.requireTrue(
+        logicConstraints.requireTrue(
             lhs.notEmpty(), //&& rhs.notEmpty(),
             //ErrorString.empty
             'empty string'
@@ -66,7 +67,7 @@ library stringUtilities
         bytes32
     ){
         //salting empty string is point and a waste of gas
-        LogicConstraints.requireTrue(
+        logicConstraints.requireTrue(
             lhs.notEmpty() && rhs.notEmpty(),
             "empty string"
         );
@@ -83,7 +84,7 @@ library stringUtilities
     )internal pure returns(
         bytes4
     ){
-        //LogicConstraints.requireTrue(
+        //logicConstraints.requireTrue(
             //lhs.notEmpty(),
             //"empty string"
         //);
@@ -131,7 +132,7 @@ library stringUtilities
         string memory
     ){
         //salting empty string is point and a waste of gas
-        LogicConstraints.requireTrue(
+        logicConstraints.requireTrue(
             lhs.notEmpty() && rhs.notEmpty(),
             "empty string"
         );

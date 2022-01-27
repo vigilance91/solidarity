@@ -23,10 +23,10 @@ import "https://github.com/vigilance91/solidarity/contracts/allowance/mixinAllow
 abstract contract AllowanceABC is Context,
     iAllowance
 {
-    using LogicConstraints for bool;
+    using logicConstraints for bool;
     
     using uint256Constraints for uint256;
-    using AddressConstraints for address;
+    using addressConstraints for address;
     
     using SafeMath for uint256;
     

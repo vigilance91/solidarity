@@ -5,7 +5,7 @@ pragma experimental ABIEncoderV2;
 
 //import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/GSN/Context.sol";
 
-import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/logicConstraints.sol";
 
 import "https://github.com/vigilance91/solidarity/contracts/eventsPausable.sol";
 
@@ -63,7 +63,7 @@ import "https://github.com/vigilance91/solidarity/contracts/eventsPausable.sol";
 abstract contract Pausable
     //iPausable
 {
-    using LogicConstraints for bool;
+    using logicConstraints for bool;
     
     using eventsPausable for address;
 

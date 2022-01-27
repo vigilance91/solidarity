@@ -3,7 +3,7 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/address/addressConstraints.sol";
 
 import "https://github.com/vigilance91/solidarity/contracts/token/TokenIdentifier/iTokenIdentifier.sol";
 import "https://github.com/vigilance91/solidarity/contracts/token/TokenIdentifier/mixinTokenIdentifier.sol";
@@ -14,8 +14,8 @@ import "https://github.com/vigilance91/solidarity/contracts/token/TokenIdentifie
 ///
 abstract contract TokenIdentifierABC is iTokenIdentifier
 {
-    //using LogicConstraints for bool;
-    using AddressConstraints for address;
+    //using logicConstraints for bool;
+    using addressConstraints for address;
     
     constructor(
         string memory name,

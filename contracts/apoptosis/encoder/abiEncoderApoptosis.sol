@@ -9,14 +9,10 @@ pragma experimental ABIEncoderV2;
 ///
 library abiEncoderApoptosis
 {
-    //string private constant _NAME = ' abiEncoderApoptosis: ';
     //
     //getter stubs
     //
-    //string internal constant _STUB_TOTAL_SUPPLY = 'apoptosis()';
-    //
     //void getter signatures, these signatures are always the same, so precompute them
     //
-    bytes public constant SIG_APOPTOSIS = abi.encodeWithSignature('apoptosis()');
-    //
+    bytes internal constant SIG_APOPTOSIS = abi.encodeWithSignature('apoptosis()');
 }

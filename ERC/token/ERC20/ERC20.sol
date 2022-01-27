@@ -64,10 +64,10 @@ import "https://github.com/vigilance91/solidarity/ERC/token/ERC20/eventsERC20.so
 ///
 abstract contract ERC20 is MutableSupplyTokenABC
 {
-    using LogicConstraints for bool;
+    using logicConstraints for bool;
     
     using uint256Constraints for uint256;
-    using AddressConstraints for address;
+    using addressConstraints for address;
     
     using eventsERC20 for address;
     
@@ -401,7 +401,7 @@ abstract contract ERC20 is MutableSupplyTokenABC
         address account,
         uint256 amount
     )internal virtual
-        //_emitTransfer(AddressLogic.NULL,account,amount)
+        //_emitTransfer(addressLogic.NULL,account,amount)
     {
         account.requireNotNull(
             //"_mint"
@@ -417,7 +417,7 @@ abstract contract ERC20 is MutableSupplyTokenABC
         //}
         
         _beforeTokenTransfer(
-            AddressLogic.NULL,
+            addressLogic.NULL,
             account,
             amount
         );
@@ -433,7 +433,7 @@ abstract contract ERC20 is MutableSupplyTokenABC
             )
         );
         
-        AddressLogic.NULL.emitTransfer(
+        addressLogic.NULL.emitTransfer(
             account,
             amount
         );
@@ -450,7 +450,7 @@ abstract contract ERC20 is MutableSupplyTokenABC
         address account,
         uint256 amount
     )internal virtual
-        //_emitTransfer(account,AddressLogic.NULL,amount)
+        //_emitTransfer(account,addressLogic.NULL,amount)
     {
         //_requireNotThis(account);
         
@@ -463,7 +463,7 @@ abstract contract ERC20 is MutableSupplyTokenABC
         
         _beforeTokenTransfer(
             account,
-            AddressLogic.NULL,
+            addressLogic.NULL,
             amount
         );
         
@@ -486,7 +486,7 @@ abstract contract ERC20 is MutableSupplyTokenABC
         //totalSupply().requireLessThan(previousSupply);
         
         account.emitTransfer(
-            AddressLogic.NULL,
+            addressLogic.NULL,
             amount
         );
     }

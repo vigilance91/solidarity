@@ -13,7 +13,7 @@ import "https://github.com/vigilance91/solidarity/ERC/ERC137/encoder/EncoderERC1
 ///
 contract EncoderERC137Factory is EIP2470SingletonFactory
 {
-    using AddressLogic for address;
+    using addressLogic for address;
     
     bytes32 private constant _HASH = keccak256(bytes('solidarity.ENCODER_ERC137_FACTORY'));
     

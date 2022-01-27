@@ -21,10 +21,10 @@ contract ExternalEtherTransactor is EIP801Canary,
 {
     using SafeMath for uint256;
     
-    using LogicConstraints for bool;
+    using logicConstraints for bool;
     
-    using AddressConstraints for address;
-    using AddressConstraints for address payable;
+    using addressConstraints for address;
+    using addressConstraints for address payable;
     
     //using uint256Constraints for uint256;
     
@@ -35,7 +35,7 @@ contract ExternalEtherTransactor is EIP801Canary,
     
     //enable proxying to execute optional callback when making an ETH transfer?
     //fallback()external payable{
-        //LogicConstraints.alwaysRevert(
+        //logicConstraints.alwaysRevert(
             //'fallback() '.concatenate(ContractErrors.FUNCTION_DELETED)
         //);
     //}

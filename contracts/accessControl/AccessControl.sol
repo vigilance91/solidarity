@@ -87,8 +87,8 @@ abstract contract AccessControl is AccessControlABC,    //Context,
     
     using eventsAccessControl for bytes32;
     
-    using LogicConstraints for bool;
-    using AddressConstraints for address;
+    using logicConstraints for bool;
+    using addressConstraints for address;
     
     //using mixinAccessControl for address;
 

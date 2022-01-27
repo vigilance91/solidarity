@@ -3,8 +3,8 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
-import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/logicConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/address/addressConstraints.sol";
 
 import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/frameworkERC165.sol";
 
@@ -14,9 +14,9 @@ library frameworkAccessControl
 {
     using frameworkERC165 for address;
     
-    using LogicConstraints for bool;
+    using logicConstraints for bool;
     
-    using AddressConstraints for address;
+    using addressConstraints for address;
     
     string private constant _NAME = 'frameworkAccessControl: ';
     

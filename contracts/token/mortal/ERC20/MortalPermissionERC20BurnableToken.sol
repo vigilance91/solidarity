@@ -30,7 +30,7 @@ abstract contract MortalPermissionERC20BurnableToken is MortalPermissionERC20Tok
     using SafeMath for uint256;
     
     using uint256Constraints for uint256;
-    using AddressConstraints for address;
+    using addressConstraints for address;
     
     constructor(
         string memory name,

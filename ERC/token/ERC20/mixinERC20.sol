@@ -5,7 +5,7 @@ pragma experimental ABIEncoderV2;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/math/SafeMath.sol";
 
-import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/address/addressConstraints.sol";
 import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256Constraints.sol";
 ///
 /// @title mixinERC20
@@ -14,7 +14,7 @@ import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256Cons
 ///
 library mixinERC20
 {
-    //using AddressConstraints for address;
+    //using addressConstraints for address;
     //using uint256Constraints for uint256;
     
     using SafeMath for uint256;

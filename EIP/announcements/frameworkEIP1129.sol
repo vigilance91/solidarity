@@ -3,7 +3,7 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/address/addressConstraints.sol";
 
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/frameworkAccessControl.sol";
 
@@ -19,7 +19,7 @@ library frameworkEIP1129
     
     using frameworkAccessControl for address;
     
-    using LogicConstraints for bool;
+    using logicConstraints for bool;
     
     bytes private constant _NUMBER_OF_POST_SIGNATURE = abi.encodeWithSignature(
         'numberOfPosts()'

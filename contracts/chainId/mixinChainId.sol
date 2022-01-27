@@ -5,7 +5,7 @@ pragma experimental ABIEncoderV2;
 
 //import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/math/SafeMath.sol";
 
-//import "https://github.com/vigilance91/solidarity/libraries/bytes/BytesConstraints.sol";
+//import "https://github.com/vigilance91/solidarity/libraries/bytes/bytesConstraints.sol";
 
 import "https://github.com/vigilance91/solidarity/libraries/bytes32/Bytes32Logic.sol";
 import "https://github.com/vigilance91/solidarity/libraries/bytes32/Bytes32Constraints.sol";
@@ -13,7 +13,7 @@ import "https://github.com/vigilance91/solidarity/libraries/bytes32/Bytes32Const
 //import "https://github.com/vigilance91/solidarity/libraries/string/stringLogic.sol";
 import "https://github.com/vigilance91/solidarity/libraries/string/stringUtilities.sol";
 
-//import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
+//import "https://github.com/vigilance91/solidarity/libraries/address/addressConstraints.sol";
 //import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256Logic.sol";
 import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256Constraints.sol";
 import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256ToString.sol";
@@ -24,7 +24,7 @@ import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256ToSt
 ///
 library mixinChainId
 {
-    using LogicConstraints for bool;
+    using logicConstraints for bool;
     
     //using SafeMath for uint256;
     
@@ -35,12 +35,23 @@ library mixinChainId
     using uint256Constraints for uint256;
     using uint256ToString for uint256;
     
-    using StringLogic for string;
-    using StringConstraints for string;
+    using stringLogic for string;
+    using stringConstraints for string;
     using stringUtilities for string;
     
-    //using BytesLogic for bytes;
-    //using BytesConstraints for bytes;
+    //using bytesLogic for bytes;
+    //using bytesConstraints for bytes;
+    
+    internal uint256 constant _ETHEREUM = 1;
+    internal uint256 constant _BSC = 56;
+    internal uint256 constant _POLYGON = 137;
+    internal uint256 constant _FANTOM = 250;
+    internal uint256 constant _ARBITRUM = 42161;
+    internal uint256 constant _OPTIMISM = 10;
+    
+    //internal uint256 constant _AVALANCHE = 0xa86a;
+    //internal uint256 constant _HARMONY = 1666600000;
+    ////internal uint256 constant _XDAI = 0x64;
 
     struct ChainIdStorage{
         uint256 id;
@@ -52,7 +63,53 @@ library mixinChainId
         string idString;    //decimal string of chainId (used in combination with salting nonces and contract address hashes)
     }
     
-    bytes32 internal constant STORAGE_SLOT = keccak256("solidarity.mixin.CHAIN_ID.STORAGE_SLOT");
+    bytes32 internal constant STORAGE_SLOT = keccak256("solidarity.mixin.ChainId.STORAGE_SLOT");
+    
+    bytes32 private constant _TYPED_HASH = keccak256(
+        "ChainIdStorage(uint256 id,bytes32 rawHash,bytes32 idHash,bytes bytesPacked,string idString)"
+    );
+    ///
+    /// encoding / deconding
+    /// 
+    function encodeChainIdStorage(
+    )internal pure returns(
+        bytes memory
+    ){
+        ChainIdStorage storage SCID = storageChainId();
+        
+        return abi.encodePacked(
+            _TYPED_HASH,
+            SCID.id,
+            SCID.rawHash,
+            SCID.idHash,
+            SCID.bytesPacked,
+            SCID.idString
+        );
+    }
+    /*
+    function decodeChainIdStorage(
+        bytes memory data
+    )internal pure returns(
+        //bytes32 typedHash
+        ChainIdStorage memory ret
+    ){  
+        bytes32 typedHash;
+
+        (
+            typedHash,
+            ret.chainId,
+            ret.rawHash,
+            ret.idHash
+            ret.bytesPacked,
+            ret.idString
+        ) = abi.decode(
+            data,
+            (bytes32, uint256, bytes32, bytes32, bytes, string)
+        );
+
+        typedHash.requireEqual(_TYPED_HASH);
+    }
+    */
     ///
     ///getters
     ///
@@ -148,7 +205,26 @@ library mixinChainId
         //return idHash().notEqual(hash);
     //}
 
-
+    //function requireChainIdEqualThis(
+    //)internal view
+    //{
+        //chainIdEqual(
+            //chainId()
+        //).requireTrue(
+            ////'chainId not supproted: '.concatenate(chainId.hexadecimal())
+        //);
+    //}
+    
+    //function requireChainIdNotEqualThis(
+    //)internal view
+    //{
+        //chainIdNotEqual(
+            //chainId()
+        //).requireTrue(
+            ////'chainId not supported: '.concatenate(chainId.hexadecimal())
+        //);
+    //}
+    
     function requireVerifyRawHash(
     )internal view
     {
@@ -215,6 +291,28 @@ library mixinChainId
         SCID.idString = SCID.id.decimal();
         SCID.idHash = SCID.idString.hash();
     }
+    /// @dev only gets called to reset state variables (if already set) on the event of a chain split/hard fork
+    function resetChainId(
+    )internal
+    {
+        isSet().requireTrue();
+        //requireChachedChainIdNotEqualThis();
+
+        ChainIdStorage storage SCID = storageChainId();
+        
+        SCID.id = chainId();
+        
+        SCID.id.requireGreaterThanZero();
+        
+        SCID.bytesPacked = abi.encodePacked(SCID.id);
+        SCID.rawHash = keccak256(SCID.bytesPacked);
+        //
+        SCID.idString = SCID.id.decimal();
+        SCID.idHash = SCID.idString.hash();
+        
+        //requireVerifyRawHash();
+        //requireVerifyHash();
+    }
     function unsetChainId(
     )internal
     {
@@ -244,7 +342,7 @@ library mixinChainId
     //using stringUtilities for string;
     
     //struct ChainIdListStorage{
-        //mapping(string=>mixinChainId.ChainIdStorage) namedMap;
+        //mapping(bytes32=>mixinChainId.ChainIdStorage) namedMap;
         //mixinChainId.ChainIdStorage[] list;
     //}
 //}

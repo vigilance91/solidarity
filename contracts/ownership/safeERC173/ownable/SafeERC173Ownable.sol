@@ -36,12 +36,12 @@ import "https://github.com/vigilance91/solidarity/contracts/ownership/safeERC173
 abstract contract SafeERC173Ownable is ERC173Ownable,
     ERC173ReceiverConstraintsABC
 {
-    using LogicConstraints for bool;
+    using logicConstraints for bool;
     
     using Address for address;
     
-    using AddressLogic for address;
-    using AddressConstraints for address;
+    using addressLogic for address;
+    using addressConstraints for address;
     
     using frameworkERC165 for address;
     using frameworkSafeERC173 for address;
@@ -101,9 +101,9 @@ abstract contract SafeERC173Ownable is ERC173Ownable,
         
         address(this).renounceOwnership(ownable);
         
-        //_requireOnERC173Received(AddressLogic.NULL, address(this));
+        //_requireOnERC173Received(addressLogic.NULL, address(this));
         
-        //assert(ownable.owner().equal(AddressLogic.NULL));
+        //assert(ownable.owner().equal(addressLogic.NULL));
     }
     /// @dev like _safeTransferOwnership but exclusively transfers ownership of `ownable` contract address to this contract's owner,
     ///

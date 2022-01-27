@@ -16,7 +16,7 @@ library thisSafeTransaction
     using addressSafeTransaction for address;
     //using addressSafeTransaction for address payable;
     
-    using LogicConstraints for bool;
+    using logicConstraints for bool;
     
     //function _balanceGreaterThanOrEqual(
         //uint256 amount

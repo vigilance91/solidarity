@@ -3,10 +3,10 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/logicConstraints.sol";
 //
-import "https://github.com/vigilance91/solidarity/libraries/bytes/BytesLogic.sol";
-import "https://github.com/vigilance91/solidarity/libraries/bytes/BytesConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/bytes/bytesLogic.sol";
+import "https://github.com/vigilance91/solidarity/libraries/bytes/bytesConstraints.sol";
 /// 
 /// @title bytes Utilities
 /// @author Tyler R. Drury - 1/12/2021, All Rights Reserved
@@ -14,11 +14,11 @@ import "https://github.com/vigilance91/solidarity/libraries/bytes/BytesConstrain
 /// 
 library bytesUtilities
 {
-    using BytesLogic for bytes;
-    using BytesConstraints for bytes;
+    using bytesLogic for bytes;
+    using bytesConstraints for bytes;
     
-    //using AddressLogic for address;
-    //using StringLogic for string;
+    //using addressLogic for address;
+    //using stringLogic for string;
     
     function concatenate(
         bytes memory lhs,

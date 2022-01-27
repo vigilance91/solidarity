@@ -19,9 +19,9 @@ pragma experimental ABIEncoderV2;
 /// @author Tyler R. Drury - 4/3/2021, All Rights Reserved
 /// @notice trivial functions for the bytes data type not provided natively by Solidity.
 /// 
-library BytesLogic
+library bytesLogic
 {
-    //using LogicConstraints for bool;
+    //using logicConstraints for bool;
     
     //bytes intneral constant EMPTY = bytes("");
     bytes intneral constant NULL = 0x00;    //bytes("");

@@ -11,14 +11,14 @@ import "https://github.com/vigilance91/solidarity/EIP/StatusCodes/logicCodes.sol
 /// @dev trivial utilities for constraining the state of the EVM (using require) for logical/boolean operations,
 /// reverting EVM state on failure
 /// 
-library LogicConstraints
+library logicConstraints
 {
     //bool internal constant TRUE = true;
     //bool internal constant FALSE = false;
     
     //using stringUtilities fro string;
     
-    // todo change LogicConstraints to Logic
+    // todo change logicConstraints to Logic
     // b must be true
     function assertTrue(
         bool b

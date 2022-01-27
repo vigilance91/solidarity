@@ -7,7 +7,7 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contr
 
 import "https://github.com/vigilance91/solidarity/contracts/allowance/eventsAllowance.sol";
 
-import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/address/addressConstraints.sol";
 import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256Constraints.sol";
 ///
 /// @title mixinAllowance
@@ -19,7 +19,7 @@ library mixinAllowance
     using SafeMath for uint256;
     using eventsAllowance for address;
     //using stringUtilities for string;
-    using AddressConstraints for address;
+    using addressConstraints for address;
     using uint256Constraints for uint256;
     
     //using EnumerableMap for EnumerableMap.Map;

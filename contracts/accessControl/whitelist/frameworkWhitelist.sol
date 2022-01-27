@@ -12,13 +12,67 @@ import "https://github.com/vigilance91/solidarity/contracts/accessControl/framew
 ///
 library frameworkWhitelist
 {
-    using LogicConstraints for bool;
-    using AddressConstraints for address;
+    using logicConstraints for bool;
+    using addressConstraints for address;
     
     using frameworkERC165 for address;
     using frameworkAccessControl for address;
     
-    string private constant _NAME = 'frameworkWhitelist: ';
+    string private constant _NAME = ' frameworkWhitelist: ';
+    
+    string private constant _ERR_INTERFACE_NOT_IMPLEMENTED = string(
+        abi.encodePacked(
+            _NAME,
+            'iWhitelist not implemented',
+            _ERR_STR_ADRS
+        )
+    );
+    
+    string private constant _ERR_IS_WHITELISTED = string(
+        abi.encodePacked(
+            _NAME,
+            "white-listed",
+            _ERR_STR_ADRS
+        )
+    );
+    
+    string private constant _ERR_NOT_WHITELISTED = string(
+        abi.encodePacked(
+            _NAME,
+            "not white-listed: ",
+            _ERR_STR_ADRS
+        )
+    );
+    
+    string private constant _STUB_IS_PERMITTED = 'isPermitted(address)';
+    string private constant _STUB_GRANT_PERMISSION = 'grantPermission(address)';
+    string private constant _STUB_REVOKE_PERMISSION = 'revokePermission(address)';
+    
+    string private constant _STUB_IS_PERMITTED_ARRAY = 'isPermitted(address[])';
+    string private constant _STUB_GRANT_PERMISSION_ARRAY = 'grantPermission(address[])';
+    string private constant _STUB_REVOKE_PERMISSION_ARRAY = 'revokePermission(address[])';
+    
+    string private constant _ERR_CALL_FAILED = string(
+        abi.encodePacked(
+            _NAME,
+            "call failed",
+            _ERR_STR_ADRS
+        )
+    );
+    string private constant _ERR_STATIC_CALL_FAILED = string(
+        abi.encodePacked(
+            _NAME,
+            "static call failed",
+            _ERR_STR_ADRS
+        )
+    );
+    //string private constant _ERR_DELEGATE_CALL_FAILED = string(
+        //abi.encodePacked(
+            //_NAME,
+            //"delegate call failed",
+            //_ERR_STR_ADRS
+        //)
+    //);
     
     bytes private constant _ROLE_PERMITTED_SIGNATURE = abi.encodeWithSignature(
         'ROLE_PERMITTED()'
@@ -36,7 +90,12 @@ library frameworkWhitelist
     )private view
     {
         target.supportsInterface(_iWHITELIST_ID).requireTrue(
-            'contract does not implement iWhitelist'
+            string(
+                abi.encodePacked(
+                    _ERR_INTERFACE_NOT_IMPLEMENTED,
+                    target
+                )
+            )
         );
     }
     
@@ -46,17 +105,26 @@ library frameworkWhitelist
     )internal view
     {
         isPermitted(target, account).requireTrue(
-            //"sender does not have role"
+            string(
+                abi.encodePacked(
+                    _ERR_NOT_WHITELISTED,
+                    account
+                )
+            )
         );
     }
     function _requireNotPermitted(
         address target,
-        bytes32 role,
         address account
     )internal view
     {
         isPermitted(target, account).requireFalse(
-            //"sender already has role"
+            string(
+                abi.encodePacked(
+                    _ERR_IS_WHITELISTED,
+                    account
+                )
+            )
         );
     }
     //function _requireHasAdminRole(
@@ -109,11 +177,19 @@ library frameworkWhitelist
         
         (bool success, bytes memory result) = target.staticcall(
             abi.encodeWithSignature(
-                'isPermitted(address)',
+                _STUB_IS_PERMITTED,
                 account
             )
         );
-        success.requireTrue('staticcall failed');
+        
+        success.requireTrue(
+            string(
+                abi.encodePacked(
+                    _ERR_STATIC_CALL_FAILED,
+                    target
+                )
+            )
+        );
         
         (ret) = abi.decode(result, (bool));
     }
@@ -137,11 +213,19 @@ library frameworkWhitelist
         
         (bool success, ) = target.call(
             abi.encodeWithSignature(
-                'grantPermission(address)',
+                _STUB_GRANT_PERMISSION,
                 account
             )
         );
-        success.requireTrue('call failed');
+        
+        success.requireTrue(
+            string(
+                abi.encodePacked(
+                    _ERR_CALL_FAILED,
+                    target
+                )
+            )
+        );
     }
     ///
     /// @dev Revokes `role` from `account`
@@ -159,11 +243,19 @@ library frameworkWhitelist
         
         (bool success, ) = target.call(
             abi.encodeWithSignature(
-                'revokePermission(address)',
+                _STUB_REVOKE_PERMISSION,
                 account
             )
         );
-        success.requireTrue('call failed');
+        
+        success.requireTrue(
+            string(
+                abi.encodePacked(
+                    _ERR_CALL_FAILED,
+                    target
+                )
+            )
+        );
     }
     ///
     /// @dev Revokes `role` from the calling account
@@ -216,7 +308,15 @@ library frameworkWhitelist
         (bool success, bytes memory result) = target.staticcall(
             _ROLE_PERMITTED_SIGNATURE
         );
-        success.requireTrue('static call failed');
+        
+        success.requireTrue(
+            string(
+                abi.encodePacked(
+                    _ERR_STATIC_CALL_FAILED,
+                    target
+                )
+            )
+        );
         
         (ret) = abi.decode(result, (bytes32));
     }
@@ -231,7 +331,15 @@ library frameworkWhitelist
         (bool success, bytes memory result) = target.staticcall(
             _GET_PERMITTED_MEMBER_COUNT_SIGNATURE
         );
-        success.requireTrue('static call failed');
+        
+        success.requireTrue(
+            string(
+                abi.encodePacked(
+                    _ERR_STATIC_CALL_FAILED,
+                    target
+                )
+            )
+        );
         
         (ret) = abi.decode(result, (uint256));
     }

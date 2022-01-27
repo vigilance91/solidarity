@@ -25,8 +25,8 @@ abstract contract SafeERC20Mint is SafeERC20BurnableToken,
 {
     using SafeMath for uint256;
 
-    //using LogicConstraints for bool;
-    using AddressLogic for address;
+    //using logicConstraints for bool;
+    using addressLogic for address;
     //using uint256Constraints for uint256;
     
     //using stringUtilities for string;
@@ -46,7 +46,7 @@ abstract contract SafeERC20Mint is SafeERC20BurnableToken,
     /// 
     //fallback(
     //)external view nonReentrant payable{
-        //LogicConstraints.alwaysRevert('proxying disabled');
+        //logicConstraints.alwaysRevert('proxying disabled');
     //}
     
     // note: derived contracts may optionally implement iEtherReceiver/iEtherTransactor, etc,

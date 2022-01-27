@@ -3,7 +3,7 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/logicConstraints.sol";
 
 import "./thisBalanceLogic.sol";
 //import "https://github.com/vigilance91/solidarity/libraries/address/this/thisBalanceLogic.sol";
@@ -14,8 +14,8 @@ import "./thisBalanceLogic.sol";
 /// for address types, reverting on failure.
 library thisBalanceConstraints
 {
-    using LogicConstraints for bool;
-    //using AddressConstraints for address;
+    using logicConstraints for bool;
+    //using addressConstraints for address;
     
     using thisBalanceLogic for address;
     using thisBalanceLogic for uint256;
@@ -121,7 +121,7 @@ library thisBalanceConstraints
         //address[] memory container
     //)internal view
     //{
-        ////LogicConstraints.requireTrue(
+        ////logicConstraints.requireTrue(
             ////container.length > 0
         ////);
         

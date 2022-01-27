@@ -4,7 +4,7 @@ pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/utils/Address.sol";
-import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/address/addressConstraints.sol";
 
 import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/iERC165.sol";
 ///
@@ -13,9 +13,9 @@ import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/iERC1
 ///
 library frameworkERC165
 {
-    using LogicConstraints for bool;
+    using logicConstraints for bool;
     
-    using AddressConstraints for address;
+    using addressConstraints for address;
     using Address for address;
     
     //using stringUtilities for string;

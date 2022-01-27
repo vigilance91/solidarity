@@ -13,7 +13,7 @@ pragma solidity >=0.6.4 <0.8.0;
 /// 
 library msgSenderConstraints
 {
-    using LogicConstraints for bool;
+    using logicConstraints for bool;
     //using addressConstraints for address payable;
     
     function requireSenderEqual(

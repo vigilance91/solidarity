@@ -23,7 +23,7 @@ abstract contract MortalERC20DeflationMint is MortalERC20BurnableToken,
 {
     using SafeMath for uint256;
 
-    using AddressLogic for address;
+    using addressLogic for address;
     
     //using stringUtilities for string;
     
@@ -35,7 +35,7 @@ abstract contract MortalERC20DeflationMint is MortalERC20BurnableToken,
     /// @dev explicitly prevent proxying
     //fallback(
     //)external view nonReentrant payable{
-        //LogicConstraints.alwaysRevert('proxying disabled');
+        //logicConstraints.alwaysRevert('proxying disabled');
     //}
     
     
@@ -159,7 +159,7 @@ abstract contract MortalERC20DeflationMint is MortalERC20BurnableToken,
         );
         
         if(from.isNull()){
-            LogicConstraints.alwaysRevert(
+            logicConstraints.alwaysRevert(
                 //_NAME.concatenate("cannot mint tokens")
                 "cannot mint tokens"
             );

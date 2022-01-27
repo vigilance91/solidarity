@@ -15,7 +15,7 @@ import "https://github.com/vigilance91/solidarity/EIP/introspection/Canary/encod
 ///
 contract EncoderEIP801Factory is EIP2470SingletonFactory
 {
-    using AddressLogic for address;
+    using addressLogic for address;
     
     bytes32 private constant _HASH = keccak256(bytes('solidarity.ENCODER_EIP801_CANARY_FACTORY'));
     

@@ -4,7 +4,7 @@ pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
 //import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256Logic.sol";
-//import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
+//import "https://github.com/vigilance91/solidarity/libraries/address/addressConstraints.sol";
 
 //import "https://github.com/vigilance91/solidarity/libraries/address/addressBalanceLogic.sol";
 import "./addressBalanceLogic.sol";
@@ -15,7 +15,7 @@ import "./addressBalanceLogic.sol";
 /// 
 library thisBalanceLogic
 {
-    //using AddressConstraints for address;
+    //using addressConstraints for address;
     using addressBalanceLogic for address;
     //
     //check balance of this calling contract context vs balance of address `rhs`

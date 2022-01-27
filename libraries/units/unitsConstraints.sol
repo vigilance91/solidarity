@@ -17,7 +17,7 @@ import "./unitsLogic.sol";
 /// 
 library unitsConstraints
 {
-    using LogicConstraints for bool;
+    using logicConstraints for bool;
     
     using uint256Constraints for uint256;
     
@@ -25,12 +25,35 @@ library unitsConstraints
     
     //string private constant _NAME = ' unitConstraints: ';
     
+    string private constant _ERR_IS_KEY =  string(
+        abi.encodePacked(
+            _NAME,
+        )
+    );
+    string private constant _ERR_IS_NOT_KEY = string(
+        abi.encodePacked(
+            _NAME,
+            "invalid key: "
+        )
+    );
+    string private constant _ERR_INVALID_DENOMINATION = string(
+        abi.encodePacked(
+            _NAME,
+            'invalid denomination'
+        )
+    );
+    
     function requireIsUnitKey(
         bytes32 key
     )internal pure
     {
         units.isUnitKey(key).requireTrue(
-            "invalid key"
+            string(
+                abi.encodePacked(
+                    _ERR_IS_NOT_KEY,
+                    key
+                )
+            )
         );
     }
     function requireNotUnitKey(
@@ -38,10 +61,14 @@ library unitsConstraints
     )internal pure
     {
         units.isUnitKey(key).requireFalse(
-            "is key"
+            string(
+                abi.encodePacked(
+                    _ERR_IS_KEY,
+                    key
+                )
+            )
         );
     }
-    //string private constant _NAME = ' unitConstraints: ';
     //
     //reverts if `lhs` is 1 BABBAGE or greater
     function requireWeiDenomination(
@@ -49,7 +76,7 @@ library unitsConstraints
     )internal pure
     {
         unitsLogic.isWeiDenomination(amount).requireTrue(
-            'invalid denomination'
+            _ERR_INVALID_DENOMINATION
         );
     }
     //function requireWeiDenomination(
@@ -84,7 +111,7 @@ library unitsConstraints
         
         lhs.requireGreaterThan(
             amount.mul(units)
-            //_NAME.concatentate('insufficient funds')
+            //_ERR_ISF  //'insufficient funds'
         );
     }
     function requireUnitsGreaterThanOrEqual(
@@ -97,7 +124,7 @@ library unitsConstraints
         
         lhs.requireGreaterThanOrEqual(
             amount.mul(units)
-            //_NAME.concatentate('funds in excess')
+            //_ERR_EXCESS_FUNDS
         );
     }
     //using units for uint256;
@@ -114,7 +141,7 @@ library unitsConstraints
         
         lhs.requireLessThan(
             amount.mul(units)
-            //_NAME.concatentate('funds in excess')
+            //_ERR_EXCESS_FUNDS
         );
     }
     function requireUnitsLessThanOrEqual(
@@ -127,7 +154,7 @@ library unitsConstraints
         
         lhs.requireLessThanOrEqual(
             amount.mul(units)
-            //_NAME.concatentate('funds in excess')
+            //_ERR_EXCESS_FUNDS
         );
     }
     /*
@@ -141,7 +168,11 @@ library unitsConstraints
         lhs.requireInRange(
             min.mul(units),
             max.mul(units)
-            //_NAME.concatentate('funds not in range')
+            //string(
+                //abi.encodePacked(
+                    //_ERR_NOT_IN_RANGE,
+                //)
+            //)
         );
     }
     function requireInXRangeUnits(
@@ -155,8 +186,12 @@ library unitsConstraints
         
         lhs.requireInXRange(
             min.mul(units),
-            max.mul(units)
-            //_NAME.concatentate('funds not in range')
+            max.mul(units),
+            //string(
+                //abi.encodePacked(
+                    //_ERR_NOT_IN_XRANGE,
+                //)
+            //)
         );
     }
     */

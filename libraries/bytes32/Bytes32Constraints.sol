@@ -4,7 +4,7 @@ pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/libraries/bytes32/Bytes32Logic.sol";
-import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/logicConstraints.sol";
 /// 
 /// @title Bytes32 Constraints Library
 /// @author Tyler R. Drury - 3/1/2021, All Rights Reserved
@@ -15,7 +15,7 @@ import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol
 /// 
 library Bytes32Constraints
 {
-    using LogicConstraints for bool;
+    using logicConstraints for bool;
     using Bytes32Logic for bytes32;
     
     //using stringUtilities for string;

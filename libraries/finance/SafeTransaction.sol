@@ -4,7 +4,7 @@ pragma solidity >=0.6.4 <0.8.0;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/math/SafeMath.sol";
 
-import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/logicConstraints.sol";
 import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256Constraints.sol";
 /// 
 /// @title Safe Transaction Library
@@ -17,7 +17,7 @@ library SafeTransaction
     //using uint256SafeMath for uint256;
     using uint256Constraints for uint256;
     
-    using LogicConstraints for bool;
+    using logicConstraints for bool;
     
     //modifier _requireNonzero(
         //uint256 value

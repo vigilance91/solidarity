@@ -19,8 +19,8 @@ abstract contract EtherAllowanceTransactorABC is EtherTransactorABC,
 {
     using SafeMath for uint256;
     
-    using LogicConstraints for bool;
-    using AddressConstraints for address;
+    using logicConstraints for bool;
+    using addressConstraints for address;
     //using uint256Constraints for uint256;
     
     using frameworkEtherReceiver for address;

@@ -32,8 +32,8 @@ abstract contract SafeERC20MutableCapMint is SafeERC20BurnableToken,  //ERC20Mut
 {
     using SafeMath for uint256;
 
-    //using LogicConstraints for bool;
-    using AddressLogic for address;
+    //using logicConstraints for bool;
+    using addressLogic for address;
     //using uint256Constraints for uint256;
     
     //using stringUtilities for string;
@@ -52,7 +52,7 @@ abstract contract SafeERC20MutableCapMint is SafeERC20BurnableToken,  //ERC20Mut
     ///     will always revert here, no need to figure out issues with function visibility, modifiers, execution context, etc
     /// 
     //)external view nonReentrant payable{
-        //LogicConstraints.alwaysRevert('proxying disabled');
+        //logicConstraints.alwaysRevert('proxying disabled');
     //}
     
     // note: derived contracts may optionally implement iEtherReceiver/iEtherTransactor, etc,

@@ -120,8 +120,8 @@ abstract contract EIP1261 is MutableSupplyTokenABC
 
 contract EIP1261MembershipVerificationToken is EIP1261
 {
-    //using LogicConstraints for bool;
-    //using AddressConstraints for address;
+    //using logicConstraints for bool;
+    //using addressConstraints for address;
     
     constructor(
     )public

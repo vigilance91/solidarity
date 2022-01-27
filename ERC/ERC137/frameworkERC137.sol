@@ -4,7 +4,7 @@ pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/utils/Address.sol";
-import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/address/addressConstraints.sol";
 
 import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/frameworkERC165.sol";
 import "https://github.com/vigilance91/solidarity/ERC/ERC173/iERC173.sol";
@@ -13,16 +13,41 @@ import "https://github.com/vigilance91/solidarity/ERC/ERC173/iERC173.sol";
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 26/3/2021, All Rights Reserved
 /// @dev verification of support for ERC-165 introspection is performed before each call
 ///
-library frameworkERC173
+library frameworkERC137
 {
     using frameworkERC165 for address;
     
-    using LogicConstraints for bool;
+    using logicConstraints for bool;
     using Address for address;
     
-    bytes4 internal constant INTERFACE_ID = type(iERC173).interfaceId;
+    string private constant _NAME = ' frameworkERC137: ';
     
-    //string internal constant LIB_NAME = ' frameworkERC173: ';
+    string private constant _ERR_STR_TARGET = ', target: ';
+    
+    string private constant _ERR_CALL_FAILED = string(
+        abi.encodePacked(
+            _NAME,
+            'external call failed',
+            _ERR_STR_TARGET
+        )
+    );
+    string private constant _ERR_ERC137_SUPPORTED = string(
+        abi.encodePacked(
+            _NAME,
+            "iERC137 supported",
+            _ERR_STR_TARGET
+        )
+    );
+    string private constant _ERR_ERC137_NOT_SUPPORTED = string(
+        abi.encodePacked(
+            _NAME,
+            "iERC137 not supported",
+            _ERR_STR_TARGET
+        )
+    );
+    
+    
+    bytes4 internal constant INTERFACE_ID = type(iERC173).interfaceId;
     
     //functions with no arguments can have their functions signautre cached, for efficiency and speed
     bytes internal constant OWNER_SIGNATURE = abi.encodeWithSignature(
@@ -64,18 +89,23 @@ library frameworkERC173
     )internal
     {
         supportsInterface(target).requireTrue(
-            "not supported"
+            string(
+                abi.encodePacked(
+                    _ERR_ERC137_NOT_SUPPORTED,
+                    target
+                )
+            )
         );
     }
     
     //function castERC137
-        //address registry
+        //address target
     //)internal pure returns(
         //iERC137
     //){
-        //_requireSupportsInterface1820(ensRegistry);
+        //_requireSupportsInterface(target);
         //
-        //return iERC137(ensRegistry);
+        //return iERC137(target);
     //}
     //function thisCastERC137(
     //)internal pure returns(
@@ -96,9 +126,16 @@ library frameworkERC173
         (bool result, bytes memory data) = target.staticcall(
             OWNER_SIGNATURE     //abi.encodeWithSignature('owner()')
         );
+        
         result.requireTrue(
-            'call failed'
+            string(
+                abi.encodePacked(
+                    _ERR_CALL_FAILED,
+                    target
+                )
+            )
         );
+        
         (ret) = abi.decode(data, (address));
     }
     /// note the contract which exectues this function MUST be the owner of the target contract,
@@ -112,8 +149,14 @@ library frameworkERC173
         (bool result, ) = target.call(
             RENOUNCE_OWNERSHIP_SIGNATURE    //abi.encodeWithSignature('renounceOwnership()')
         );
+        
         result.requireTrue(
-            'call failed'
+            string(
+                abi.encodePacked(
+                    _ERR_CALL_FAILED,
+                    target
+                )
+            )
         );
     }
     /// note the contract which exectues this function MUST be the owner of the target contract
@@ -130,8 +173,14 @@ library frameworkERC173
                 newOwner
             )
         );
+        
         result.requireTrue(
-            'call failed'
+            string(
+                abi.encodePacked(
+                    _ERR_CALL_FAILED,
+                    target
+                )
+            )
         );
     }
 }

@@ -7,9 +7,11 @@ pragma experimental ABIEncoderV2;
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 18/2/2021, All Rights Reserved
 /// @notice trivial library for logical or bitwise operations on addresses not provided natively by Solidity
 ///
-library AddressLogic
+library addressLogic
 {
-    address public constant NULL = address(0);
+    address internal constant NULL = address(0);
+    //address internal constant NULL = address(0xFFFFFFFFFFFFFFFFFFF);
+    
     // compare addresses and address related logic/binary/bitwise operations
     function equal(
         address lhs,

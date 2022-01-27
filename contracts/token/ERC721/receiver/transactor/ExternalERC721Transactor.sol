@@ -20,8 +20,8 @@ contract ExternalERC721Transactor is ERC721TransactorABC
 {
     using SafeMath for uint256;
     
-    using LogicConstraints for bool;
-    using AddressConstraints for address;
+    using logicConstraints for bool;
+    using addressConstraints for address;
     //using uint256Constraints for uint256;
     
     using frameworkEtherReceiver for address;
@@ -40,7 +40,7 @@ contract ExternalERC721Transactor is ERC721TransactorABC
     /// 
     //fallback(
     //)external view nonReentrant payable{
-        //LogicConstraints.alwaysRevert('proxying disabled');
+        //logicConstraints.alwaysRevert('proxying disabled');
     //}
     constructor(
     )public

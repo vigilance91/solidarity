@@ -30,10 +30,28 @@ abstract contract BlacklistABC is ContractConstraintsABC,
 {
     using EnumerableSet for EnumerableSet.AddressSet;
     
-    using LogicConstraints for bool;
-    using AddressConstraints for address;
+    using logicConstraints for bool;
+    using addressConstraints for address;
 
-    string private constant _NAME = ' BlacklistABC: ';
+    string private constant _NAME = ' - BlacklistABC: ';
+    
+    string private constant _ERR_STR_ADRS = ", address: ";
+    
+    string private constant _ERR_IS_BLACKLISTED = string(
+        abi.encodePacked(
+            _NAME,
+            "black-listed",
+            _ERR_STR_ADRS
+        )
+    );
+    
+    string private constant _ERR_NOT_BLACKLISTED = string(
+        abi.encodePacked(
+            _NAME,
+            "not black-listed: ",
+            _ERR_STR_ADRS
+        )
+    );
     
     //bytes32 private constant _STORAGE_SLOT = keccak256('solidarity.accessControl.blacklistABC.STORAGE_SLOT');
     //
@@ -80,7 +98,12 @@ abstract contract BlacklistABC is ContractConstraintsABC,
         //account.requireNotNullAndNotThis();
         
         _isBanned(account).requireTrue(
-            //"address is banned"
+            string(
+                abi.encodePacked(
+                    _ERR_IS_BLACKLISTED,
+                    account
+                )
+            )
         );
     }
     function _requireNotBanned(
@@ -91,7 +114,12 @@ abstract contract BlacklistABC is ContractConstraintsABC,
         //account.requireNotNullAndNotThis();
         
         _isBanned(account).requireFalse(
-            //"address is not banned"
+            string(
+                abi.encodePacked(
+                    _ERR_NOT_BLACKLISTED,
+                    account
+                )
+            )
         );
     }
     //

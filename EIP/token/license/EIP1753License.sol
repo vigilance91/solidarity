@@ -23,7 +23,7 @@ contract EIP1753License is iEIP1753,
     EIP1753
 {
     //using eventsEIP1753 for address;
-    //using AddressConstraints for address;
+    //using addressConstraints for address;
     
     constructor(
         string memory name,

@@ -5,7 +5,7 @@ pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/AccessControl.sol";
 
-import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/address/addressConstraints.sol";
 //import "https://github.com/vigilance91/solidarity/libraries/eventsEIP1129.sol";
 import "https://github.com/vigilance91/solidarity/EIP/announcements/iEIP1129.sol";
 //import "./eventsEIP1129.sol";
@@ -83,7 +83,7 @@ abstract contract EIP1129 is Context,
 {
     using SafeMath for uint256;
     
-    using LogicConstraints for bool;
+    using logicConstraints for bool;
     
     using addressToString for address;
     using addressToString for address payable;

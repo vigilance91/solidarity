@@ -112,6 +112,43 @@ contract Whitelist is ERC165,   //SafeCanary
         _grantRole(ROLE_PERMITTED, account);
     }
     
+    ///
+	/// @dev whitelists all the addresses in `accounts`
+    /// transaction cost: 195,085 gas + execution cost 166,837 gas === 361,922 total gas
+    /// emits a {RoleGranted} event
+    ///
+    /// Requirements:
+    ///     - caller must have `role`'s admin role or be default admin
+    ///     - caller must not be the recovered singer's address
+    ///     - reverts if any address in `accounts` has previously been white-listed
+    /// 
+    function grantPermission(
+        address[] memory accounts
+    )external virtual override //returns(address)  //,bytes32,bytes32, bytes32)  //override nonReentrant
+    {
+        _requireThisPermitted();
+
+        address sender = _msgSender();
+        //sender must be admin and also be permitted to use this contract
+        //_requirePermitted(sender);
+        //_requireIsAssignorOrAdmin(sender);
+        _requireHasAdminRole(ROLE_PERMITTED, sender);
+        //
+        uint L = accounts.length;
+        address account;
+        
+        for(uint i; i < L; i++){
+            // require signer has not already been granted permission
+            account = accounts[i];
+            
+            _requireNotHasRole(ROLE_PERMITTED, account);
+
+            _incrementNonce(account);
+            
+            _grantRole(ROLE_PERMITTED, account);
+        }
+    }
+    
     function isPermitted(
         address account
     )public view virtual override returns(
@@ -124,6 +161,25 @@ contract Whitelist is ERC165,   //SafeCanary
         //}
         
         return _hasRole(ROLE_PERMITTED, account);
+    }
+    
+    function isPermitted(
+        address[] memory accounts
+    )public view virtual override returns(
+        bool[] memory ret
+    ){
+        _requireThisPermitted();
+
+        //if(account.equal(owner())){
+            //return true;
+        //}
+        uint L = accounts.length;
+        
+        ret = new bool[](L);
+        
+        for(uint i; i < L; i++){
+            ret[i] = _hasRole(ROLE_PERMITTED, account);
+        }
     }
     //function isAssignor(
         //address account
@@ -259,6 +315,20 @@ contract Whitelist is ERC165,   //SafeCanary
         _revokeRole(ROLE_PERMITTED, account);
     }
     ///
+    /// @dev Revokes `account` from whitelist
+    /// emits a {RoleRevoked} event
+    ///
+    /// Requirements:
+    ///     - the caller must have `role`'s admin role
+    ///     - reverts if account in `accounts` has not previously been white-listed
+    ///
+    //function revokePermission(
+        //address[] memory accounts
+    //)external virtual override  //NonReentrant
+        //onlyOwnerAdminOrRole(ROLE_REVOKER)
+    //{
+    //}
+    ///
     /// @dev Caller renounces their access to whitelist
     /// emits a {RoleRevoked} event
     ///
@@ -314,6 +384,61 @@ contract Whitelist is ERC165,   //SafeCanary
         //
         //_incrementNonce(sender);
         //_incrementNonce(account);
+        //
+        //NOTE: if caller is an admin they will retain the admin role for this contract
+    //}
+    ///
+    /// @dev Atomic transfers of permission from `from` to addresses in `to`
+    /// emits a {RoleRevoked} and {RoleGranted} events for each transfered role
+    ///
+    /// Requirements:
+    ///     - reverts if caller is not an admin
+    ///     - reverts if caller is not whitelisted
+    ///     - reverts if account in `from` is null, caller, this contract or is not whitelisted
+    ///     - reverts if account in `to` is null, caller, this contract or has previously been whitelisted
+    ///
+    //function transferPermission(
+        //address[] calldata fromAccounts,
+        //address[] calldata toAccounts
+    //)external virtual override  //NonReentrant
+        //onlyDefaultAdminOrRoleAdmin
+    //{
+        //_requireHasAdminRole(ROLE_PERMITTED, _msgSender());
+        
+        //address from;
+        //address to;
+        
+        //bytes32 RP = ROLE_PERMITTED;
+        //uint L = from.length;
+        
+        //L.requireGreaterThanZero();
+        //L.requireEqual(to.length);
+        
+        //for(uint i; i < L; i++){
+            //from = fromAccounts[i];
+            //to = toAccounts[i];
+            
+            //from.requireNotEqual(to);
+            
+            //_requireAddressesNotEqual(sender, from, to);
+            
+            ////if(sender.notEqual(this)){
+                //_requireAddressesNotNotNullAndNotThis(from, to);
+            ////}
+            
+            //_requireHasRole(RP, from);
+            //_requireNotHasRole(RP, to);
+            //
+            //_transferRole(RP, from, to);
+            //
+            //_incrementNonce(from);
+            //_incrementNonce(to);
+            
+            ////_requireNotHasRole(RP, from);
+            ////_requireHasRole(RP, to);
+        //}
+        //
+        //_incrementNonce(sender);
         //
         //NOTE: if caller is an admin they will retain the admin role for this contract
     //}

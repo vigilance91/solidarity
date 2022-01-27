@@ -10,7 +10,7 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contr
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/iAccessControl.sol";
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/mixinAccessControl.sol";
 
-import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/address/addressConstraints.sol";
 ///
 /// @title Access Control Abstract Base Contract
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 8/12/2021, All Rights Reserved
@@ -20,11 +20,11 @@ abstract contract AccessControlABC is Context
 {
     using EnumerableSet for EnumerableSet.AddressSet;
     
-    using LogicConstraints for bool;
+    using logicConstraints for bool;
     
     using Address for address;
     
-    using AddressConstraints for address;
+    using addressConstraints for address;
     
     //using stringUtilities for string;
     

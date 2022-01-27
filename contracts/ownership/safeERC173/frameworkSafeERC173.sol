@@ -3,7 +3,7 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/address/addressConstraints.sol";
 
 import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/frameworkERC165.sol";
 
@@ -15,8 +15,8 @@ import "https://github.com/vigilance91/solidarity/ERC/ERC173/iERC173.sol";
 ///
 library frameworkSafeERC173
 {
-    using LogicConstraints for bool;
-    using AddressConstraints for address;
+    using logicConstraints for bool;
+    using addressConstraints for address;
     
     using Address for address;
     
@@ -118,7 +118,7 @@ library frameworkSafeERC173
         //if address is an externally owned wallet address,
         //returns NULL
         if(!target.isContract()){
-            return AddressLogic.NULL;
+            return addressLogic.NULL;
         }
         
         _requireSupportsInterfaceERC173(target);

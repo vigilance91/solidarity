@@ -16,6 +16,8 @@ library blockNumberConstraints
 {
     using uint256Constraints for uint;
     
+    //string private constant _NAME = " - blockNumberConstraints: ";
+    
     //require greater Than (>) operators, for requiring transactions to be performed only after a specific block height has been reached
     function requireBlockNumberGreaterThan(
         uint rhs

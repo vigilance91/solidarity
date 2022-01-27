@@ -3,7 +3,7 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/logicConstraints.sol";
 
 import "https://github.com/vigilance91/solidarity/contracts/token/ERC20/frameworkSafeERC20.sol";
 ///
@@ -12,8 +12,8 @@ import "https://github.com/vigilance91/solidarity/contracts/token/ERC20/framewor
 ///
 abstract contract ERC20ReceiverConstraintsABC //is ContractConstraintsABC
 {
-    using LogicConstraints for bool;
-    //using AddressConstraints for address;
+    using logicConstraints for bool;
+    //using addressConstraints for address;
     using frameworkSafeERC20 for address;
     
     string private constant _TRANSFER_FAILED = " ERC20ReceiverConstraintsABC: contract can not receive ERC20 transfers";

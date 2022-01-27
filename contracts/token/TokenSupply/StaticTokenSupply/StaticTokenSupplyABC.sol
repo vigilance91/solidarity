@@ -13,7 +13,7 @@ import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256Cons
 ///
 abstract contract StaticTokenSupplyABC is iStaticTokenSupply
 {
-    using LogicConstraints for bool;
+    using logicConstraints for bool;
     
     using uint256Logic for uint256;
     using uint256Constraints for uint256;

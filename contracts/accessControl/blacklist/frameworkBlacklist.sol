@@ -12,13 +12,64 @@ import "https://github.com/vigilance91/solidarity/contracts/accessControl/blackl
 ///
 library frameworkBlacklist
 {
-    using LogicConstraints for bool;
-    using AddressConstraints for address;
+    using logicConstraints for bool;
+    using addressConstraints for address;
     
     using frameworkERC165 for address;
     using frameworkAccessControl for address;
     
-    string private constant _NAME = 'frameworkBlacklist: ';
+    string private constant _NAME = ' frameworkBlacklist: ';
+    string private constant _ERR_STR_ADRS = ', address: ';
+    
+    string private constant _ERR_INTERFACE_NOT_IMPLEMENTED = string(
+        abi.encodePacked(
+            _NAME,
+            'iBlacklist not implemented',
+            _ERR_STR_ADRS
+        )
+    );
+    
+    string private constant _ERR_IS_BLACKLISTED = string(
+        abi.encodePacked(
+            _NAME,
+            "black-listed",
+            _ERR_STR_ADRS
+        )
+    );
+    
+    string private constant _ERR_NOT_BLACKLISTED = string(
+        abi.encodePacked(
+            _NAME,
+            "not black-listed: ",
+            _ERR_STR_ADRS
+        )
+    );
+    
+    string private constant _ERR_CALL_FAILED = string(
+        abi.encodePacked(
+            _NAME,
+            "call failed",
+            _ERR_STR_ADRS
+        )
+    );
+    string private constant _ERR_STATIC_CALL_FAILED = string(
+        abi.encodePacked(
+            _NAME,
+            "static call failed",
+            _ERR_STR_ADRS
+        )
+    );
+    //
+    //function strgin stubs
+    //
+    string private constant _STUB_IS_BANNED = 'isBanned(address)';
+    string private constant _STUB_IS_BANNED_ARRAY = 'isBanned(address[])';
+    
+    string private constant _STUB_BAN = 'ban(address)';
+    string private constant _STUB_BAN_ARRAY = 'ban(address[])';
+    
+    string private constant _STUB_REVOKE_BAN = 'revokeBan(address)';
+    string private constant _STUB_REVOKE_BAN_ARRAY = 'revokeBan(address[])';
     
     //bytes private constant _CALLER_ADDRESS_HASH_SIGNATURE = abi.encodeWithSignature(
         //'callerAddressHash()'
@@ -43,7 +94,12 @@ library frameworkBlacklist
     )private view
     {
         target.supportsInterface(_iBLACKLIST_ID).requireTrue(
-            'contract does not implement iBlacklist'
+            string(
+                abi.encodePacked(
+                    _ERR_INTERFACE_NOT_IMPLEMENTED,
+                    target
+                )
+            )
         );
     }
     
@@ -53,7 +109,12 @@ library frameworkBlacklist
     )internal view
     {
         isBanned(target, account).requireTrue(
-            //"sender is not banned"
+            string(
+                abi.encodePacked(
+                    _ERR_NOT_BLACKLISTED,
+                    account
+                )
+            )
         );
     }
     function _requireBanned(
@@ -65,9 +126,12 @@ library frameworkBlacklist
         
         for(uint i; i < accounts.length; i++){
             ret[i].requireTrue(
-                //_NAME.concatenate(
-                    //"account is not banned: ".concatenate(ret[i].hexadecimal())
-                //)
+                string(
+                    abi.encodePacked(
+                        _ERR_NOT_BLACKLISTED,
+                        accounts[i]
+                    )
+                )
             );
         }
     }
@@ -81,9 +145,12 @@ library frameworkBlacklist
         
         for(uint i; i < accounts.length; i++){
             ret[i].requireFalse(
-                //_NAME.concatenate(
-                    //"account is banned: ".concatenate(ret[i].hexadecimal())
-                //)
+                string(
+                    abi.encodePacked(
+                        _ERR_IS_BLACKLISTED,
+                        accounts[i]
+                    )
+                )
             );
         }
     }
@@ -137,11 +204,18 @@ library frameworkBlacklist
         
         (bool success, bytes memory result) = target.staticcall(
             abi.encodeWithSignature(
-                'isBanned(address)',
+                _STUB_IS_BANNED,
                 account
             )
         );
-        success.requireTrue('staticcall failed');
+        success.requireTrue(
+            string(
+                abi.encodePacked(
+                    _ERR_STATIC_CALL_FAILED,
+                    target
+                )
+            )
+        );
         
         (ret) = abi.decode(result, (bool));
     }
@@ -158,11 +232,19 @@ library frameworkBlacklist
         
         (bool success, bytes memory result) = target.staticcall(
             abi.encodeWithSignature(
-                'isBanned(address[])',
+                _STUB_IS_BANNED_ARRAY,
                 accounts
             )
         );
-        success.requireTrue('staticcall failed');
+        
+        success.requireTrue(
+            string(
+                abi.encodePacked(
+                    _ERR_STATIC_CALL_FAILED,
+                    target
+                )
+            )
+        );
         
         (ret) = abi.decode(result, (bool[]));
     }
@@ -187,13 +269,20 @@ library frameworkBlacklist
         
         (bool success, ) = target.call(
             abi.encodeWithSignature(
-                'ban(address)',
+                _STUB_BAN,
                 account
             )
         );
-        success.requireTrue('call failed');
+        
+        success.requireTrue(
+            string(
+                abi.encodePacked(
+                    _ERR_CALL_FAILED,
+                    target
+                )
+            )
+        );
     }
-    
     ///
     /// @dev Grants `role` to each account in `accounts`
     /// If `account` had not been already granted `role`, emits multiple {RoleGranted} events
@@ -211,11 +300,18 @@ library frameworkBlacklist
         
         (bool success, ) = target.call(
             abi.encodeWithSignature(
-                'ban(address[])',
+                _STUB_BAN_ARRAY,
                 accounts
             )
         );
-        success.requireTrue('call failed');
+        success.requireTrue(
+            string(
+                abi.encodePacked(
+                    _ERR_CALL_FAILED,
+                    target
+                )
+            )
+        );
     }
     ///
     /// @dev Revokes `role` from `account`
@@ -233,11 +329,19 @@ library frameworkBlacklist
         
         (bool success, ) = target.call(
             abi.encodeWithSignature(
-                'revokeBan(address)',
+                _STUB_REVOKE_BAN,
                 account
             )
         );
-        success.requireTrue('call failed');
+        
+        success.requireTrue(
+            string(
+                abi.encodePacked(
+                    _ERR_CALL_FAILED,
+                    target
+                )
+            )
+        );
     }
     ///
     /// @dev Revokes `role` from each accoun in `accounts`
@@ -256,11 +360,19 @@ library frameworkBlacklist
         
         (bool success, ) = target.call(
             abi.encodeWithSignature(
-                'revokeBan(address[])',
+                _STUB_REVOKE_BAN_ARRAY,
                 accounts
             )
         );
-        success.requireTrue('call failed');
+        
+        success.requireTrue(
+            string(
+                abi.encodePacked(
+                    _ERR_CALL_FAILED,
+                    target
+                )
+            )
+        );
     }
     
     function roleBanned(
@@ -273,7 +385,15 @@ library frameworkBlacklist
         (bool success, bytes memory result) = target.staticcall(
             _ROLE_BANNED_SIGNATURE
         );
-        success.requireTrue('static call failed');
+        
+        success.requireTrue(
+            string(
+                abi.encodePacked(
+                    _ERR_STATIC_CALL_FAILED,
+                    target
+                )
+            )
+        );
         
         (ret) = abi.decode(result, (bytes32));
     }
@@ -288,7 +408,15 @@ library frameworkBlacklist
         (bool success, bytes memory result) = target.staticcall(
             _GET_BANNED_MEMBER_COUNT_SIGNATURE
         );
-        success.requireTrue('static call failed');
+        
+        success.requireTrue(
+            string(
+                abi.encodePacked(
+                    _ERR_STATIC_CALL_FAILED,
+                    target
+                )
+            )
+        );
         
         (ret) = abi.decode(result, (uint256));
     }

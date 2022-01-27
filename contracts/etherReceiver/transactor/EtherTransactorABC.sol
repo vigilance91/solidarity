@@ -9,7 +9,7 @@ import "https://github.com/vigilance91/solidarity/contracts/etherReceiver/EtherR
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/math/SafeMath.sol";
 
-import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/address/addressConstraints.sol";
 import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256Constraints.sol";
 
 //import "https://github.com/vigilance91/solidarity/contracts/allowance/AllowanceABC.sol";
@@ -29,9 +29,9 @@ abstract contract EtherTransactorABC is EtherReceiverABC,
 {
     using SafeMath for uint256;
     
-    using LogicConstraints for bool;
+    using logicConstraints for bool;
     
-    using AddressConstraints for address;
+    using addressConstraints for address;
     
     using uint256Constraints for uint256;
     

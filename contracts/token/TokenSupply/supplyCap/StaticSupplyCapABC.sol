@@ -14,7 +14,7 @@ abstract contract StaticSupplyCapABC is iStaticSupplyCap
 {
     //using SafeMath for uint256;
 
-    //using AddressLogic for address;
+    //using addressLogic for address;
     //using uint256Constraints for uint256;
     
     string private constant CONTRACT_NAME = ' StaticSupplyCapABC: ';
@@ -98,7 +98,7 @@ abstract contract StaticSupplyCapABC is iStaticSupplyCap
         );
         //when minting or burning tokens
         if(from.isNull() || to.isNull()){
-            //LogicConstraints.alwaysRevert(
+            //logicConstraints.alwaysRevert(
                 //_NAME.concatenate("token supply cap cannot mutate")
             //);
             require(

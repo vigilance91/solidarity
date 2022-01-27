@@ -9,7 +9,7 @@ import "https://github.com/vigilance91/solidarity/contracts/accessControl/Access
 
 import "https://github.com/vigilance91/solidarity/libraries/bytes32/Bytes32Logic.sol";
 
-import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/address/addressConstraints.sol";
 import "https://github.com/vigilance91/solidarity/libraries/address/addressToString.sol";
 
 import "./iEIP1753.sol";
@@ -26,13 +26,13 @@ import "https://github.com/vigilance91/solidarity/contracts/token/StaticSupplyTo
 /// 
 library mixinEIP1753
 {
-    using LogicConstraints for bool;
+    using logicConstraints for bool;
     ////using nowMath for uint;
     ////using BlockTime for uint;
     
     using Bytes32Logic for bytes32;
     
-    using AddressConstraints for address;
+    using addressConstraints for address;
     using addressToString for address;
     
     using stringUtilities for string;

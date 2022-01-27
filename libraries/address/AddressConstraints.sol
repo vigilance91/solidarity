@@ -3,8 +3,9 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
-import "https://github.com/vigilance91/solidarity/libraries/address/AddressLogic.sol";
+import "https://github.com/vigilance91/solidarity/libraries/logicConstraints.sol";
+
+import "https://github.com/vigilance91/solidarity/libraries/address/addressLogic.sol";
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/utils/Address.sol";
 /// 
@@ -12,18 +13,64 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contr
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 3/1/2021, All Rights Reserved
 /// @notice trivial utilities for constraining the state of the EVM (using require) for address types, reverting on failure
 ///
-library AddressConstraints
+library addressConstraints
 {
-    using LogicConstraints for bool;
+    using logicConstraints for bool;
     
     using Address for address;
     
-    using AddressLogic for address;
+    using addressLogic for address;
     
     //using stringUtilities for string;
     //using statusMessage for string;
     
-    //string private constant _NAME = " - addressConstraints: ";
+    string private constant _NAME = " - addressConstraints: ";
+    
+    string private constant _ERR_STR_LHS = ", lhs: ";
+    string private constant _ERR_STR_RHS = ", rhs: ";
+    //string private constant _ERR_STR_VALUE = ", value: ";
+    
+    string private constant _ERR_EQUAL = string(
+        abi.encodePacked(
+            _NAME,
+            '=='
+        )
+    );
+    
+    string private constant _ERR_NOT_EQUAL = string(
+        abi.encodePacked(
+            _NAME,
+            '!='
+        )
+    );
+    
+    string private constant _ERR_IS_NULL = string(
+        abi.encodePacked(
+            _NAME,
+            'is null'
+        )
+    );
+    
+    string private constant _ERR_IS_NOT_NULL = string(
+        abi.encodePacked(
+            _NAME,
+            'is not null'
+        )
+    );
+    
+    string private constant _ERR_IS_CONTRACT = string(
+        abi.encodePacked(
+            _NAME,
+            'is contract, address: '
+        )
+    );
+    
+    string private constant _ERR_IS_NOT_CONTRACT = string(
+        abi.encodePacked(
+            _NAME,
+            'is not contract, address: '
+        )
+    );
     
     function requireEqual(
         address lhs,
@@ -31,7 +78,15 @@ library AddressConstraints
     )public pure
     {
         lhs.equal(rhs).requireTrue(
-            //_NAME.concatenate('lhs != rhs')
+            string(
+                abi.encodePacked(
+                    _ERR_NOT_EQUAL,
+                    _ERR_STR_LHS,
+                    lhs,
+                    _ERR_STR_RHS,
+                    rhs
+                )
+            )
         );
     }
     function requireNotEqual(
@@ -40,7 +95,15 @@ library AddressConstraints
     )public pure
     {
         lhs.equal(rhs).requireFalse(
-            //_NAME.concatenate('lhs == rhs')
+            string(
+                abi.encodePacked(
+                    _ERR_EQUAL,
+                    _ERR_STR_LHS,
+                    lhs,
+                    _ERR_STR_RHS,
+                    rhs
+                )
+            )
         );
     }
     
@@ -49,7 +112,12 @@ library AddressConstraints
     )public pure
     {
         account.isNull().requireTrue(
-            //_NAME.concatenate('lhs == 0x0')
+            string(
+                abi.encodePacked(
+                    _ERR_IS_NOT_NULL,
+                    account
+                )
+            )
         );
     }
     //function requireIsNull(
@@ -60,12 +128,13 @@ library AddressConstraints
             //requireIsNull(accounts[i]);
         //}
     //}
+    
     function requireNotNull(
         address account
     )public pure
     {
         account.isNotNull().requireTrue(
-            //_NAME.concatenate('lhs != 0x0')
+            _ERR_IS_NULL
         );
     }
     
@@ -84,8 +153,14 @@ library AddressConstraints
         //_requireNotNull(account)
     {
         requireNotNull(account);
+        
         account.isContract().requireTrue(
-            //_NAME.concatenate('address must be a contract')
+            string(
+                abi.encodePacked(
+                    _ERR_IS_NOT_CONTRACT,
+                    account
+                )
+            )
         );
     }
     //function requireContract(
@@ -103,8 +178,14 @@ library AddressConstraints
         //_requireNotNull(account)
     {
         requireNotNull(account);
+        
         account.isContract().requireFalse(
-            //_NAME.concatenate('address cannot be a contract')
+            string(
+                abi.encodePacked(
+                    _ERR_IS_CONTRACT,
+                    account
+                )
+            )
         );
     }
     //function requireNotContract(
@@ -161,6 +242,7 @@ library AddressConstraints
     {
         requireNotNull(lhs);
         requireNotNull(rhs);
+        
         requireNotEqual(lhs, rhs);
     }
     //function requireNotMsgSender(
@@ -189,7 +271,7 @@ library AddressConstraints
     )public pure
         //_isNotNull(self,rhs)
     {
-        requireNotNull(self);
+        requireNotNull(self);   //address(this)
         requireNotNull(rhs);
         requireNotEqual(self, rhs);
     }
@@ -200,8 +282,11 @@ library AddressConstraints
     )public pure
         //_isNotNull(lhs, rhs)
     {
+        //address T = address(this);
+        
         requireNotThisAndNotNull(self,lhs);
         requireNotThisAndNotNull(self,rhs);
+        
         requireNotEqual(lhs, rhs);
         //requireNotEqual(self, lhs);
         //requireNotEqual(self, rhs);
@@ -211,6 +296,8 @@ library AddressConstraints
         //address[] memory container
     //)public pure
     //{
+        //address T = address(this);
+        
         //for(uint256 i = 0; i < container.length; i++){
             //address rhs = container[i];
             //isNotThisAndNotNull(self, rhs);

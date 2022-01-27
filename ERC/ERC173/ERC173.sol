@@ -6,7 +6,7 @@ pragma experimental ABIEncoderV2;
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/GSN/Context.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/utils/ReentrancyGuard.sol";
 
-import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/address/addressConstraints.sol";
 
 import "https://github.com/vigilance91/solidarity/ERC/ERC173/iERC173.sol";
 import "https://github.com/vigilance91/solidarity/ERC/ERC173/mixinERC173.sol";
@@ -35,7 +35,7 @@ abstract contract ERC173 is Context,
     //VersionedDomain,
     iERC173
 {
-    using AddressConstraints for address;
+    using addressConstraints for address;
     
     using mixinERC173 for bytes32;
     

@@ -3,7 +3,7 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/logicConstraints.sol";
 
 import "https://github.com/vigilance91/solidarity/contracts/etherReceiver/iEtherReceiver.sol";
 ///
@@ -22,7 +22,7 @@ abstract contract NonPayable is iEtherReceiver
     receive(
     )external payable
     {
-        LogicConstraints.alwaysRevert(
+        logicConstraints.alwaysRevert(
             _REJECTED
         );
     }
@@ -44,6 +44,6 @@ abstract contract NonPayable is iEtherReceiver
     )external view virtual override returns(    // nonReentrant?
         bool
     ){
-        return false;   //LogicConstraints.FALSE
+        return false;   //logicConstraints.FALSE
     }
 }

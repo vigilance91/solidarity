@@ -22,13 +22,15 @@ abstract contract WhitelistABC is ContractConstraintsABC,
 {
     using EnumerableSet for EnumerableSet.AddressSet;
     
-    using LogicConstraints for bool;
-    using AddressConstraints for address;
+    using logicConstraints for bool;
+    using addressConstraints for address;
     using Bytes32Constraints for bytes32;
     
     using stringUtilities for string;
     
     using addressToString for address;
+    
+    string private constant _NAME = ' - WhitelistABC: ';
 
     bytes32 private constant _STORAGE_SLOT = keccak256('solidarity.accessControl.whitelistABC.STORAGE_SLOT');
     //
@@ -37,11 +39,58 @@ abstract contract WhitelistABC is ContractConstraintsABC,
     //bytes32 public constant ROLE_ASSIGNOR = keccak256('solidarity.accessControl.whitelistABC.role.ASSIGNOR');     //assigns permission
     //bytes32 public constant ROLE_REVOKER = keccak256('solidarity.accessControl.whitelistABC.role.REVOKER');       //revokes permission
     //
-    bytes32 public constant ROLE_PERMITTED = keccak256('solidarity.accessControl.whitelistABC.role.PERMITTED');     //role granted to whitelisted addresses permitted to access network resources
+    bytes32 public constant ROLE_PERMITTED = keccak256('solidarity.accessControl.whitelistABC.ROLE_PERMITTED');     //role granted to whitelisted addresses permitted to access network resources
     
-    //string private _thisHex;
+    string private constant _ERR_STR_ADRS = ", address: ";
     
-    //string private constant _NAME = ' WhitelistABC: ';
+    string private constant _ERR_IS_WHITELISTED = string(
+        abi.encodePacked(
+            _NAME,
+            "white-listed",
+            _ERR_STR_ADRS
+        )
+    );
+    
+    string private constant _ERR_NOT_WHITELISTED = string(
+        abi.encodePacked(
+            _NAME,
+            "not white-listed: ",
+            _ERR_STR_ADRS
+        )
+    );
+    
+    /*
+    string private constant _ERR_IS_REVOKER = string(
+        abi.encodePacked(
+            _NAME,
+            "cannot be a revoker",
+            _ERR_STR_ADRS
+        )
+    );
+    string private constant _ERR_NOT_REVOKER = string(
+        abi.encodePacked(
+            _NAME,
+            "not revoker",
+            _ERR_STR_ADRS
+        )
+    );
+    
+    string private constant _ERR_IS_ASSIGNOR = string(
+        abi.encodePacked(
+            _NAME,
+            "cannot be an assignor",
+            _ERR_STR_ADRS
+        )
+    );
+    string private constant _ERR_NOT_ASSIGNOR = string(
+        abi.encodePacked(
+            _NAME,
+            "not assignor",
+            _ERR_STR_ADRS
+        )
+    );
+    
+    */
     
     constructor(
     )internal
@@ -137,7 +186,13 @@ abstract contract WhitelistABC is ContractConstraintsABC,
     )internal view
     {
         _hasRole(ROLE_PERMITTED, account).requireTrue(
-            //_NAME.concatentate("address not white-listed")
+            string(
+                abi.encodePacked(
+                    _ERR_NOT_WHITELISTED,
+                    account
+                )
+            )
+            
         );
     }
     function _requireNotPermitted(
@@ -146,7 +201,12 @@ abstract contract WhitelistABC is ContractConstraintsABC,
     )internal view
     {
         _hasRole(ROLE_PERMITTED, account).requireFalse(
-            //_NAME.concatentate("address is white-listed")
+            string(
+                abi.encodePacked(
+                    _ERR_IS_WHITELISTED,
+                    account
+                )
+            )
         );
     }
     
@@ -169,7 +229,12 @@ abstract contract WhitelistABC is ContractConstraintsABC,
     //)internal view
     //{
         //_hasRole(ROLE_ASSIGNOR, account).requireTrue(
-            ////_NAME.concatentate("address not a role assignor")
+            //string(
+                //abi.encodePacked(
+                    //_ERR_NOT_ASSIGNOR,
+                    //account
+                //)
+            //)
         //);
     //}
     //function _requireNotAssignor(
@@ -177,7 +242,12 @@ abstract contract WhitelistABC is ContractConstraintsABC,
     //)internal view
     //{
         //_hasRole(ROLE_ASSIGNOR, account).requireFalse(
-            ////_NAME.concatentate("address cannot be a role assignor")
+            //string(
+                //abi.encodePacked(
+                    //_ERR_IS_ASSIGNOR,
+                    //account
+                //)
+            //)
         //);
     //}
     //
@@ -186,7 +256,12 @@ abstract contract WhitelistABC is ContractConstraintsABC,
     //)internal view
     //{
         //_hasRole(ROLE_REVOKER, account).requireTrue(
-            ////_NAME.concatentate("address not a role revoker")
+            //string(
+                //abi.encodePacked(
+                    //_ERR_NOT_REVOKER,
+                    //account
+                //)
+            //)
         //);
     //}
     //function _requireNotRevoker(
@@ -194,7 +269,12 @@ abstract contract WhitelistABC is ContractConstraintsABC,
     //)internal view
     //{
         //_hasRole(ROLE_REVOKER, account).requireFalse(
-            ////_NAME.concatentate("address cannot be a role revoker")
+            //string(
+                //abi.encodePacked(
+                    //_ERR_IS_REVOKER,
+                    //account
+                //)
+            //)
         //);
     //}
 }

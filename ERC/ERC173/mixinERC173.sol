@@ -3,7 +3,7 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/address/addressConstraints.sol";
 import "https://github.com/vigilance91/solidarity/ERC/ERC173/eventsERC173.sol";
 ///
 /// @title ERC173 Mixin Library
@@ -11,7 +11,7 @@ import "https://github.com/vigilance91/solidarity/ERC/ERC173/eventsERC173.sol";
 ///
 library mixinERC173
 {
-    using AddressConstraints for address;
+    using addressConstraints for address;
     
     using eventsERC173 for address;
     
@@ -204,7 +204,7 @@ library mixinERC173
         transferOwnership(
             slot,
             //chainId,
-            AddressLogic.NULL
+            addressLogic.NULL
         );
     }
 }

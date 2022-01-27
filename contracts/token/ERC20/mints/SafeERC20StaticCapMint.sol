@@ -27,8 +27,8 @@ abstract contract SafeERC20StaticCapMint is SafeERC20BurnableToken,
 {
     using SafeMath for uint256;
 
-    //using LogicConstraints for bool;
-    //using AddressLogic for address;
+    //using logicConstraints for bool;
+    //using addressLogic for address;
     //using uint256Constraints for uint256;
     
     //using stringUtilities for string;
@@ -115,7 +115,7 @@ abstract contract SafeERC20StaticCapMint is SafeERC20BurnableToken,
         );
         
         if(from == address(0)){
-            //LogicConstraints.alwaysRevert(
+            //logicConstraints.alwaysRevert(
                 //_NAME.concatenate("token supply cap cannot mutate")
             //);
             require(

@@ -13,7 +13,7 @@ import "https://github.com/vigilance91/solidarity/EIP/token/membershipVerificati
 ///
 contract EncoderEIP1261Factory is EIP2470SingletonFactory
 {
-    using AddressLogic for address;
+    using addressLogic for address;
     
     bytes32 private constant _HASH = keccak256(bytes('solidarity.ENCODER_EIP1261_MEMBERSHIP_VERIFICATION_TOKEN_FACTORY'));
     

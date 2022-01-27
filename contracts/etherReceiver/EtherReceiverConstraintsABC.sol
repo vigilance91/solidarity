@@ -3,7 +3,7 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/logicConstraints.sol";
 
 import "https://github.com/vigilance91/solidarity/contracts/etherReceiver/frameworkEtherReceiver.sol";
 //import "./frameworkEtherReceiver.sol";
@@ -15,8 +15,8 @@ import "https://github.com/vigilance91/solidarity/contracts/etherReceiver/framew
 ///
 abstract contract EtherReceiverConstraintsABC
 {
-    using LogicConstraints for bool;
-    //using AddressConstraints for address;
+    using logicConstraints for bool;
+    //using addressConstraints for address;
     using frameworkEtherReceiver for address;
     
     string private constant _NAME = ' EtherReceiverConstraintsABC: ';

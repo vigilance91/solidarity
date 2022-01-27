@@ -26,7 +26,7 @@ import "https://github.com/vigilance91/solidarity/contracts/accessControl/whitel
 ///
 abstract contract MortalPermissionERC20Token is MortalERC20Token
 {
-    using LogicConstraints for bool;
+    using logicConstraints for bool;
     
     using frameworkWhitelist for address;
     

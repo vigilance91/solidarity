@@ -5,11 +5,18 @@ pragma experimental ABIEncoderV2;
 
 //import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/utils/Address.sol";
 
-import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/logicConstraints.sol";
 
-//import "https://github.com/vigilance91/solidarity/libraries/address/AddressLogic.sol";
-import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
+//import "https://github.com/vigilance91/solidarity/libraries/address/addressLogic.sol";
+import "https://github.com/vigilance91/solidarity/libraries/address/addressConstraints.sol";
 import "https://github.com/vigilance91/solidarity/libraries/address/addressToString.sol";
+
+//base library for all mixins
+//library mixinABL
+//{
+    //bytes32 private constant _TYPED_HASH = keccak256('EIP712Domain(uint256 chainId,bytes32 slot,address deployer,address deployedContract,uint blockNumber)');
+//}
+
 ///
 /// @title mixinContract
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 16/9/2021, All Rights Reserved
@@ -19,15 +26,18 @@ library mixinContract
 {
     using Bytes32Logic for bytes32;
     
-    using AddressLogic for address;
-    //using AddressConstraints for address;
+    using addressLogic for address;
+    //using addressConstraints for address;
     using addressToString for address;
     
-    using StringLogic for string;
+    using stringLogic for string;
     using stringUtilities for string;
     
     //string private constant _NAME = ' mixinContract';
-
+    bytes32 private constant _TYPED_HASH = keccak256('EIP712Domain(uint256 chainId,bytes32 slot,address deployer,address deployedContract,uint blockNumber)');
+    
+    ////bytes32 private constant _CONTRACT_STORAGE_TYPED_HASH = keccak256('solidarity.ContractStorage(address _this,address deployer,bytes32 thisHash,bytes32 bytesPacked,bytes32 thisHex)');
+    
     struct ContractStorage{
         address _this;
         //address deployer;
@@ -40,6 +50,42 @@ library mixinContract
         bytes bytesPacked;
         string thisHex;
     }
+    
+    //function hashContractStorage(
+        //ContractStorage storage s
+    //){
+        ////_requireInitialized(s);
+        
+        //return keccak256(
+            //abi.encodePacked(
+                //_CONTRACT_STORAGE_TYPED_HASH,
+                //s._this,
+                ////s.deployer,
+                ////
+                ////s.thisRawHash,
+                //s.thisHash,
+                ////
+                ////s.domainNameSeperator;
+                ////
+                //keccak256(s.bytesPacked),
+                //keccak256(s.thisHex)
+            //)
+        //);
+    //}
+    //
+    //function hashContractStorage(
+        //bytes32 slot
+    //){
+        //return hashContractStorage(
+            //storageContract(slot)
+        //);
+    //}
+    //function requireDomainSeperatorMatches(
+    //){
+        //_domainNameSeperator.requireEqual(hashContractStorage(
+            //storageContract(slot
+        //));
+    //}
     ///
     ///getters
     ///
@@ -204,6 +250,7 @@ library mixinContract
         //
         //SCID.thisHexHash = hexHash(chainId, self);
         SCID.thisHash = SCID.thisHex.saltAndHash(chainId);
+        
         //SCID.domainNameSeperator = keccak256(
             //abi.encode(
                 //keccak256('EIP712Domain(uint256 chainId,bytes32 slot,address deployer,address deployedContract,uint blockNumber)'),   //string name,string version
@@ -217,6 +264,28 @@ library mixinContract
             //)
         //);
     }
+    //function typedHash(
+        //byte32 slot,
+        //address deployer,
+        //address self,
+        //string memory name,
+        //string memory version
+    //)internal pure returns(
+        //bytes32
+    //){
+        //return keccak256(
+            //abi.encode(
+                //keccak256('EIP712Domain(uint256 chainId,bytes32 slot,address deployer,address deployedContract,uint blockNumber)'),   //string name,string version
+                //chainId,
+                //slot,
+                ////_msgSender(),
+                //self,
+                //block.number  //keccak256(abi.encode(block.number))
+                ////keccak256(bytes(name)),
+                ////keccak256(bytes(version)),
+            //)
+        //);
+    //}
     //function hexHash(
         //uint256 chainId,
         //bytes32 slot,
@@ -252,7 +321,7 @@ library mixinContract
         ////SCID.thisHash.require...();
         ////SCID.thisHex.requireNotEmpty();
         //
-        //SCID._this = AddressLogic.NULL;
+        //SCID._this = addressLogic.NULL;
         //
         //chainId.requireNotEmpty();
         //

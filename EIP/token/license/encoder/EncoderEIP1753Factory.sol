@@ -15,7 +15,7 @@ import "./EncoderEIP1753License.sol";
 ///
 contract EncoderEIP1753Factory is EIP2470SingletonFactory
 {
-    using AddressLogic for address;
+    using addressLogic for address;
     
     bytes32 private constant _HASH = keccak256(bytes('solidarity.ENCODER_EIP1753_FACTORY'));
     

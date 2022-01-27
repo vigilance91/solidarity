@@ -24,7 +24,7 @@ abstract contract MutableSupplyCapABC is StaticSupplyCapABC
 {
     using SafeMath for uint256;
 
-    //using AddressLogic for address;
+    //using addressLogic for address;
     using uint256Constraints for uint256;
     
     string private constant _NAME = ' MutableSupplyCapABC: ';

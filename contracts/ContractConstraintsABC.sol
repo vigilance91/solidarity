@@ -65,7 +65,7 @@ import "https://github.com/vigilance91/solidarity/contracts/mixinContract.sol";
 abstract contract ContractConstraintsABC is ChainIdConstraintsABC
 {
     using Address for address;
-    using AddressConstraints for address;
+    using addressConstraints for address;
     
     using mixinContract for bytes32;
     
@@ -79,7 +79,23 @@ abstract contract ContractConstraintsABC is ChainIdConstraintsABC
         //'solidarity.ChainIdConstraintsABC.STORAGE_SLOT'
     //);
     
+    //bytes32 private constant _EIP712_DOMAIN_TYPE_HASH = keccak256(
+        //'EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)'
+    //);
+    
+    //bytes32 DOMAIN_SEPARATOR = keccak256(
+        //abi.encode(
+            //keccak256('EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)'),
+            //keccak256(bytes(name)),
+            //keccak256(bytes(version)),
+            //chainid(),
+            //address(this)
+        //)
+    //);
+    
     constructor(
+        //string memory name,
+        //string memory version,
         //address deployer
     )internal
         ChainIdConstraintsABC(
@@ -105,6 +121,17 @@ abstract contract ContractConstraintsABC is ChainIdConstraintsABC
         );
         
         ////_domainNameSeperator = _thisHexString().concatenate(chainIdString()).concatenate(_NAME);
+        
+        ////_domainNameSeperator = keccak256(
+            //abi.encode(
+                //keccak256('EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)'),  //bytes32 salt
+                //keccak256(bytes(name)),
+                //keccak256(bytes(version)),
+                //chainid(),
+                //address(this)
+                ////thisHexHash()
+            //)
+        //);
         
         //_thisPayable = payable(_this);
     }
@@ -167,7 +194,7 @@ abstract contract ContractConstraintsABC is ChainIdConstraintsABC
 
         for(uint i; i < accounts.length; i++){
             accounts[i].requireIsNull(
-                //""
+                //_ERR_ADDRESS_NOT_NULL
             );
         }
     }
@@ -177,7 +204,7 @@ abstract contract ContractConstraintsABC is ChainIdConstraintsABC
     {
         for(uint i; i < accounts.length; i++){
             accounts[i].requireNotNull(
-                //""
+                //_ERR_ADDRESS_IS_NULL
             );
         }
     }

@@ -5,7 +5,7 @@ pragma experimental ABIEncoderV2;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/math/SafeMath.sol";
 
-import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/logicConstraints.sol";
 import "https://github.com/vigilance91/solidarity/EIP/introspection/Canary/eventsEIP801.sol";
 ///
 /// @title Mixin Library for EIP-801 Canary Standard
@@ -15,7 +15,7 @@ import "https://github.com/vigilance91/solidarity/EIP/introspection/Canary/event
 /// 
 library mixinEIP801
 {
-    using LogicConstraints for bool;
+    using logicConstraints for bool;
     
     using SafeMath for uint;
     
@@ -135,7 +135,7 @@ library mixinEIP801
     {
         EIP801Storage storage cs = canaryStorage();
         //
-        //LogicConstraints.requireTrue(
+        //logicConstraints.requireTrue(
             //ls.initialized == false && ls.alive == false
         //);
         

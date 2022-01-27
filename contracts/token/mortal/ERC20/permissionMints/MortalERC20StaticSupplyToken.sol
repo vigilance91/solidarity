@@ -30,8 +30,8 @@ abstract contract MortalERC20StaticSupplyToken is MortalPermissionERC20Token,
 
     using frameworkERC165 for address;
     
-    using LogicConstraints for bool;
-    using AddressLogic for address;
+    using logicConstraints for bool;
+    using addressLogic for address;
     
     //using uint256Constraints for uint256;
     using Address for address;
@@ -49,7 +49,7 @@ abstract contract MortalERC20StaticSupplyToken is MortalPermissionERC20Token,
     /// 
     //fallback(
     //)external view nonReentrant payable{
-        //LogicConstraints.alwaysRevert('proxying disabled');
+        //logicConstraints.alwaysRevert('proxying disabled');
     //}
     
     constructor(
@@ -118,13 +118,13 @@ abstract contract MortalERC20StaticSupplyToken is MortalPermissionERC20Token,
         );
         
         if(from.isNull()){
-            LogicConstraints.alwaysRevert(
+            logicConstraints.alwaysRevert(
                 //_NAME.concatenate("cannot mint tokens")
                 "cannot mint tokens"
             );
         }
         else if(to.isNull()){
-            LogicConstraints.alwaysRevert(
+            logicConstraints.alwaysRevert(
                 //_NAME.concatenate("cannot burn tokens")
                 "cannot burn tokens"
             );

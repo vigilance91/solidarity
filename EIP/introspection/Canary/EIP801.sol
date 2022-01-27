@@ -5,8 +5,8 @@ pragma experimental ABIEncoderV2;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/math/SafeMath.sol";
 
-import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
-import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/logicConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/address/addressConstraints.sol";
 
 import "https://github.com/vigilance91/solidarity/EIP/introspection/Canary/iEIP801.sol";
 import "https://github.com/vigilance91/solidarity/EIP/introspection/Canary/mixinEIP801.sol";
@@ -20,8 +20,8 @@ abstract contract EIP801 is iEIP801
 {
     //using eventsEIP801 for address;
     
-    using LogicConstraints for bool;
-    using AddressConstraints for address;
+    using logicConstraints for bool;
+    using addressConstraints for address;
     
     using SafeMath for uint;
     
@@ -200,7 +200,7 @@ abstract contract EIP801 is iEIP801
     ){
         //return _readOnlyCanaryStorage().blockAge();
         
-        //LogicConstraints.requireTrue(
+        //logicConstraints.requireTrue(
             //block.number > createdBlock()
         //);
         

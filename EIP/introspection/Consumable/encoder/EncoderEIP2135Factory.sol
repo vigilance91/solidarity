@@ -16,7 +16,7 @@ import "https://github.com/vigilance91/solidarity/EIP/introspection/Consumable/e
 ///
 contract EncoderEIP2135Factory is EIP2470SingletonFactory
 {
-    using AddressLogic for address;
+    using addressLogic for address;
     
     bytes32 private constant _HASH = keccak256(bytes('solidarity.ENCODER_EIP2135_CONSUMABLE_FACTORY'));
     

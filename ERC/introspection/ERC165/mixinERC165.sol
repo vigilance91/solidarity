@@ -10,7 +10,7 @@ pragma experimental ABIEncoderV2;
 ///
 library mixinERC165
 {
-    //using LogicConstraints for bool;
+    //using logicConstraints for bool;
     //using eventsERC165 for bytes4;
     
     bytes32 internal constant STORAGE_SLOT = keccak256("ERC-165.mixin.storage");

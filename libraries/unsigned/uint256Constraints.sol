@@ -3,7 +3,7 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/logicConstraints.sol";
 import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256Logic.sol";
 /// 
 /// @title uint256 Contraints Library
@@ -13,11 +13,71 @@ import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256Logi
 /// 
 library uint256Constraints
 {
-    using LogicConstraints for bool;
+    using logicConstraints for bool;
     
     using uint256Logic for uint256;
     
-    string private constant LIB_NAME = "uint256Constraints: ";
+    string private constant _NAME = "uint256Constraints: ";
+    
+    //string private constant _ERR_STR_MIN = ', min: ';
+    //string private constant _ERR_STR_MAX = ', max: ';
+    //string private constant _ERR_STR_MAX = ', value: ';
+    
+    string private constant _ERR_EQUAL = string(
+        abi.encodePacked(
+            _NAME,
+            '=='
+        )
+    );
+    
+    string private constant _ERR_NOT_EQUAL = string(
+        abi.encodePacked(
+            _NAME,
+            '!='
+        )
+    );
+    
+    string private constant _ERR_GT = string(
+        abi.encodePacked(
+            _NAME,
+            '>'
+        )
+    );
+    
+    string private constant _ERR_GT_OR_EQ = string(
+        abi.encodePacked(
+            _NAME,
+            '>='
+        )
+    );
+    
+    string private constant _ERR_LT = string(
+        abi.encodePacked(
+            _NAME,
+            '<'
+        )
+    );
+    
+    string private constant _ERR_LT_OR_EQ = string(
+        abi.encodePacked(
+            _NAME,
+            '<='
+        )
+    );
+    
+    string private constant _ERR_IS_ZERO = string(
+        abi.encodePacked(
+            _NAME,
+            '== 0'
+        )
+    );
+    
+    string private constant _ERR_IS_NOT_ZERO = string(
+        abi.encodePacked(
+            _NAME,
+            '!= 0'
+        )
+    );
     
     function requireEqual(
         uint256 lhs,
@@ -25,7 +85,7 @@ library uint256Constraints
     )public pure
     {
         lhs.equal(rhs).requireTrue(
-            //LIB_NAME
+            _ERR_NOT_EQUAL
         );
     }
     
@@ -35,7 +95,7 @@ library uint256Constraints
     )public pure
     {
         lhs.notEqual(rhs).requireTrue(
-            //LIB_NAME
+            _ERR_EQUAL
         );
     }
     //require lhs & rhs is not 0
@@ -44,7 +104,7 @@ library uint256Constraints
         //int256 rhs
     //) public pure
     //{
-        //LogicConstraints.requireTrue(
+        //logicConstraints.requireTrue(
             //lhs.and(rhs) != 0
         //);
     //}
@@ -54,7 +114,7 @@ library uint256Constraints
         //int256 rhs
     //) public pure
     //{
-        //LogicConstraints.requireTrue(
+        //logicConstraints.requireTrue(
             //lhs.or(rhs) != 0
         //);
     //}
@@ -63,7 +123,7 @@ library uint256Constraints
         //int256 rhs
     //) public pure
     //{
-        //LogicConstraints.requireTrue(
+        //logicConstraints.requireTrue(
             //lhs.xor(rhs) == 0
         //);
     //}
@@ -77,7 +137,7 @@ library uint256Constraints
     ) public pure
     {
         lhs.greaterThan(rhs).requireTrue(
-            ////LIB_NAME
+            _ERR_LT_OR_EQ
         );
     }
     function requireGreaterThanOrEqual(
@@ -86,23 +146,23 @@ library uint256Constraints
     ) public pure
     {
         lhs.greaterThanOrEqual(rhs).requireTrue(
-            //LIB_NAME
+            _ERR_LT
         );
     }
     function requireGreaterThanZero(
         uint256 lhs
-    ) public pure
+    )public pure
     {
         lhs.greaterThanZero().requireTrue(
-            //LIB_NAME
+            _ERR_IS_ZERO
         );
     }
     function requireIsZero(
         uint256 lhs
-    ) public pure
+    )public pure
     {
         lhs.isZero().requireTrue(
-            //LIB_NAME
+            _ERR_IS_NOT_ZERO
         );
     }
     /**
@@ -111,19 +171,19 @@ library uint256Constraints
     function requireLessThan(
         uint256 lhs,
         uint256 rhs
-    ) public pure
+    )public pure
     {
         lhs.lessThan(rhs).requireTrue(
-            //LIB_NAME
+            _ERR_GT_OR_EQ
         );
     }
     function requireLessThanOrEqual(
         uint256 lhs,
         uint256 rhs
-    ) public pure
+    )public pure
     {
         lhs.lessThanOrEqual(rhs).requireTrue(
-            //_NAME
+            _ERR_GT
         );
     }
     /// @dev require `lhs` is within the inclusive range between `min` and `max`
@@ -134,7 +194,17 @@ library uint256Constraints
     )public pure
     {
         lhs.inRange(min, max).requireTrue(
-            //_NAME
+            //string(
+                //abi.encodePacked(
+                    //_ERR_NOT_IN_RANGE,
+                    //_ERR_STR_MIN,
+                    //min,
+                    //_ERR_STR_MAX,
+                    //max,
+                    //_ERR_STR_VALUE,
+                    //lhs
+                //)
+            //)
         );
     }
     /// @dev require `lhs` is within the exclusive range between `min` and `max`
@@ -145,6 +215,17 @@ library uint256Constraints
     )public pure
     {
         lhs.inXRange(min, max).requireTrue(
+            //string(
+                //abi.encodePacked(
+                    //_ERR_NOT_IN_XRANGE,
+                    //_ERR_STR_MIN,
+                    //min,
+                    //_ERR_STR_MAX,
+                    //MAX_VALUE,
+                    //_ERR_STR_VALUE,
+                    //lhs
+                //)
+            //)
         );
     }
 

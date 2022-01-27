@@ -3,7 +3,7 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/logicConstraints.sol";
 
 import "https://github.com/vigilance91/solidarity/contracts/token/ERC721/frameworkERC721.sol";
 ///
@@ -12,7 +12,7 @@ import "https://github.com/vigilance91/solidarity/contracts/token/ERC721/framewo
 ///
 abstract contract ERC721ReceiverConstraintsABC //is ContractConstraintsABC
 {
-    using LogicConstraints for bool;
+    using logicConstraints for bool;
     
     using frameworkERC721 for address;
     

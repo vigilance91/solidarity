@@ -3,7 +3,7 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/logicConstraints.sol";
 
 import "https://github.com/vigilance91/solidarity/contracts/ownership/safeERC173/frameworkSafeERC173.sol";
 ///
@@ -14,8 +14,8 @@ import "https://github.com/vigilance91/solidarity/contracts/ownership/safeERC173
 ///
 abstract contract ERC173ReceiverConstraintsABC
 {
-    using LogicConstraints for bool;
-    //using AddressConstraints for address;
+    using logicConstraints for bool;
+    //using addressConstraints for address;
     using frameworkSafeERC173 for address;
     
     string private _NAME = ' ERC173ReceiverConstraintsABC: ';

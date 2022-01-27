@@ -3,7 +3,7 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/libraries/address/AddressConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/address/addressConstraints.sol";
 
 import "https://github.com/vigilance91/solidarity/contracts/apoptosis/eventsApoptosis.sol";
 
@@ -30,8 +30,8 @@ import "https://github.com/vigilance91/solidarity/contracts/etherReceiver/EtherR
 
 abstract contract ApoptosisABC is EtherReceiverConstraintsABC
 {
-    using AddressLogic for address;
-    using AddressConstraints for address;
+    using addressLogic for address;
+    using addressConstraints for address;
     
     using eventsApoptosis for address;
     

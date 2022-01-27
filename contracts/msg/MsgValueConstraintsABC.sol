@@ -16,16 +16,51 @@ abstract contract MsgValueConstraintsABC
     ////string internal _domainNameSeperator;
     string private constant _NAME = ' MsgValueConstraintsABC: ';
     //
-    //string private constant _EQUAL = _NAME.concatenate('==');
-    //string private constant _NOT_EQUAL = _NAME.concatenate('!=');
+    //string private constant _ERR_EQUAL = string(
+        //abi.encodePacked(
+            //_NAME,
+            //'=='
+        //)
+    //);
+    //string private constant _ERR_NOT_EQUAL = string(
+        //abi.encodePacked(
+            //_NAME,
+            //'!='
+        //)
+    //);
     //
-    //string private constant _GREATER_THAN = _NAME.concatenate('>');
-    //string private constant _GREATER_THAN_OR_EQUAL = _NAME.concatenate('>=');
+    //string private constant _ERR_GREATER_THAN = string(
+        //abi.encodePacked(
+            //_NAME,
+            //'>'
+        //)
+    //);
+    //string private constant _ERR_GREATER_THAN_OR_EQUAL = string(
+        //abi.encodePacked(
+            //_NAME,
+            //'>='
+        //)
+    //);
     //
-    //string private constant _LESS_THAN = _NAME.concatenate('<');
-    //string private constant _LESS_THAN_OR_EQUAL = _NAME.concatenate('<=');
+    //string private constant _ERR_LESS_THAN = string(
+        //abi.encodePacked(
+            //_NAME,
+            //'<'
+        //)
+    //);
+    //string private constant _ERR_LESS_THAN_OR_EQUAL = string(
+        //abi.encodePacked(
+            //_NAME,
+            //'<='
+        //)
+    //);
     
-    ////string private constant _LESS_THAN = _NAME.concatenate('== 0');
+    ////string private constant _ERR_IS_ZERO = string(
+        //abi.encodePacked(
+            //_NAME,
+            //'== 0'
+        //)
+    //);
     
     constructor(
     )internal
@@ -36,7 +71,7 @@ abstract contract MsgValueConstraintsABC
     )internal view
     {
         rhs.requireMsgValueEqual(
-            //_NOT_EQUAL
+            //_ERR_NOT_EQUAL
         );
     }
     function _requireMsgValueNotEqual(
@@ -44,7 +79,7 @@ abstract contract MsgValueConstraintsABC
     )internal view
     {
         rhs.requireMsgValueNotEqual(
-            //_EQUAL
+            //_ERR_EQUAL
         );
     }
     /**
@@ -55,7 +90,7 @@ abstract contract MsgValueConstraintsABC
     )internal view
     {
         rhs.requireMsgValueGreaterThan(
-            //_LESS_THAN_OR_EQUAL
+            //_ERR_LESS_THAN_OR_EQUAL
         );
     }
     /**
@@ -66,7 +101,7 @@ abstract contract MsgValueConstraintsABC
     )internal view
     {
         rhs.requireMsgValueGreaterThanOrEqual(
-            //_LESS_THAN
+            //_ERR_LESS_THAN
         );
     }
     /**
@@ -77,7 +112,7 @@ abstract contract MsgValueConstraintsABC
     )internal view
     {
         rhs.requireMsgValueLessThan(
-            //_GREATER_THAN_OR_EQUAL
+            //_ERR_GREATER_THAN_OR_EQUAL
         );
     }
     /**
@@ -88,21 +123,21 @@ abstract contract MsgValueConstraintsABC
     )internal view
     {
         rhs.requireMsgValueLessThanOrEqual(
-            //_GREATER_THAN
+            //_ERR_GREATER_THAN
         );
     }
     function _requireMsgValueGreaterThanZero(
     )internal view
     {
         msgValueConstraints.requireMsgValueGreaterThanZero(
-            //_NON_ZERO
+            //_ERR_IS_ZERO
         );
     }
     function _requireMsgValueIsZero(
     )internal view
     {
         msgValueConstraints.requireMsgValueIsZero(
-            //_ZERO
+            //_ERR_NON_ZERO
         );
     }
     /*

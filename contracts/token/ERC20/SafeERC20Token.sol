@@ -138,7 +138,7 @@ abstract contract SafeERC20Token is ERC20Token,
         
         super._mint(account, amount);
         
-        _requireOnERC20Received(account, AddressLogic.NULL, amount);
+        _requireOnERC20Received(account, addressLogic.NULL, amount);
     }
     ///
     ///Requirements:
