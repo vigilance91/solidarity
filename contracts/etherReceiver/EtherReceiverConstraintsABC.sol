@@ -6,7 +6,6 @@ pragma experimental ABIEncoderV2;
 import "https://github.com/vigilance91/solidarity/libraries/logicConstraints.sol";
 
 import "https://github.com/vigilance91/solidarity/contracts/etherReceiver/frameworkEtherReceiver.sol";
-//import "./frameworkEtherReceiver.sol";
 
 //import "https://github.com/vigilance91/solidarity/contracts/msg/value/MsgValueConstraints.sol";
 ///
@@ -28,6 +27,13 @@ abstract contract EtherReceiverConstraintsABC
         )
     );
     
+    string private constant _ERR_INSUFFICIENT_BALANCE = string(
+        abi.encodePacked(
+            _NAME,
+            'insufficient contract balance'
+        )
+    );
+    
     constructor(
     )internal
     {
@@ -39,7 +45,7 @@ abstract contract EtherReceiverConstraintsABC
     {
         require(
             address(this).balance >= amount,
-            'insufficient contract balance'
+            _ERR_INSUFFICIENT_BALANCE
         );
     }
     

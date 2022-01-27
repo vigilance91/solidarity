@@ -14,11 +14,13 @@ import "https://github.com/vigilance91/solidarity/libraries/msg/value/msgValueLo
 /// 
 library msgValueConstraints
 {
-    using LogicConstraints for bool;
+    using logicConstraints for bool;
 
     using msgValueLogic for uint256;
     
     using uint256Constraints for uint256;
+    
+    //string private constant _NAME = " - msgValueConstraints: ";
     
     function requireMsgValueEqual(
         uint256 rhs

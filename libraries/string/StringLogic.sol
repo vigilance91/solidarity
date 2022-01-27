@@ -15,14 +15,51 @@ import "https://github.com/vigilance91/solidarity/libraries/bytes32/Bytes32Logic
 /// This library, on the otherhand, is NOT vulnerable to timing attacks and thus,
 /// is recommended as an alternative as it is designed and intended for use in cryptographically secure applications
 ///
-library StringLogic
+library stringLogic
 {
     //using Bytes32Logic for bytes32;
     //using stringUtils for string;
     
-    //string private constant LIB_NAME = " stringLogic: ";
-    string public constant EMPTY = "";
-    bytes32 public constant EMPTY_HASH = keccak256(bytes(""));  //''.hash();
+    //string private constant _NAME = " stringLogic: ";
+    //
+    //bytes1 private constant _80 = 0x80;  //> 128 range characters (uft-8 characters above ascii DEL)
+    //bytes1 private constant _E0 = 0xE0;  //> 224 range characters (3 bytes)
+    //bytes1 private constant _F0 = 0xF0;  //> 240 range characters (4 bytes)
+    //bytes1 private constant _F8 = 0xF8;  //> 248 range characters (5 bytes)
+    //bytes1 private constant _FC = 0xFC;  //> 252 range characters (6 bytes)
+    //
+    /*
+    //note: in uft-8 and ascii, anything  < 0x20 is non-humanreadbale whitespace characters
+    //string private constant _SPACE = string(0x20);
+    //
+    //utf-8 multi-bytes whitespace characters, reference:
+    //  https://stackoverflow.com/questions/2227921/simplest-way-to-get-a-complete-list-of-all-the-utf-8-whitespace-characters-in-ph#2228012
+    //
+    string private constant _NO_BREAK_SPACE = "\xC2\xA0";
+    
+    string private constant _LINE_SEPARATOR = "\x20\x28";
+    string private constant _PARAGRAPH_BOUNDARY = "\x20\x29";
+    //
+    string private constant _OGHAM_SPACE_MARK = \xE1\x9A\x80;
+    string private constant _EN_QUAD = "\xE2\x80\x80";    //"\xe2\x80\x80";
+    string private constant _EM_QUAD = "\xE2\x80\x81";
+    string private constant _EN_SPACE = "\xE2\x80\x82";
+    string private constant _EM_SPACE = "\xE2\x80\x83";
+    string private constant _THREE_PER_EM_SPACE = "\xE2\x80\x84";
+    string private constant _FOUR_PER_EM_SPACE = "\xE2\x80\x85";
+    string private constant _SIX_PER_EM_SPACE = "\xE2\x80\x86";
+    string private constant _FIGURE_SPACE = "\xE2\x80\x87";
+    string private constant _PUNCTUATION_SPACE = "\xE2\x80\x88";
+    string private constant _THIN_SPACE = "\x0E2\x80\x89";
+    string private constant _HAIR_SPACE = "\xE2\x80\x8A";
+    string private constant _ZERO_WIDTH_SPACE = "\xE2\x80\x8B";
+    string private constant _NARROW_NO_BREAK_SPACE = "\xE2\x80\xAF";
+    string private constant _MEDIUM_MATHEMATICAL_SPACE = "\xE2\x81\x9F";
+    string private constant _IDEOGRAPHIC_SPACE = "\xE3\x80\x80";
+    */
+    string internal constant EMPTY = "";
+    
+    bytes32 internal constant EMPTY_HASH = keccak256(bytes(""));  //''.hash();
     /**
      * compare string hashes using XOR, rather than iteratively compare each element in strings
      * not only is this appraoch generally faster for larger strings but is also NOT vulnerable to timing attacks
@@ -35,9 +72,9 @@ library StringLogic
         string memory rhs
     )internal
     {
-        LogicConstraints.requireTrue(
+        logicConstraints.requireTrue(
             notEmpty(lhs) && notEmpty(rhs)
-            'empty' //LIB_NAME.concatenate('empty')
+            'empty' //_NAME.concatenate('empty')
         );
         _;
     }
@@ -72,6 +109,24 @@ library StringLogic
             keccak256(bytes(rhs))
         );
     }
+    //
+    //@returns {bool} true if string `s` contains only whitespace
+    //function isWhitespace(
+        //string memory s
+    //)internal pure returns(
+        //bool
+    //){
+    //}
+    //
+    //@returns {bool} true upon the first instance of a whitespace character in string `s`,
+    //if no whitespace is encountered returns false
+    //
+    //function containsWhitespace(
+        //string memory s
+    //)internal pure returns(
+        //bool
+    //){
+    //}
     
     function empty(
         string memory lhs
@@ -158,7 +213,8 @@ library StringLogic
     //function or(
         //string memory lhs,
         //string memory rhs
-    //)internal returns(string memory
+    //)internal returns(
+        //string memory
     //) _notEmpty(lhs,rhs)
     //{
         //bytes lb = bytes(lhs);
@@ -170,9 +226,9 @@ library StringLogic
     //}
     //function not(
         //string memory self
-    //)internal
-        //returns(string memory)
-    {
+    //)internal returns(
+        string memory
+    ){
         notEmpty(self);
         
         //return string(!bytes(self));

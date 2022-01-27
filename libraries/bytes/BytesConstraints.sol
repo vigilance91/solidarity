@@ -3,16 +3,16 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/libraries/bytes/BytesLogic.sol";
-import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/bytes/bytesLogic.sol";
+import "https://github.com/vigilance91/solidarity/libraries/logicConstraints.sol";
 
 /// @title Bytes Constraints Library
 /// @author Tyler R. Drury - 4/3/2021, All Rights Reserved
 /// @notice This library provides trivial functions for constaining the state of the EVM (using require) based on the bytes data type.
-library BytesConstraints
+library bytesConstraints
 {
-    using LogicConstraints for bool;
-    using BytesLogic for bytes;
+    using logicConstraints for bool;
+    using bytesLogic for bytes;
     
     //using stringUtilities for string;
     
@@ -23,7 +23,7 @@ library BytesConstraints
         bytes rhs
     ) internal pure
     {
-        LogicConstraints.requireTrue(
+        logicConstraints.requireTrue(
             lhs.equal(rhs)
         );
     }
@@ -32,7 +32,7 @@ library BytesConstraints
         bytes rhs
     ) internal pure
     {
-        LogicConstraints.requireTrue(
+        logicConstraints.requireTrue(
             lhs.notEqual(rhs)
         );
     }

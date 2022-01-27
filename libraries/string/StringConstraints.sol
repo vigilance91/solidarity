@@ -3,22 +3,51 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/libraries/LogicConstraints.sol";
-import "https://github.com/vigilance91/solidarity/libraries/string/StringLogic.sol";
+import "https://github.com/vigilance91/solidarity/libraries/logicConstraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/string/stringLogic.sol";
 //import "https://github.com/vigilance91/solidarity/libraries/string/stringUtilities.sol";
 
 /// @title String Contraints Library
 /// @author Tyler R. Drury - 3/1/2021, All Rights Reserved
 /// @dev trivial utilities for constraining the state of the EVM (using require) for
 /// Solidity's string type, reverting on failure
-library StringConstraints
+library stringConstraints
 {
-    using LogicConstraints for bool;
-    using StringLogic for string;
+    using logicConstraints for bool;
+    
+    using stringLogic for string;
     
     //using stringUtilities for string;
     
-    //string private constant LIB_NAME = 'stringConstraints: ';
+    string private constant _NAME = ' stringConstraints: ';
+    
+    string private constant _ERR_EQUAL = string(
+        abi.encodePacked(
+            _NAME,
+            '=='
+        )
+    );
+    string private constant _ERR_NOT_EQUAL = string(
+        abi.encodePacked(
+            _NAME,
+            '!='
+        )
+    );
+    
+    string private constant _ERR_EMPTY = string(
+        abi.encodePacked(
+            _NAME,
+            'string is empty'
+        )
+    );
+    
+    string private constant _ERR_NOT_EMPTY = string(
+        abi.encodePacked(
+            _NAME,
+            'string is not empty'
+        )
+    );
+    
     
     function requireEqual(
         string memory lhs,
@@ -26,9 +55,8 @@ library StringConstraints
     )public pure
     {
         lhs.equal(rhs).requireTrue(
-            //LIB_NAME.concatenate('not equal')
+            _ERR_NOT_EQUAL
         );
-        //LogicConstraints.requireTrue(lhs.equal(rhs));
     }
     
     function requireNotEqual(
@@ -37,9 +65,8 @@ library StringConstraints
     )public pure
     {
         lhs.equal(rhs).requireFalse(
-            //LIB_NAME.concatenate('equal')
+            _ERR_EQUAL
         );
-        //LogicConstraints.requireTrue(lhs.notEqual(rhs));
     }
     
     function requireEmpty(
@@ -47,9 +74,8 @@ library StringConstraints
     )public pure
     {
         lhs.empty().requireTrue(
-            //LIB_NAME.concatenate('not empty')
+            _ERR_NOT_EMPTY
         );
-        //LogicConstraints.requireTrue(lhs.empty());
     }
     
     function requireNotEmpty(
@@ -57,9 +83,8 @@ library StringConstraints
     )public pure
     {
         lhs.notEmpty().requireTrue(
-            //LIB_NAME.concatenate('empty')
+            _ERR_EMPTY
         );
-        //LogicConstraints.requireTrue(lhs.notEmpty());
     }
     
     function requireNotEmptyAndNotEqual(
@@ -68,9 +93,10 @@ library StringConstraints
     )public pure
     {
         lhs.notEmptyAndNotEqual(rhs).requireTrue(
-            //LIB_NAME.concatenate('(lhs not empty || rhs nor empty) || lhs == rhs')
+            //_NAME.concatenate(
+                //'(lhs not empty || rhs nor empty) || lhs == rhs'
+            //)
         );
-        //LogicConstraints.requireTrue(lhs.notEmptyAndNotEqual(rhs));
     }
     
     function requireNotEmptyAndAreEqual(
@@ -79,8 +105,7 @@ library StringConstraints
     )public pure
     {
         lhs.notEmptyAndAreEqual(rhs).requireTrue(
-            //LIB_NAME.concatenate('(lhs not empty || rhs nor empty) || lhs != rhs')')
+            //_NAME.concatenate('(lhs not empty || rhs nor empty) || lhs != rhs')')
         );
-        //LogicConstraints.requireTrue(lhs.notEmptyAndAreEqual(rhs));
     }
 }
