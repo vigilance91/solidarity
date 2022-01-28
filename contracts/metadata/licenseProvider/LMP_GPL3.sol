@@ -40,12 +40,6 @@ contract LMP_GLP3 is MetadataLicenseProviderABC,
         return _uriHash();
     }
     
-    function uri(
-    )external view override returns(
-        string memory
-    ){
-        return _uri();
-    }
     function brief(
         string memory date,
         string memory copyrightOwners,

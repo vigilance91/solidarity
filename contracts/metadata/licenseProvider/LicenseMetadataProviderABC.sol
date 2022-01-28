@@ -6,7 +6,9 @@ pragma experimental ABIEncoderV2;
 import "https://github.com/vigilance91/solidarity/libraries/string/stringConstraints.sol";
 import "https://github.com/vigilance91/solidarity/libraries/string/stringUtilities.sol";
 
-abstract contract MetadataLicenseProviderABC
+import "https://github.com/vigilance91/solidarity/EIP/token/tokenMetadata/EIP1046.sol";
+
+abstract contract MetadataLicenseProviderABC is EIP1046
 {
     using stringConstraints for string;
     //using stringUtilities for string;
@@ -39,20 +41,18 @@ abstract contract MetadataLicenseProviderABC
 
     //struct storageLMP{
         bytes32 private _hash;
-        string private _licenseURI;
+        //string private _licenseURI;
     //}
     
     constructor(
         //bytes32 slot,
         string memory licenseURI
     )internal
+        EIP1046(licenseURI)
     {
-        //slot.set(licenseURI);
-        //
         licenseURI.requireNotEmpty();
         //licenseURI.requireURL();
-         
-        _licenseURI = licenseURI;
+        
         _hash = keccak256(bytes(licenseURI));
     }
     function _endl(
@@ -61,12 +61,6 @@ abstract contract MetadataLicenseProviderABC
         string memory
     ){
         return unix ? _UNIX_ENDL : _DOS_ENDL;
-    }
-    function _uri(
-    )internal view returns(
-        string memory
-    ){
-        return _licenseURI;
     }
     
     function _uriHash(

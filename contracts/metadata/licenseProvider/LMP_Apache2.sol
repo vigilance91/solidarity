@@ -34,12 +34,6 @@ contract LMP_Apache2 is MetadataLicenseProviderABC,
     {
     }
     
-    function uri(
-    )external view override returns(
-        string memory
-    ){
-        return _uri();  //"https://www.apache.org/licenses/LICENSE-2.0.html";
-    }
     function uriHash(
     )external view override returns(
         bytes32

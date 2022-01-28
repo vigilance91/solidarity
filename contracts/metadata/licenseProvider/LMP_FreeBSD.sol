@@ -28,12 +28,6 @@ contract LMP_FreeBSD is MetadataLicenseProviderABC,
     {
     }
     
-    function uri(
-    )external view override returns(
-        string memory
-    ){
-        return _uri();
-    }
     function uriHash(
     )external view override returns(
         bytes32

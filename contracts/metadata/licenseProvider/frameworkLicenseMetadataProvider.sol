@@ -11,8 +11,8 @@ library frameworkMetadataLicenseProvider
 {
     bytes4 internal constant _INTERFACE_ID = type(iMetadataLicenseProvider).interfaceId;
     
-    bytes internal constant _URI_SINGATURE = abi.encodeWithSignature(
-        'uri()'
+    bytes internal constant _TOKEN_URI_SINGATURE = abi.encodeWithSignature(
+        'tokenURI()'
     );
     bytes internal constant _URI_HASH_SINGATURE = abi.encodeWithSignature(
         'uriHash()'
@@ -47,15 +47,15 @@ library frameworkMetadataLicenseProvider
         //);
     //}
     
-    function uri(
+    function tokenURI(
         address target
     )internal view returns(
         string memory
     ){
-        //return castMetadataLicenseProvider(target).uri();
+        //return castMetadataLicenseProvider(target).tokenURI();
         
         //_requireSupportsInterface(target);
-        //(bool success, bytes result) = target.call(_URI_SINGATURE);
+        //(bool success, bytes result) = target.call(_TOKEN_URI_SINGATURE);
         //success.requireTrue('uri() failed');
         //(ret) = abi.decode((string));
         
