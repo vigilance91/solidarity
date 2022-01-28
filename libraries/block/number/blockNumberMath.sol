@@ -9,14 +9,14 @@ pragma experimental ABIEncoderV2;
 /// 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/math/SafeMath.sol";
 
-//import "./uint256Constraints.sol";
+import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256Constraints.sol";
 ///
 /// @title Utility Library for block.number Based Chronological Math Operations
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 12/12/2021, All Rights Reserved
 /// 
 library blockNumberMath
 {
-    //using uint256Constraints for uint;
+    using uint256Constraints for uint;
     //using NowMath for uint;
     
     using SafeMath for uint;
@@ -49,7 +49,7 @@ library blockNumberMath
     /// @return {uint} current block number + `rhs`, number of blocks in the future, from the current block
     function nowBlockAdd(
         uint rhs
-    )internal pure returns(
+    )internal view returns(
         uint
     ){
         return block.number.add(rhs);
@@ -57,7 +57,7 @@ library blockNumberMath
     /// @return {uint} current block number - `rhs`, number of blocks in the past, from the current block
     function nowBlockSub(
         uint rhs
-    )internal pure returns(
+    )internal view returns(
         uint
     ){
         return block.number.sub(rhs);
@@ -65,7 +65,7 @@ library blockNumberMath
     /// @return {uint} `lhs` - current block, delta of blocks in the future between now and block number lhs
     function subNowBlock(
         uint lhs
-    )internal pure returns(
+    )internal view returns(
         uint
     ){
         return lhs.sub(block.number);
@@ -73,7 +73,7 @@ library blockNumberMath
     /// @return {uint} current block number * `rhs`
     function blockNowMul(
         uint rhs
-    )internal pure returns(
+    )internal view returns(
         uint
     ){
         return block.number.mul(rhs);
@@ -81,7 +81,7 @@ library blockNumberMath
     /// @return {uint} current block number / `rhs`
     function nowBlockDiv(
         uint rhs
-    )internal pure returns(
+    )internal view returns(
         uint
     ){
         return block.number.div(rhs);
@@ -89,7 +89,7 @@ library blockNumberMath
     /// @return {uint} `lhs` / current block number
     function divNowBlock(
         uint lhs
-    )internal pure returns(
+    )internal view returns(
         uint
     ){
         return lhs.div(block.number);
@@ -97,7 +97,7 @@ library blockNumberMath
     /// @return {uint} current block number % `rhs`
     function nowBlockMod(
         uint rhs
-    )internal pure returns(
+    )internal view returns(
         uint
     ){
         return block.number.mod(rhs);
@@ -105,7 +105,7 @@ library blockNumberMath
     /// @return {uint} current block number % `rhs`
     function modNowBlock(
         uint lhs
-    )internal pure returns(
+    )internal view returns(
         uint
     ){
         return lhs.mod(block.number);
@@ -126,67 +126,67 @@ library blockNumberMath
         //return block.number >> rhs;
     //}
     //returns current block number + aprox blocks to be calculated in the future
-    function aproxBlockNumberFromNow(
-        uint futureTimestamp
-        uint avgBlockDuration
-    )internal pure returns(
-        uint
-    ){
-        avgBlockDuration.requireGreatThanZero();
-        //require(futureTimestamp > block.timestamp);
-        //future block estimate based on timestamp, relative to now and the average blocks processed per seconds across the range of timestamps
-        //avgBlockDuration (in seconds) should be between 10-20 and should preferably be provided by an external oracle source
-        return block.number.add(
-            //aprox number of blocks rendered between future timestamp and now
-            futureTimestamp.aproxBlocksFromNow(avgBlockDuration)
-        );
-    }
+    //function aproxBlockNumberFromNow(
+        //uint futureTimestamp,
+        //uint avgBlockDuration
+    //)internal pure returns(
+        //uint
+    //){
+        //avgBlockDuration.requireGreaterThanZero();
+        ////require(futureTimestamp > block.timestamp);
+        ////future block estimate based on timestamp, relative to now and the average blocks processed per seconds across the range of timestamps
+        ////avgBlockDuration (in seconds) should be between 10-20 and should preferably be provided by an external oracle source
+        //return block.number.add(
+            ////aprox number of blocks rendered between future timestamp and now
+            //futureTimestamp.aproxBlocksFromNow(avgBlockDuration)
+        //);
+    //}
     //returns current block number - aprox blocks which have been calculated
-    function aproxBlockNumberSinceNow(
-        uint pastTimestamp
-        uint avgBlockDuration
-    )internal pure returns(
-        uint
-    ){
-        avgBlockDuration.requireGreatThanZero();
-        //now.requireGreatThan(pastTimestamp);
-        //past block estimate relative to now and the average blocks processed per second across the range of timestamps
-        return block.number.sub(
-            //aprox number of blocks rendered between now and past timestamp
-            pastTimestamp.aproxBlocksSinceNow(avgBlockDuration)
-        );
-    }
+    //function aproxBlockNumberSinceNow(
+        //uint pastTimestamp,
+        //uint avgBlockDuration
+    //)internal pure returns(
+        //uint
+    //){
+        //avgBlockDuration.requireGreaterThanZero();
+        ////now.requireGreatThan(pastTimestamp);
+        ////past block estimate relative to now and the average blocks processed per second across the range of timestamps
+        //return block.number.sub(
+            ////aprox number of blocks rendered between now and past timestamp
+            //pastTimestamp.aproxBlocksSinceNow(avgBlockDuration)
+        //);
+    //}
     /// impose default block solve duration of 15 seconds
-    function aproxBlockNumberFromNowDefault(
-        uint futureTimestamp
-    )internal pure returns(
-        uint
-    ){
-        return aproxBlockNumberFromNow(
-            futureTimestamp,
-            15
-        );
-    }
+    //function aproxBlockNumberFromNowDefault(
+        //uint futureTimestamp
+    //)internal pure returns(
+        //uint
+    //){
+        //return aproxBlockNumberFromNow(
+            //futureTimestamp,
+            //15
+        //);
+    //}
     /// impose default block solve duration of 15 seconds
-    function aproxBlockNumberSinceNowDefault(
-        uint pastTimestamp
-    )internal pure returns(
-        uint
-    ){
-        return aproxBlockNumberSinceNow(
-            pastTimestamp,
-            15
-        );
-    }
+    //function aproxBlockNumberSinceNowDefault(
+        //uint pastTimestamp
+    //)internal pure returns(
+        //uint
+    //){
+        //return aproxBlockNumberSinceNow(
+            //pastTimestamp,
+            //15
+        //);
+    //}
     //generate hash for one of the last 256 block (excluding current)
     function _blockHash(
         uint blockNumber
-    )internal pure returns(
+    )internal view returns(
         bytes32
     ){
         blockNumber.requireLessThan(block.number);
         blockNumber.requireGreaterThan(
-            blockNumberSub(256)
+            nowBlockSub(256)
         );
         
         return blockhash(blockNumber);

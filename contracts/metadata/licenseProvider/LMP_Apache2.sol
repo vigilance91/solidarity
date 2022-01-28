@@ -3,12 +3,12 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/contracts/licenseMetadataprovider/iLicenseMetadataProvider.sol";
+import "https://github.com/vigilance91/solidarity/contracts/licenseMetadataprovider/iMetadataLicenseProvider.sol";
 
-import "https://github.com/vigilance91/solidarity/contracts/licenseMetadataprovider/LicenseMetadataProviderABC.sol";
+import "https://github.com/vigilance91/solidarity/contracts/licenseMetadataprovider/MetadataLicenseProviderABC.sol";
 
-contract LMP_Apache2 is LicenseMetadataProviderABC,
-    iLicenseMetadataProvider
+contract LMP_Apache2 is MetadataLicenseProviderABC,
+    iMetadataLicenseProvider
 {
     using stringUtilities for string;
     
@@ -30,7 +30,7 @@ contract LMP_Apache2 is LicenseMetadataProviderABC,
 
     constructor(
     )public
-        LicenseMetadataProviderABC(_URI)
+        MetadataLicenseProviderABC(_URI)
     {
     }
     

@@ -3,7 +3,7 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-interface iLicenseMetadataProvider
+interface iMetadataLicenseProvider
 {
     function uri(
     )external view returns(

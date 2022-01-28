@@ -3,7 +3,7 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "./uint256Logic.sol";
+import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256Logic.sol";
 /// 
 /// @title Utilities for block.timestamp
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 5/3/2021, All Rights Reserved
@@ -15,7 +15,7 @@ library nowLogic
     
     function nowGreaterThan(
         uint rhs
-    )internal pure returns(
+    )internal view returns(
         bool ret
     ){
         //return block.timestamp.greaterThan(rhs);
@@ -25,14 +25,14 @@ library nowLogic
     }
     function nowGreaterThanOrEqual(
         uint rhs
-    )internal pure returns(
+    )internal view returns(
         bool ret
     ){
         return block.timestamp.greaterThanOrEqual(rhs);
     }
     function nowLessThan(
         uint rhs
-    )internal pure returns(
+    )internal view returns(
         bool ret
     ){
         //return block.timestamp.lessThan(rhs);
@@ -42,7 +42,7 @@ library nowLogic
     }
     function nowLessThanOrEqual(
         uint rhs
-    )internal pure returns(
+    )internal view returns(
         bool ret
     ){
         return block.timestamp.lessThanOrEqual(rhs);
@@ -51,14 +51,14 @@ library nowLogic
     // trivial convenience operations
     //
     function nowGreaterThanZero(
-    )internal pure returns(
+    )internal view returns(
         bool ret
     ){
         return block.timestamp.greaterThanZero();
     }
     //function lessThanMax(
         //uint lhs
-    //) internal pure returns(
+    //) internal view returns(
         //bool ret
     //){
         //return block.timestamp.lessThanMax();

@@ -5,17 +5,17 @@ pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/libraries/address/addressConstraints.sol";
 
-//import "https://github.com/vigilance91/solidarity/contracts/licenseMetadataProvider/frameworkLicenseMetadataProvider.sol";
+//import "https://github.com/vigilance91/solidarity/contracts/metadata/licenseProvider/frameworkMetadataLicenseProvider.sol";
 ///
 /// @title License Metadata Provider Mixin Library
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 27/1/2022, All Rights Reserved
 /// @dev 
 /// 
-library mixinLicenseMetadataProviderMap
+library mixinMetadataLicenseProviderMap
 {
     using addressConstraints for address;
     
-    //using frameworkLicenseMetadataProvider for address;
+    //using frameworkMetadataLicenseProvider for address;
     
     //struct License{
         //uint timeIssued;
@@ -26,7 +26,7 @@ library mixinLicenseMetadataProviderMap
         //string text;
     //}
     
-    struct LicenseMetadataProviderMapStorage{
+    struct MetadataLicenseProviderMapStorage{
         //mapping of contract address to license metadata provider contract
         mapping(address=>address) map;
         //mapping(address=>License) map;
@@ -34,12 +34,12 @@ library mixinLicenseMetadataProviderMap
     
     //string private _STRUCTURED_DATA = 'uint256,string,string,string,string';
     
-    //bytes32 internal constant STORAGE_SLOT = keccak256("solidarity.network.mixin.LicenseMetadataProviderMap.STORAGE_SLOT");
+    //bytes32 internal constant STORAGE_SLOT = keccak256("solidarity.network.mixin.MetadataLicenseProviderMap.STORAGE_SLOT");
     
-    function _storageLicenseMetadataProviderMap(
+    function _storageMetadataLicenseProviderMap(
         bytes32 slot
     )private pure returns(
-        LicenseMetadataProviderMapStorage storage ret
+        MetadataLicenseProviderMapStorage storage ret
     ){
         assembly {
             ret_slot := slot
@@ -137,7 +137,7 @@ library mixinLicenseMetadataProviderMap
     )internal
     {
         account.requireIsContract();
-        //resolver.requireLicenseMetadataProvider();
+        //resolver.requireMetadataLicenseProvider();
         
         mapping(address,address) storage s = _storageContractMap(slot).map;
         
@@ -162,9 +162,9 @@ library mixinLicenseMetadataProviderMap
     )internal //returns(mapping(address=>address) storage)
     {
         //account.requireIsContract();
-        //resolver.requireSupportsInterfaceLicenseMetadataProvider();
+        //resolver.requireSupportsInterfaceMetadataLicenseProvider();
         
-        mapping(address=>address) storage S = _storageLicenseMetadataProviderMapStorage(slot).map;
+        mapping(address=>address) storage S = _storageMetadataLicenseProviderMapStorage(slot).map;
         
         address oldResolver = S[account];
         
@@ -188,7 +188,7 @@ library mixinLicenseMetadataProviderMap
         address account
     )internal
     {
-        mapping(address=>address) storage S = _storageLicenseMetadataProviderMapStorage(slot).map;
+        mapping(address=>address) storage S = _storageMetadataLicenseProviderMapStorage(slot).map;
         
         address oldResolver = S[account];
         

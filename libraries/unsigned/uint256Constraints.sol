@@ -4,6 +4,7 @@ pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/libraries/logicConstraints.sol";
+
 import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256Logic.sol";
 /// 
 /// @title uint256 Contraints Library

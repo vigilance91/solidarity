@@ -6,12 +6,12 @@ pragma experimental ABIEncoderV2;
 import "https://github.com/vigilance91/solidarity/libraries/string/stringConstraints.sol";
 import "https://github.com/vigilance91/solidarity/libraries/string/stringUtilities.sol";
 
-abstract contract LicenseMetadataProviderABC
+abstract contract MetadataLicenseProviderABC
 {
     using stringConstraints for string;
     //using stringUtilities for string;
     
-    //using mixinLicenseMetadataProvider for bytes32;
+    //using mixinMetadataLicenseProvider for bytes32;
     
     string internal constant _COPYRIGHT = "Copyright © ";
     string internal constant _SPACE = " ";
