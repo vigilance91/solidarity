@@ -5,6 +5,7 @@ pragma experimental ABIEncoderV2;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/utils/ReentrancyGuard.sol";
 
+import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/iERC165.sol";
 import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/ERC165.sol";
 
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/iAccessControl.sol";
