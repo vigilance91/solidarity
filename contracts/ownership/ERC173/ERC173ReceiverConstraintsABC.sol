@@ -18,7 +18,7 @@ abstract contract ERC173ReceiverConstraintsABC
     //using addressConstraints for address;
     using frameworkSafeERC173 for address;
     
-    string private _NAME = ' ERC173ReceiverConstraintsABC: ';
+    string private constant _NAME = ' ERC173ReceiverConstraintsABC: ';
     
     string private constant _TRANSFER_FAILED = string(
         abi.encodePacked(

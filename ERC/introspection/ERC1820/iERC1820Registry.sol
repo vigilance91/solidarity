@@ -3,9 +3,11 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 ///
-/// @dev Interface of the global ERC1820 Registry, as defined in the
-/// https://eips.ethereum.org/EIPS/eip-1820[EIP]. Accounts may register
-/// implementers for interfaces in this registry, as well as query support.
+/// @dev Read-only interface of the global ERC1820 Registry,
+/// as defined in the https://eips.ethereum.org/EIPS/eip-1820[EIP]
+/// 
+/// Accounts may register implementers for interfaces in this registry,
+/// as well as query support.
 ///
 /// Implementers may be shared by multiple accounts,
 /// and can also implement more than a single interface for each account.
@@ -16,24 +18,8 @@ pragma experimental ABIEncoderV2;
 ///
 /// For an in-depth explanation and source code analysis, see the EIP text.
 ///
-interface iERC1820Registry
+interface iERC1820RegistryView
 {
-    ///
-    /// @dev Sets `newManager` as the manager for `account`. A manager of an
-    /// account is able to set interface implementers for it.
-    ///
-    /// By default, each account is its own manager. Passing a value of `0x0` in
-    /// `newManager` will reset the manager to this initial state.
-    ///
-    /// Emits a {ManagerChanged} event.
-    ///
-    /// Requirements:
-    ///     - the caller must be the current manager for `account`
-    ///
-    function setManager(
-        address account,
-        address newManager
-    )external;
     ///
     /// @return {address} the manager for `account`
     /// See {setManager}
@@ -43,28 +29,6 @@ interface iERC1820Registry
     )external view returns(
         address
     );
-    ///
-    /// @dev Sets the `implementer` contract as ``account``'s implementer for `interfaceHash`
-    ///
-    /// `account` being the zero address is an alias for the caller's address.
-    /// The zero address can also be used in `implementer` to remove an old one.
-    ///
-    /// See {interfaceHash} to learn how these are created.
-    ///
-    /// Emits an {InterfaceImplementerSet} event.
-    ///
-    /// Requirements:
-    ///     - the caller must be the current manager for `account`.
-    ///     - `interfaceHash` must not be an {iERC165} interface id (i.e. it must not end in 28 zeroes)
-    ///     - `implementer` must implement {IERC1820Implementer} and return true when
-    ///     queried for support, unless `implementer` is the caller.
-    ///     See {iERC1820Implementer-canImplementInterfaceForAddress}.
-    ///
-    function setInterfaceImplementer(
-        address account,
-        bytes32 _interfaceHash,
-        address implementer
-    )external;
     ///
     /// @dev Returns the implementer of `interfaceHash` for `account`. If no such
     /// implementer is registered, returns the zero address.
@@ -88,16 +52,6 @@ interface iERC1820Registry
     )external pure returns(
         bytes32
     );
-    ///
-    /// @notice Updates the cache with whether the contract implements an ERC165 interface or not.
-    /// 
-    /// @param account Address of the contract for which to update the cache.
-    /// @param interfaceId ERC165 interface for which to update the cache.
-    ///
-    function updateERC165Cache(
-        address account,
-        bytes4 interfaceId
-    )external;
     ///
     ///  @notice Checks whether a contract implements an ERC165 interface or not.
     ///  If the result is not cached a direct lookup on the contract address is performed.
@@ -131,7 +85,68 @@ interface iERC1820Registry
     );
 }
 ///
-///ERC1820 Registry events
+/// @dev Mutable Interface of the global ERC1820 Registry,
+/// as defined in https://eips.ethereum.org/EIPS/eip-1820[EIP]
+///
+interface iERC1820RegistryMutable
+{
+    ///
+    /// @dev Sets `newManager` as the manager for `account`. A manager of an
+    /// account is able to set interface implementers for it.
+    ///
+    /// By default, each account is its own manager. Passing a value of `0x0` in
+    /// `newManager` will reset the manager to this initial state.
+    ///
+    /// Emits a {ManagerChanged} event.
+    ///
+    /// Requirements:
+    ///     - the caller must be the current manager for `account`
+    ///
+    function setManager(
+        address account,
+        address newManager
+    )external;
+    ///
+    /// @dev Sets the `implementer` contract as ``account``'s implementer for `interfaceHash`
+    ///
+    /// `account` being the zero address is an alias for the caller's address.
+    /// The zero address can also be used in `implementer` to remove an old one.
+    ///
+    /// See {interfaceHash} to learn how these are created.
+    ///
+    /// Emits an {InterfaceImplementerSet} event.
+    ///
+    /// Requirements:
+    ///     - the caller must be the current manager for `account`.
+    ///     - `interfaceHash` must not be an {iERC165} interface id (i.e. it must not end in 28 zeroes)
+    ///     - `implementer` must implement {IERC1820Implementer} and return true when
+    ///     queried for support, unless `implementer` is the caller.
+    ///     See {iERC1820Implementer-canImplementInterfaceForAddress}.
+    ///
+    function setInterfaceImplementer(
+        address account,
+        bytes32 _interfaceHash,
+        address implementer
+    )external;
+    ///
+    /// @notice Updates the cache with whether the contract implements an ERC165 interface or not.
+    /// 
+    /// @param account Address of the contract for which to update the cache.
+    /// @param interfaceId ERC165 interface for which to update the cache.
+    ///
+    function updateERC165Cache(
+        address account,
+        bytes4 interfaceId
+    )external;
+}
+
+interface iERC1820Registry is iERC1820RegistryView,
+    iERC1820RegistryMutable
+{
+    
+}
+///
+///@dev ERC-1820 Registry events
 ///
 library eventsERC1820Registry
 {
@@ -162,8 +177,8 @@ library eventsERC1820Registry
         );
     }
     function emitManagerChanged(
-        address indexed account,
-        address indexed newManager
+        address account,
+        address newManager
     )internal
     {
         emit ManagerChanged(

@@ -9,14 +9,14 @@ import "https://github.com/vigilance91/solidarity/contracts/ContractConstraintsA
 import "https://github.com/vigilance91/solidarity/contracts/nonces/NoncesABC.sol";
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/AccessControlABC.sol";
 ///
-/// @title Access Control Address Whitelist Abstract Base Contract
+/// @title Access Control Address Whitelist View Abstract Base Contract
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 9/12/2021, All Rights Reserved
 ///
 /// deployment cost:
 ///     = transaction cost: 1,891,498 gas + execution cost 1,399,630 gas 
 ///     = 3,291,128 gas
 ///
-abstract contract WhitelistABC is ContractConstraintsABC,
+abstract contract WhitelistViewABC is ContractConstraintsABC,
     NoncesABC,
     AccessControlABC
 {
@@ -30,18 +30,33 @@ abstract contract WhitelistABC is ContractConstraintsABC,
     
     using addressToString for address;
     
-    string private constant _NAME = ' - WhitelistABC: ';
+    string private constant _NAME = ' - WhitelistViewABC: ';
     
     //bytes32 private _NAMESPACE_HASH = bytes32(uint256(keccak256('solidarity.accessControl.')) - 1);
     
+    //bytes32 private constant _STORAGE_SLOT = _NAMESPACE_HASH ^ bytes32(uint256(
+        //keccak256('WhitelistABC.STORAGE_SLOT')
+    //) - 1);
+    
+    //= _NAMESPACE_HASH ^ bytes32(uint256(
+        //keccak256('WhitelistABC.STORAGE_SLOT')
+    //) - 1);
     bytes32 private constant _STORAGE_SLOT = keccak256('solidarity.accessControl.whitelistABC.STORAGE_SLOT');   //_NAMESPACE_HASH ^ bytes32(uint256(keccak256('whitelistABC.STORAGE_SLOT') ) - 1);
     //
-    //bytes32 public constant ROLE_WHITELIST_ADMIN = _NAMESPACE_HASH ^ bytes32(uint256(keccak256('WhitelistABC.role.ADMIN');     //has both assignor and revoker rights but can not assign other admins
+    //bytes32 public constant ROLE_WHITELIST_ADMIN = _NAMESPACE_HASH ^ bytes32(uint256(
+        //keccak256('WhitelistViewABC.role.ADMIN')
+    //) - 1);     //has both assignor and revoker rights but can not assign other admins
     //
-    //bytes32 public constant ROLE_ASSIGNOR = _NAMESPACE_HASH ^ bytes32(uint256(keccak256('WhitelistABC.role.ASSIGNOR')) - 1);     //assigns permission
-    //bytes32 public constant ROLE_REVOKER = _NAMESPACE_HASH ^ bytes32(uint256(keccak256('WhitelistABC.role.REVOKER')) - 1);       //revokes permission
+    //bytes32 public constant ROLE_ASSIGNOR = _NAMESPACE_HASH ^ bytes32(uint256(
+        //keccak256('WhitelistViewABC.role.ASSIGNOR')
+    //) - 1);     //assigns permission
+    //bytes32 public constant ROLE_REVOKER = _NAMESPACE_HASH ^ bytes32(uint256(
+        //keccak256('WhitelistViewABC.role.REVOKER')
+    //) - 1);       //revokes permission
     //
-    //bytes32 public constant ROLE_PERMITTED = _NAMESPACE_HASH ^ bytes32(uint256(keccak256('whitelistABC.role.PERMITTED')) -1);     //role granted to whitelisted addresses permitted to access network resources
+    //bytes32 public constant ROLE_PERMITTED = _NAMESPACE_HASH ^ bytes32(uint256(
+        //keccak256('WhitelistViewABC.role.PERMITTED')
+    //) -1);     //role granted to whitelisted addresses permitted to access network resources
     bytes32 public constant ROLE_PERMITTED = keccak256('solidarity.accessControl.whitelistABC.ROLE_PERMITTED');     //role granted to whitelisted addresses permitted to access network resources
     
     string private constant _ERR_STR_ADRS = ", address: ";
@@ -57,7 +72,7 @@ abstract contract WhitelistABC is ContractConstraintsABC,
     string private constant _ERR_NOT_WHITELISTED = string(
         abi.encodePacked(
             _NAME,
-            "not white-listed: ",
+            "not white-listed",
             _ERR_STR_ADRS
         )
     );
@@ -109,19 +124,21 @@ abstract contract WhitelistABC is ContractConstraintsABC,
         //_setRoleAdmin(ROLE_REVOKER, ROLE_WHITELIST_ADMIN_ROLE);
         _setRoleAdmin(ROLE_PERMITTED, ROLE_DEFAULT_ADMIN);  //ROLE_WHITELIST_ADMIN_ROLE);
         
+        //address sender = _msgSender();
+        
         _setupRole(ROLE_PERMITTED, _msgSender());
         _setupRole(ROLE_PERMITTED, address(this));
         //
-        //_setupRole(ROLE_REVOKER, _msgSender());
-        //_setupRole(ROLE_ASSIGNOR, _msgSender());
+        //_setupRole(ROLE_REVOKER, sender);
+        //_setupRole(ROLE_ASSIGNOR, sender);
         //
         ////_setupRole(ROLE_ASSIGNOR, address(this));
         ////_setupRole(ROLE_REVOKER, address(this));
     }
     //function init(
-        //address[] memory permitted,
-        ////address[] memory assignors
-        ////address[] memory revokers
+        //address[] calldata permitted,
+        ////address[] calldata assignors
+        ////address[] calldata revokers
     //){
         //
         //address a;
@@ -184,10 +201,15 @@ abstract contract WhitelistABC is ContractConstraintsABC,
     ///constraints
     ///
     function _requirePermitted(
-        //bytes32 role,
         address account
     )internal view
     {
+        //_requireHasRole(
+            //ROLE_PERMITTED,
+            //account,
+            //_ERR_NOT_WHITELISTED,
+        //);
+        
         _hasRole(ROLE_PERMITTED, account).requireTrue(
             string(
                 abi.encodePacked(
@@ -195,14 +217,18 @@ abstract contract WhitelistABC is ContractConstraintsABC,
                     account
                 )
             )
-            
         );
     }
     function _requireNotPermitted(
-        //bytes32 role,
         address account
     )internal view
     {
+        //_requireNotHasRole(
+            //ROLE_PERMITTED,
+            //account,
+            //_ERR_IS_WHITELISTED
+        //);
+        
         _hasRole(ROLE_PERMITTED, account).requireFalse(
             string(
                 abi.encodePacked(
@@ -231,26 +257,20 @@ abstract contract WhitelistABC is ContractConstraintsABC,
         //address account
     //)internal view
     //{
-        //_hasRole(ROLE_ASSIGNOR, account).requireTrue(
-            //string(
-                //abi.encodePacked(
-                    //_ERR_NOT_ASSIGNOR,
-                    //account
-                //)
-            //)
+        //_requireHasRole(
+            //ROLE_ASSIGNOR,
+            //account,
+            //_ERR_NOT_ASSIGNOR
         //);
     //}
     //function _requireNotAssignor(
         //address account
     //)internal view
     //{
-        //_hasRole(ROLE_ASSIGNOR, account).requireFalse(
-            //string(
-                //abi.encodePacked(
-                    //_ERR_IS_ASSIGNOR,
-                    //account
-                //)
-            //)
+        //_requireNotHasRole(
+            //ROLE_ASSIGNOR,
+            //account,
+            //_ERR_IS_ASSIGNOR
         //);
     //}
     //
@@ -258,26 +278,20 @@ abstract contract WhitelistABC is ContractConstraintsABC,
         //address account
     //)internal view
     //{
-        //_hasRole(ROLE_REVOKER, account).requireTrue(
-            //string(
-                //abi.encodePacked(
-                    //_ERR_NOT_REVOKER,
-                    //account
-                //)
-            //)
+        //_requireHasRole(
+            //ROLE_REVOKER,
+            //account,
+            //_ERR_NOT_REVOKER,
         //);
     //}
     //function _requireNotRevoker(
         //address account
     //)internal view
     //{
-        //_hasRole(ROLE_REVOKER, account).requireFalse(
-            //string(
-                //abi.encodePacked(
-                    //_ERR_IS_REVOKER,
-                    //account
-                //)
-            //)
+        //_requireHasRole(
+            //ROLE_REVOKER,
+            //account,
+            //_ERR_IS_REVOKER
         //);
     //}
 }

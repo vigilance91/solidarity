@@ -113,3 +113,179 @@ library frameworkEIP2470
         );
     }
 }
+
+library frameworkEIP2470View
+{
+    using frameworkERC165 for address;
+    
+    using logicConstraints for bool;
+    //using addressConstraints for address;
+    
+    string internal constant _NAME = ' frameworkEIP2470View: ';
+    //bytes4 internal constant IID_EIP2470_VIEW = type(iEIP2470View).interfaceId;
+    
+    bytes4 internal constant DEPLOYED_CONTRACTS_SIGNATURE = abi.encodeWithSignature('deployedContracts()');
+    ///
+    ///mutable interface
+    ///
+    function _supportsInterface(
+        address target
+    )internal view returns(
+        bool
+    ){
+        //target.requireNotNull();
+        
+        return target.supportsInterface(
+            type(iEIP2470).interfaceId  //INTERFACE_ID
+        );
+    }
+    function _requireSupportsInterface(
+        address target
+    )internal
+    {
+        _supportsInterface(
+            target
+        ).requireTrue(
+            "EIP2470 not supported"
+        );
+    }
+    
+    //function castEIP2470
+        //address singleton
+    //)internal pure returns(
+        //iEIP2470
+    //){
+        //_requireSupportsInterfaceEIP2470(singleton);
+        //
+        //return iEIP2470(singleton);
+    //}
+    //function thisCastEIP2470(
+    //)internal pure returns(
+        //iEIP2470
+    //){
+        //return castEIP2470(
+            //address(this)
+        //);
+    //}
+    //
+    function deployedContracts(
+        address target
+    )internal view returns(
+        address payable[] memory ret
+    ){
+        //target.requireSupportsInterfaceEIP2470View();
+        _requireSupportsInterface(target);
+        
+        (bool success, bytes memory result) = target.staticcall(
+            abi.encodeWithSignature(
+                'deployedContracts()'
+            )
+        );
+        success.requireTrue('call failed');
+        
+        (ret) = abi.decode(
+            result,
+            (address payable[])
+        );
+    }
+}
+
+library frameworkEIP2470Mutable
+{
+    using frameworkERC165 for address;
+    
+    using logicConstraints for bool;
+    //using addressConstraints for address;
+    
+    //bytes4 internal constant IID_EIP2470_MUTABLE = type(iEIP2470Mutable).interfaceId;
+    string internal constant _NAME = ' frameworkEIP2470Mutable: ';
+    string internal constant _ERR_STR_TARGET = ', target: ';
+    
+    string internal constant STUB_DEPLOY = 'deploy(bytes,bytes32)';
+    
+    string internal constant _CALL_FAILED = string(
+        abi.encodePacked(
+            _NAME,
+            '.call failed',
+            _ERR_STR_TARGET
+        )
+    );
+    
+    function deploy(
+        address target,
+        bytes memory initCode,
+        bytes32 salt
+    )internal returns(
+        address payable ret
+    ){
+        //target.requireSupportsInterfaceEIP2470Mutable();
+        _requireSupportsInterface(target);
+        
+        (bool success, bytes memory result) = target.call(
+            abi.encodeWithSignature(
+                STUB_DEPLOY,
+                initCode,
+                salt
+            )
+        );
+        success.requireTrue(
+            string(
+                abi.encodePacked(
+                    _CALL_FAILED,
+                    target
+                )
+            )
+        );
+        
+        (ret) = abi.decode(result, (address payable));
+    }
+}
+
+library frameworkEIP2470Delegate
+{
+    using frameworkERC2470InterfaceSupport for address;
+    
+    using logicConstraints for bool;
+    
+    //bytes4 internal constant IID_EIP2470_MUTABLE = type(iEIP2470Mutable).interfaceId;
+    
+    string internal constant _NAME = ' frameworkEIP2470Delegate: ';
+    string internal constant _ERR_STR_DELEGATE = ', delegate: ';
+    
+    string internal constant _ERR_CALL_FAILED = string(
+        abi.encodePacked(
+            _NAME,
+            '.delegatecall failed',
+            _ERR_STR_DELEGATE
+        )
+    );
+    
+    function deploy(
+        address target,
+        bytes memory initCode,
+        bytes32 salt
+    )internal returns(
+        address payable ret
+    ){
+        //target.requireSupportsInterfaceEIP2470Mutable();
+        _requireSupportsInterface(target);
+        
+        (bool success, bytes memory result) = target.delegatecall(
+            abi.encodeWithSignature(
+                frameworkEIP2470Mutable.STUB_DEPLOY,
+                initCode,
+                salt
+            )
+        );
+        success.requireTrue(
+            string(
+                abi.encodePacked(
+                    _ERR_CALL_FAILED,
+                    target
+                )
+            )
+        );
+        
+        (ret) = abi.decode(result, (address payable));
+    }
+}

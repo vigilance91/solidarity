@@ -3,24 +3,10 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/ERC165.sol";
-
-//import "https://github.com/vigilance91/solidarity/contracts/etherReceiver/NonPayable.sol";
-
-import "https://github.com/vigilance91/solidarity/contracts/accessControl/whitelist/WhitelistABC.sol";
-import "https://github.com/vigilance91/solidarity/contracts/accessControl/whitelist/iWhitelist.sol";
-
-//interface iAccessControlWhitelist is iAccessControl,
-//    iWhitelist
-//{
-//}
-
-//interface iSafeMortalWhitelist is iSafeMortalCanary,
-//    iWhitelist
-//{
-//}
+import "https://github.com/vigilance91/solidarity/contracts/accessControl/whitelist/Whitelist.sol";
+import "https://github.com/vigilance91/solidarity/contracts/accessControl/whitelist/iWhitelistBatched.sol";
 ///
-/// @title Access Control Address Whitelist
+/// @title Batched Access Control Address Whitelist
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 2/5/2021, All Rights Reserved
 ///
 /// deplpoyment cost: 1,988,787 (previous version required 1,399,630 gas)
@@ -42,18 +28,21 @@ import "https://github.com/vigilance91/solidarity/contracts/accessControl/whitel
 /// with the blacklist banning malicious, buggy or nefarious contracts or known hackers by default,
 ///     and then by allowing only non-blacklisted addresses to be permitted onto the whitelist to access functionality
 ///
-contract Whitelist is ERC165,   //SafeCanary
-    //NonPayable
-    WhitelistABC,
-    iWhitelist
+contract WhitelistBatched is Whitelist,
+    iWhitelistBatched
 {
-    bytes32 private constant _WHITELIST_STORAGE_SLOT = keccak256('solidarity.accessControl.whitelistABC.STORAGE_SLOT');
+    string private constant _NAME = ' - WhitelistBatched: ';
     
-    bytes4 internal constant _IID_WHITELIST_VIEW = type(iWhitelistView).interfaceId;
-    bytes4 internal constant _IID_WHITELIST_MUTABLE = type(iWhitelistMutable).interfaceId;
-    bytes4 internal constant _IID_WHITELIST = type(iWhitelist).interfaceId;
+    bytes4 internal constant _IID_WHITELIST_VIEW_BATCHED = type(iWhitelistViewBatched).interfaceId;
+    bytes4 internal constant _IID_WHITELIST_MUTABLE_BATCHED = type(iWhitelistMutableBatched).interfaceId;
+    bytes4 internal constant _IID_WHITELIST_BATCHED = type(iWhitelistBatched).interfaceId;
     //string private constant _NAME = ' Whitelist: ';
-    string internal constant _ERR_INVALID_IID = 'invalid interface ID';
+    string internal constant _ERR_INVALID_IID = string(
+        abi.encodePacked(
+            _NAME,
+            'invalid interface ID'
+        )
+    );
     
     constructor(
     )public
@@ -63,7 +52,7 @@ contract Whitelist is ERC165,   //SafeCanary
         WhitelistABC()
     {
         require(
-            (_IID_WHITELIST_VIEW ^ _IID_WHITELIST_MUTABLE) == _IID_WHITELIST,
+            (_IID_WHITELIST_VIEW_BATCHED ^ _IID_WHITELIST_MUTABLE_BATCHED) == _IID_WHITELIST_BATCHED,
             _ERR_INVALID_IID
         );
         ////require(
@@ -71,11 +60,12 @@ contract Whitelist is ERC165,   //SafeCanary
             ////_ERR_INVALID_IID
         ////);
         
-        //_registerInterface(_IID_WHITELIST_VIEW);
-        //_registerInterface(_IID_WHITELIST_MUTABLE);
-        _registerInterface(_IID_WHITELIST);
+        _registerInterface(_IID_WHITELIST_VIEW_BATCHED);
+        _registerInterface(_IID_WHITELIST_MUTABLE_BATCHED);
+        _registerInterface(_IID_WHITELIST_BATCHED);
+        
         //_registerInterface(
-            //type(iWhitelist).interfaceId ^ type(iERC165).interfaceId
+            //_IID_WHITELIST_BATCHED ^ _IID_ERC165
         //);
     }
     //function init(
@@ -98,38 +88,6 @@ contract Whitelist is ERC165,   //SafeCanary
             //_setupRole(ROLE_REVOKERS, revokers[i]);
         //}
     //}
-    ///
-	/// @dev admin grants the signer of the hashed address and signature access to this contract
-    /// transaction cost: 195,085 gas + execution cost 166,837 gas === 361,922 total gas
-    /// emits a {RoleGranted} event
-    ///
-    /// Requirements:
-    ///     - caller must have `role`'s admin role or be default admin
-    ///     - caller must not be the recovered singer's address
-    ///     - reverts if `account` has previously been white-listed
-    ///     - reverts if recovered signer's address hash (combined with that acount's nonce) does not equal `signerHash`
-    /// 
-    function grantPermission(
-        address account
-    )external virtual override //returns(address)  //,bytes32,bytes32, bytes32)  //override nonReentrant
-    {
-        _requireThisPermitted();
-
-        address sender = _msgSender();
-        //sender must be admin and also be permitted to use this contract
-        //_requirePermitted(sender);
-        //_requireThisPermitted();
-        //_requireIsAssignorOrAdmin(sender);
-        _requireHasAdminRole(ROLE_PERMITTED, sender);
-        //
-        // require signer has not already been granted permission
-        _requireNotHasRole(ROLE_PERMITTED, account);
-
-        _incrementNonce(account);
-        
-        _grantRole(ROLE_PERMITTED, account);
-    }
-    
     ///
 	/// @dev whitelists all the addresses in `accounts`
     /// transaction cost: 195,085 gas + execution cost 166,837 gas === 361,922 total gas
@@ -166,21 +124,6 @@ contract Whitelist is ERC165,   //SafeCanary
             _grantRole(ROLE_PERMITTED, account);
         }
     }
-    
-    function isPermitted(
-        address account
-    )public view virtual override returns(
-        bool
-    ){
-        _requireThisPermitted();
-        //owner of this contract is always whitelisted
-        //if(account.equal(owner())){
-            //return true;
-        //}
-        
-        return _hasRole(ROLE_PERMITTED, account);
-    }
-    
     function isPermitted(
         address[] memory accounts
     )public view virtual override returns(
@@ -220,63 +163,6 @@ contract Whitelist is ERC165,   //SafeCanary
         //}
         //
         //return _hasRole(ROLE_REVOKER, account);
-    //}
-    ///
-    /// @return {uint256} the number of white-listed accounts,
-    /// can be used together with {getRoleMember} to enumerate all white-listed accounts
-    ///
-    //function permittedAddresses(
-    //)public view returns(
-        //address[] memory
-    //){
-        //_requireHasAdminRole(ROLE_PERMITTED, _msgSender());
-        //
-        //return _roleAt(ROLE_PERMITTED).members;
-    //}
-    ///
-    /// @return {uint256} the number of white-listed accounts,
-    /// can be used together with {getRoleMember} to enumerate all white-listed accounts
-    ///
-    function getPermittedMemberCount(
-    )public view override returns(
-        uint256
-    ){
-        //return _roleAt(ROLE_PERMITTED).members.length();
-        return _roleMemberCount(ROLE_PERMITTED);
-    }
-    ///
-    /// @return {uint256} the number of role assignors,
-    /// 
-    //function getAssignorMemberCount(
-    //)public view override returns(
-        //uint256
-    //){
-        //return _roleMemberCount(ROLE_ASSIGNOR);
-    //}
-    ///
-    /// @return {uint256} the number of role assignors,
-    /// 
-    //function getRevokerMemberCount(
-    //)public view override returns(
-        //uint256
-    //){
-        //return _roleMemberCount(ROLE_REVOKER);
-    //}
-    
-    //get the addresses associated with the assignor's admin role
-    //function assignorAdmin(
-    //)public view override returns(
-        //address
-    //){
-        // return ;
-    //}
-    
-    //get the addresses associated with the revoker's admin role
-    //function revokerAdmin(
-    //)public view override returns(
-        //address
-    //){
-        // return ;
     //}
     ///
     /// @dev Revokes `account` from whitelist

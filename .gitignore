@@ -3,6 +3,8 @@ Thumbs.db
 npm-debug.log
 composer.json
 build.bat
+hash.bat
+createUML.bat
 Doxyfile
 /bower_components
 /node_modules

@@ -49,6 +49,9 @@ library mixinTokenIdentifier
     )internal
     {
         //newName().requireNotEmpty();
+        //string storage N = TokenIdentifierStorage(slot).name;
+        //N.requireEmpty();
+        //N.requireNotEqual(newName);
         storageTokenIdentifier().name = newName;
     }
     function setSymbol(
@@ -56,6 +59,9 @@ library mixinTokenIdentifier
     )internal
     {
         //newSymbol.requireNotEmpty();
+        //string storage N = TokenIdentifierStorage(slot).name;
+        //N.requireEmpty();
+        //N.requireNotEqual(newSymbol);
         storageTokenIdentifier().symbol = newSymbol;
     }
     function initialize(

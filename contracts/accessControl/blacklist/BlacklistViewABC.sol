@@ -23,17 +23,16 @@ import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/ERC16
 /// for a list of known malicious, bug or otherwise vulnerable tokens can be found here:
 ///     https://tokensniffer.com/
 ///
-abstract contract BlacklistABC is ContractConstraintsABC,
+abstract contract BlacklistViewABC is ContractConstraintsABC,
     NoncesABC,
     AccessControlABC
-    //NonPayable,
 {
     using EnumerableSet for EnumerableSet.AddressSet;
     
     using logicConstraints for bool;
     using addressConstraints for address;
 
-    string private constant _NAME = ' - BlacklistABC: ';
+    string private constant _NAME = ' - BlacklistViewABC: ';
     
     string private constant _ERR_STR_ADRS = ", address: ";
     
@@ -56,7 +55,9 @@ abstract contract BlacklistABC is ContractConstraintsABC,
     
     //bytes32 private constant _STORAGE_SLOT = keccak256('BlacklistABC.STORAGE_SLOT');
     //
-    //bytes32 public constant ROLE_BLACKLIST_ADMIN = _NAMESPACE_HASH ^ bytes32(uint256(keccak256('BlacklistABC.role.ADMIN')) -1);     //has both assignor and revoker rights but can not assign other admins
+    //bytes32 public constant ROLE_BLACKLIST_ADMIN = _NAMESPACE_HASH ^ bytes32(uint256(
+        //keccak256('BlacklistABC.role.ADMIN')) -1
+    //);     //has both assignor and revoker rights but can not assign other admins
     //
     //bytes32 public constant ROLE_ASSIGNOR = _NAMESPACE_HASH ^ bytes32(uint256(
         //keccak256('blacklistABC.role.ASSIGNOR')
@@ -152,25 +153,5 @@ abstract contract BlacklistABC is ContractConstraintsABC,
         uint256
     ){
         return _roleAt(ROLE_BANNED).members.length();
-    }
-    function _ban(
-        address account
-    )internal
-    {
-        _requireNotBanned(account);
-        
-        _grantRole(ROLE_BANNED, account);
-        
-        _incrementNonce(account);
-    }
-    function _revokeBan(
-        address account
-    )internal
-    {
-        _requireBanned(account);
-        
-        _revokeRole(ROLE_BANNED, account);
-        
-        _incrementNonce(account);
     }
 }
