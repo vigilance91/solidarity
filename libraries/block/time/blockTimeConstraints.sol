@@ -4,106 +4,107 @@ pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
 //import "https://github.com/vigilance91/solidarity/libraries/logicConstraints.sol";
-import "https://github.com/vigilance91/solidarity/libraries/block/chronoConstraints.sol";
+
+import "https://github.com/vigilance91/solidarity/libraries/block/time/blockTimeLogic.sol";
 /// 
 /// @title chronological Constraints Library based on utilizing both block.timestamp and block.height for determining timepoints
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 5/3/2021, All Rights Reserved
 ///
-library chronoConstraints
+library blockTimeConstraints
 {
     using logicConstraints for bool;
     
     using blockTimeLogic for uint;
     
-    string private constant _NAME = " - blocktimeConstraints: ";
+    string private constant _NAME = " - blockTimeConstraints: ";
     
     /// >
-    function requireblockTimeNowGreaterThan(
-        uint rhs,
-        uint avgBlockDuration
-    )internal pure returns(
+    function requireBlockTimeGreaterThan(
+        uint rhs
+        //uint avgBlockDuration
+    )internal view returns(
         bool
     ){
-        rhs.blockTimeNowGreaterThan(avgBlockDuration).requireTrue(
+        rhs.blockTimeNowGreaterThan().requireTrue(
             //''
         );
     }
-    function requireChronoNowGreaterThanOrEqual(
-        uint rhs,
-        uint avgBlockDuration
-    )internal pure returns(
+    function requireBlockTimeGreaterThanOrEqual(
+        uint rhs
+        //uint avgBlockDuration
+    )internal view returns(
         bool
     ){
-        rhs.blockTimeNowGreaterThanOrEqual(avgBlockDuration).requireTrue(
+        rhs.blockTimeNowGreaterThanOrEqual().requireTrue(
             //''
         );
     }
     /// <
-    function requireChronoNowLessThan(
-        uint rhs,
-        uint avgBlockDuration
-    )internal pure returns(
+    function requireBlockTimeLessThan(
+        uint rhs
+        //uint avgBlockDuration
+    )internal view returns(
         bool
     ){
-        rhs.blockTimeNowLessThan(avgBlockDuration).requireTrue(
+        rhs.blockTimeNowLessThan().requireTrue(
             //''
         );
     }
-    function requireChronoNowLessThanOrEqual(
-        uint rhs,
-        uint avgBlockDuration
-    )internal pure returns(
+    function requireBlockTimeLessThanOrEqual(
+        uint rhs
+        //uint avgBlockDuration
+    )internal view returns(
         bool
     ){
-        rhs.blockTimeNowLessThanOrEqual(avgBlockDuration).requireTrue(
+        rhs.blockTimeNowLessThanOrEqual().requireTrue(
             //''
         );
     }
     ///
     ///optional message overloads
     ///
-    function requireblockTimeNowGreaterThan(
+    function requireBlockTimeGreaterThan(
         uint rhs,
-        uint avgBlockDuration,
+        //uint avgBlockDuration,
         string memory message
-    )internal pure returns(
+    )internal view returns(
         bool
     ){
-        rhs.blockTimeNowGreaterThan(avgBlockDuration).requireTrue(
+        rhs.blockTimeNowGreaterThan().requireTrue(
             message
         );
     }
-    function requireChronoNowGreaterThanOrEqual(
+    function requireBlockTimeGreaterThanOrEqual(
         uint rhs,
-        uint avgBlockDuration,
+        //uint avgBlockDuration,
         string memory message
-    )internal pure returns(
+    )internal view returns(
         bool
     ){
-        rhs.blockTimeNowGreaterThanOrEqual(avgBlockDuration).requireTrue(
+        rhs.blockTimeNowGreaterThanOrEqual().requireTrue(
             message
         );
     }
     /// <
-    function requireChronoNowLessThan(
+    function requireBlockTimeLessThan(
         uint rhs,
-        uint avgBlockDuration,
+        //uint avgBlockDuration,
         string memory message
-    )internal pure returns(
+    )internal view returns(
         bool
     ){
-        rhs.blockTimeNowLessThan(avgBlockDuration).requireTrue(
+        rhs.blockTimeNowLessThan().requireTrue(
             message
         );
     }
-    function requireChronoNowLessThanOrEqual(
+    function requireBlockTimeLessThanOrEqual(
         uint rhs,
-        uint avgBlockDuration,
+        //uint avgBlockDuration,
         string memory message
-    )internal pure returns(
+    )internal view returns(
         bool
     ){
-        rhs.blockTimeNowLessThanOrEqual(avgBlockDuration).requireTrue(
+        rhs.blockTimeNowLessThanOrEqual().requireTrue(
             message
         );
     }

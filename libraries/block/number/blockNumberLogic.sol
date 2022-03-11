@@ -3,6 +3,8 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/math/SafeMath.sol";
+
 import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256Constraints.sol";
 /// 
 /// @title block.number Logic Library for use with the chronological generation of blocks on the blockchain
@@ -19,25 +21,31 @@ library blockNumberLogic
     /// @return {uint} total number of blocks, in the past, since the current block
     function blockNumberPastDelta(
         uint rhs
-    )internal pure returns(
-        bool
+    )internal view returns(
+        uint
     ){
-        //block.number.lessThan(rhs);
+        if(block.number.greaterThan(rhs)){
+            return 0;
+        }
+        
         return block.number.sub(rhs);
     }
     /// @return {uint} total number of blocks, in the future, from the current block
     function blockNumberFutureDelta(
         uint lhs
-    )internal pure returns(
-        bool
+    )internal view returns(
+        uint
     ){
-        //lhs.requireGreatThan(block.number);
+        if(lhs.lessThan(block.number)){
+            return 0;
+        }
+        
         return lhs.sub(block.number);
     }
     /// @return {bool} (>) operator
     function blockNumberGreaterThan(
         uint rhs
-    )internal pure returns(
+    )internal view returns(
         bool
     ){
         return block.number.greaterThan(rhs);
@@ -45,7 +53,7 @@ library blockNumberLogic
     /// @return {bool} (>=) operator
     function blockNumberGreaterThanOrEqual(
         uint rhs
-    )internal pure returns(
+    )internal view returns(
         bool
     ){
         return block.number.greaterThanOrEqual(rhs);
@@ -53,7 +61,7 @@ library blockNumberLogic
     /// @return {bool} (<) operator
     function blockNumberLessThan(
         uint rhs
-    )internal pure returns(
+    )internal view returns(
         bool
     ){
         return block.number.lessThan(rhs);
@@ -61,7 +69,7 @@ library blockNumberLogic
     /// @return {bool} (<=) operator
     function blockNumberLessThanOrEqual(
         uint rhs
-    )internal pure returns(
+    )internal view returns(
         bool
     ){
         return block.number.lessThanOrEqual(rhs);
@@ -70,14 +78,14 @@ library blockNumberLogic
     /// intentionally omitted, operations not useful or trivial axioms
     ///
     //function blockNumberGreaterThanZero(
-    //)internal pure returns(
+    //)internal view returns(
         //bool
     //){
         //return block.number.greaterThanZero();
     //}
     //function greaterThanMin(
         //uint lhs
-    //)internal pure returns(
+    //)internal view returns(
         //bool
     //){
         //return block.number.requireLessThan(
@@ -86,11 +94,38 @@ library blockNumberLogic
     //}
     //function lessThanMax(
         //uint lhs
-    //)internal pure returns(
+    //)internal view returns(
         //bool
     //){
         //return block.number.requireLessThan(
             //type(uint).max
+        //);
+    //}
+    
+    //function blockNumberInRange(
+        //uint lhs
+        //uint min,
+        //uint max
+    //)internal view returns(
+        //bool
+    //){
+        //return block.number.inRange(
+            //min
+            //max
+        //);
+    //}
+    
+    //function blockNumberInXRange(
+        //uint value,
+        //uint min,
+        //uint max
+    //)internal view returns(
+        //bool
+    //){
+        //return block.number.inXRange(
+            //value,
+            //min
+            //max
         //);
     //}
 }

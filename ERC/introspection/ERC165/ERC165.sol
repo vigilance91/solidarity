@@ -14,6 +14,8 @@ import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/mixin
 ///
 abstract contract ERC165 is iERC165
 {
+    //using mixinERC165 for bytes32;
+    
     bytes4 private constant _INTERFACE_ID = type(iERC165).interfaceId;
 
     constructor(
@@ -33,7 +35,7 @@ abstract contract ERC165 is iERC165
     ///
     function supportsInterface(
         bytes4 interfaceId
-    )public view override returns(
+    )public view virtual override returns(
         bool
     ){
         return mixinERC165.supportsInterface(interfaceId);

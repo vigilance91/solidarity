@@ -3,12 +3,16 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
+import "https://github.com/vigilance91/solidarity/libraries/block/now/nowLogic.sol";
+import "https://github.com/vigilance91/solidarity/libraries/block/now/nowMath.sol";
 import "https://github.com/vigilance91/solidarity/libraries/block/now/nowConstraints.sol";
+
+import "https://github.com/vigilance91/solidarity/libraries/block/number/blockNumberLogic.sol";
 import "https://github.com/vigilance91/solidarity/libraries/block/number/blockNumberConstraints.sol";
 /// 
 /// @title Block timestamp Based Chonologic Math Library
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 5/3/2021, All Rights Reserved
-/// @brief  based on utilizing both block.timestamp and block.height for determining time points,
+/// @dev based on utilizing both block.timestamp and block.height for determining time points,
 /// safely validating time based consensus between an average of both block.timestamp and block.number,
 /// where even if a hostile miner forges the block's timestamp, they can not forge the block number of the transaction on the blockchain
 /// 
@@ -19,7 +23,10 @@ import "https://github.com/vigilance91/solidarity/libraries/block/number/blockNu
 /// 
 library blockTimeMath
 {
+    using SafeMath for uint;
+
     using nowLogic for uint;
+    using nowMath for uint;
     using nowConstraints for uint;
     
     using blockNumberLogic for uint;
@@ -36,7 +43,7 @@ library blockTimeMath
     function blockTimeAdjustedSecondsSince(
         uint rhs,
         uint avgBlockDuration
-    )internal pure returns(
+    )internal view returns(
         uint256
     ){
         //now >= rhs
@@ -46,7 +53,7 @@ library blockTimeMath
         //( (now - rhs) + avgBlocksInPast) / 2
         //average between system default target of 1 block per 15 seconds,
         //and a user provided duration which more closely resemebles the solving duration over the desired duration
-        uint AVG_BLOCKS = rhs.aproxBlocksInPastAverage(avgBlockDuration);
+        uint AVG_BLOCKS = rhs.blockNumberPastDelta();
         //avgBlock
         uint AVG_S = AVG_BLOCKS.mul(MEDIAN_TARGET_HASHES_PER_SECOND).add(
             AVG_BLOCKS.mul(avgBlockDuration)
@@ -69,11 +76,11 @@ library blockTimeMath
     function blockTimeAverageSecondsUntil(
         uint lhs,
         uint avgBlockDuration
-    )internal pure returns(
-        bool
+    )internal view returns(
+        uint
     ){
         //now <= rhs
-        if(lhs.nowLessThanOrEqual(){
+        if(lhs.nowLessThanOrEqual()){
             return 0;
         }
         //( (now + rhs) + avgBlocksInFuture) / 2
@@ -81,7 +88,7 @@ library blockTimeMath
         uint AVG_S = AVG_BLOCKS.mul(MEDIAN_TARGET_HASHES_PER_SECOND).add(
             AVG_BLOCKS.mul(avgBlockDuration)
         ) >> 1;
-        
+        //
         return lhs.sub(now).add(
             AVG_S.sub(now)
         ) >> 1;
@@ -90,33 +97,33 @@ library blockTimeMath
     /// @return {uint} aprox. time in seconds, in the future, from now relative to the block timestamp and,
     /// an average of block solving duration supplied by a user timestamp in future
     ///
-    function blockTimeAverageSecondsUntil(
-        uint tsFuture,
-        uint avgBlockDuration
-    )internal pure returns(
-        bool
-    ){
+    //function blockTimeAverageSecondsUntil(
+        //uint tsFuture,
+        //uint avgBlockDuration
+    //)internal pure returns(
+        //bool
+    //){
         //( (now + rhs) + (blocksInFuture * avgBlockDuration) ) / 2
-        return chronoSecondsUntil(
-            tsFuture,
-            avgBlockDuration
-        ).nowAdd();
-    }
+        //return tsFuture.blockNumberFutureDelta(
+        //).mul(
+            //avgBlockDuration
+        //).nowAdd();
+    //}
     /// 
     /// @return {uint} aprox. time in seconds, in the past, from now relative to the block timestamp and,
     /// an average of block solving duration supplied by a user timestamp in past
     /// 
-    function blockTimeAdjustedSecondsSince(
-        uint tsPast,
-        uint avgBlockDuration
-    )internal pure returns(
-        bool
-    ){
-        return chronoSecondsSince(
-            tsPast,
-            avgBlockDuration
-        ).nowSub();
-    }
+    //function blockTimeAdjustedSecondsSince(
+        //uint tsPast,
+        //uint avgBlockDuration
+    //)internal pure returns(
+        //bool
+    //){
+        //return chronoSecondsSince(
+            //tsPast,
+            //avgBlockDuration
+        //).nowSub();
+    //}
     /**
     *rhs and returns are in blocks
     
