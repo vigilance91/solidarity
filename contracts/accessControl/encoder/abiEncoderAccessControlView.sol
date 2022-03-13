@@ -5,7 +5,7 @@ pragma experimental ABIEncoderV2;
 ///
 /// @title Access Control View Transaction ABI Encoder Library
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 15/3/2021, All Rights Reserved
-/// convenience library for creating encoded signatures for low-level address call operations
+/// @dev convenience library for creating encoded signatures for low-level address call operations
 ///
 library abiEncoderAccessControlView
 {
