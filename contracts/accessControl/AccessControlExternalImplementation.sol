@@ -5,15 +5,17 @@ pragma experimental ABIEncoderV2;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/utils/ReentrancyGuard.sol";
 
-import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/iERC165.sol";
-import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/ERC165.sol";
-
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/iAccessControl.sol";
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/AccessControlMutableABC.sol";
+
+import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/iERC165.sol";
+import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/ERC165.sol";
 ///
 /// @title External Access Control Implementation
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 11/3/2022, All Rights Reserved
-/// @dev external implementation for use with proxies.
+/// @dev external implementation for use with proxies,
+/// storage is not initialized, since this is a implementation contract its storage gets initialized in the proxy, not here.
+/// deploy cost: 964,774 
 ///
 contract AccessControlExternalImplementation is ERC165,
     ReentrancyGuard,
@@ -28,7 +30,7 @@ contract AccessControlExternalImplementation is ERC165,
         AccessControlMutableABC()
     {
         _registerInterface(type(iAccessControlMutable).interfaceId);
-        //_registerInterface(type(iERC165).interfaceId ^ type(iAccessControlMutable).interfaceId);
+        _registerInterface(type(iERC165).interfaceId ^ type(iAccessControlMutable).interfaceId);
     }
     ///
     /// @dev Grants `role` to `account`

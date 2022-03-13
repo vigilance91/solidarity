@@ -75,6 +75,20 @@ abstract contract AccessControlViewABC  //is AccessControlConstraints
         )
     );
     
+    string private constant _ERR_REQUIRE_HAS_ROLE_ALL =  string(
+        abi.encodePacked(
+            _NAME,
+            "role must be assigned to all, ",
+            _ERR_STR_ROLE
+        )
+    );
+    string private constant _ERR_REQUIRE_NOT_HAS_ROLE_ALL = string(
+        abi.encodePacked(
+            _NAME,
+            "role must not be assigned to all, ",
+            _ERR_STR_ROLE
+        )
+    );
     string internal constant _STR_COMMA = ',';
     string internal constant _ERR_STR_ROLE = " role: ";
     string internal constant _ERR_STR_ADDRESS = " address: ";
@@ -106,7 +120,7 @@ abstract contract AccessControlViewABC  //is AccessControlConstraints
     )internal view returns(
         mixinAccessControl.RoleData storage
     ){
-        return _readOnlyRoles()[role];
+        return mixinAccessControl.roleAt(role);
     }
     ///
     ///constraints
@@ -144,43 +158,23 @@ abstract contract AccessControlViewABC  //is AccessControlConstraints
         address account
     )internal view
     {
-        _hasRole(role, account).requireTrue(
-            string(
-                abi.encodePacked(
-                    _ERR_REQUIRE_ROLE,   //_NAME.concatenate(_ERR_REQUIRE_ROLE)
-                    role
-                    //_ERR_STR_ADDRESS,
-                    //address
-                )
-            )
-        );
+        mixinAccessControl.requireHasRole(role, account);
     }
     function _requireNotHasRole(
         bytes32 role,
         address account
     )internal view
     {
-        _hasRole(role, account).requireFalse(
-            string(
-                abi.encodePacked(
-                    _ERR_REQUIRE_NOT_ROLE,   //_NAME.concatenate(_ERR_REQUIRE_NOT_ROLE)
-                    role,
-                    _STR_COMMA,
-                    _ERR_STR_ADDRESS,
-                    account
-                )
-            )
-        );
+        mixinAccessControl.requireNotHasRole(role, account);
     }
     function _requireHasRoleAll(
-        byes32 role
-    )internal view returns(
-        bool
-    ){
-        return _hasRoleAll(role).requireTrue(
+        bytes32 role
+    )internal view
+    {
+        _hasRoleAll(role).requireTrue(
             string(
                 abi.encodePacked(
-                    _ERR_REQUIRE_HAS_ROLE_ALL,
+                    _ERR_REQUIRE_NOT_HAS_ROLE_ALL,
                     role
                     //_ERR_STR_ADDRESS,
                     //AddressLogic.NULL
@@ -189,11 +183,10 @@ abstract contract AccessControlViewABC  //is AccessControlConstraints
         );
     }
     function _requireNotHasRoleAll(
-        byes32 role
-    )internal view returns(
-        bool
-    ){
-        return _hasRoleAll(role).requireFalse(
+        bytes32 role
+    )internal view
+    {
+        _hasRoleAll(role).requireFalse(
             string(
                 abi.encodePacked(
                     _ERR_REQUIRE_HAS_ROLE_ALL,
@@ -312,11 +305,11 @@ abstract contract AccessControlViewABC  //is AccessControlConstraints
     /// @return {bool} `true` if AddressLogic.NULL has been granted `role` (meaning all accounts have that role), otherwise `false`
     ///
     function _hasRoleAll(
-        byes32 role
+        bytes32 role
     )internal view returns(
         bool
     ){
-        return _hasRole(role, AddressLogic.NULL);
+        return _hasRole(role, addressLogic.NULL);
     }
     ///
     /// @return ret {bool[]} `true` for each corresponding`account in `accounts` has been granted `role`, otherwise false

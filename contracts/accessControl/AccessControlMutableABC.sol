@@ -71,7 +71,7 @@ abstract contract AccessControlMutableABC is Context,
     {
         //_storageSlot = storageSlot;
         
-        _setupRole(ROLE_DEFAULT_ADMIN, _msgSender());
+        //_setupRole(ROLE_DEFAULT_ADMIN, _msgSender());
     }
     
     //function _accessControlSlot(
@@ -108,20 +108,7 @@ abstract contract AccessControlMutableABC is Context,
         bytes32 adminRole
     )internal virtual
     {
-        mapping(bytes32=>mixinAccessControl.RoleData) storage mr = mixinAccessControl.storageAccessControl(
-            //_storageSlot
-        ).roles;
-        
-        //aside from ROLE_DEFAULT_ADMIN (which is its own admin), roles can not be their own admin
-        //role.requireNotEqual(adminRole);
-        ////mr[role].adminRole.requireZero("adminRole already set");
-        
-        mr[role].adminRole = adminRole;
-        
-        role.emitRoleAdminChanged(
-            mr[role].adminRole,
-            adminRole
-        );
+        mixinAccessControl.setRoleAdmin(role, adminRole);
     }
     function _grantRole(
         bytes32 role,
@@ -131,18 +118,9 @@ abstract contract AccessControlMutableABC is Context,
     {
         //_requireCanReceiveAccessControl(recipient);   //, role);
         
-        mixinAccessControl.storageAccessControl(
-            //_storageSlot
-        ).roles[role].members.add(recipient).requireTrue(
-            string(
-                abi.encodePacked(
-                    _ERR_GRANT_ROLE_FAILED,
-                    role,
-                    _STR_COMMA,
-                    _ERR_STR_ADDRESS,
-                    recipient
-                )
-            )
+        mixinAccessControl.grantRole(
+            role,
+            recipient
         );
         
         role.emitRoleGranted(
@@ -157,18 +135,9 @@ abstract contract AccessControlMutableABC is Context,
         address account
     )internal
     {
-        mixinAccessControl.storageAccessControl(
-            //_storageSlot
-        ).roles[role].members.remove(account).requireTrue(
-            string(
-                abi.encodePacked(
-                    _ERR_REVOKE_ROLE_FAILED,
-                    role,
-                    _STR_COMMA,
-                    _ERR_STR_ADDRESS,
-                    account
-                )
-            )
+        mixinAccessControl.revokeRole(
+            role,
+            account
         );
         
         role.emitRoleRevoked(
@@ -180,13 +149,13 @@ abstract contract AccessControlMutableABC is Context,
         bytes32 role
     )internal
     {
-        _grantRole(role, AddressLogic.NULL);
+        _grantRole(role, addressLogic.NULL);
     }
     function _revokeRoleAll(
         bytes32 role
     )internal
     {
-        _revokeRole(role, AddressLogic.NULL);
+        _revokeRole(role, addressLogic.NULL);
     }
     ///
     /// @dev Admin forces transfer of `role` from address `from` to address `to`
@@ -210,11 +179,21 @@ abstract contract AccessControlMutableABC is Context,
     )internal virtual
     {
         //from.requireNotNullAndNotEqual(to);
-        
         _requireHasRole(role,from);
         _requireNotHasRole(role,to);
         
-        _grantRole(role, to);
-        _revokeRole(role, from);
+        mixinAccessControl.transferRole(role, from, to);
+        
+        address sender = _msgSender();
+        
+        role.emitRoleRevoked(
+            from,
+            sender
+        );
+        
+        role.emitRoleGranted(
+            to,
+            sender
+        );
     }
 }
