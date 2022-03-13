@@ -24,8 +24,8 @@ contract AccessControlBatchedExternalImplementation is ExternalAccessControlImpl
     )public
         AccessControlExternalImplementation()
     {
-        //_registerInterface(type(iAccessControlBatched).interfaceId);
-        //_registerInterface(type(iERC165).interfaceId ^ type(iAccessControlBatched).interfaceId);
+        //_registerInterface(type(iAccessControlMutableBatched).interfaceId);
+        ////_registerInterface(type(iAccessControlMutable).interfaceId ^ type(iAccessControlMutableBatched).interfaceId);
     }
     ///
     /// @dev Grants `role` to each account in `accounts`

@@ -297,6 +297,19 @@ abstract contract AccessControlABC is Context
         return _roleAt(role).members.contains(account);
     }
     ///
+    /// @return {bool} `true` if `account` has been granted `role`
+    /// 
+    /// Requirements:
+    ///     -account can not be zero address
+    ///
+    function _hasRoleAll(
+        bytes32 role
+    )internal view returns(
+        bool
+    ){
+        return _roleAt(role).members.contains(addressLogic.NULL);
+    }
+    ///
     /// @return ret {bool[]} `true` for each corresponding`account in `accounts` has been granted `role`, otherwise false
     /// 
     /// Requirements:

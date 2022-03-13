@@ -27,6 +27,7 @@ contract EIP2470SingletonFactory is EIP801Canary,
         EIP2470()
     {
         _registerInterface(type(iEIP2470).interfaceId);
+        //_registerInterface(type(iERC165).interfaceId ^ type(iEIP2470).interfaceId);
         //_registerInterface(type(iEIP2470SingletonFactory).interfaceId);
     }
     function deploy(

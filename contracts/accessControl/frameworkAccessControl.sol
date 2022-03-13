@@ -378,6 +378,14 @@ library frameworkAccessControlView
     using addressConstraints for address;
     
     string private constant _NAME = 'frameworkAccessControlView: ';
+    string private constant _ERR_STR_ROLE = ', role: ';
+    string private constant _ERR_STR_ADDRESS = ', address: ';
+    string private constant _ERR_CALL_FAILED = string(
+        abi.encodePacked(
+            _NAME,
+            '.call failed, target: '
+        )
+    );
     
     string internal constant STUB_HAS_ROLE = 'hasRole(bytes32,address)';
     //
@@ -530,7 +538,7 @@ library frameworkAccessControlView
                     target,
                     _ERR_STR_ROLE,
                     role,
-                    _ERR_STR_ACCOUNT,
+                    _ERR_STR_ADDRESS,
                     account
                 )
             )

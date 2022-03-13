@@ -192,7 +192,7 @@ abstract contract AccessControl is AccessControlABC,    //AccessControlMutableAB
     /// @return {bool} `true` if AddressLogic.NULL has been granted `role` (meaning all accounts have that role), otherwise `false`
     ///
     function hasRoleAll(
-        byes32 role
+        bytes32 role
     )external view returns(
         bool
     ){
@@ -286,7 +286,7 @@ abstract contract AccessControl is AccessControlABC,    //AccessControlMutableAB
     function grantRole(
         bytes32 role,
         address[] memory accounts
-    )public virtual override
+    )public virtual //override
         //onlyDefaultAdminOrRoleAdmin
     {
         _requireHasAdminRole(role, _msgSender());
@@ -323,7 +323,7 @@ abstract contract AccessControl is AccessControlABC,    //AccessControlMutableAB
     function revokeRole(
         bytes32 role,
         address[] memory accounts
-    )public virtual override
+    )public virtual //override
     {
         _requireHasAdminRole(role, _msgSender());
         
@@ -401,7 +401,301 @@ abstract contract AccessControl is AccessControlABC,    //AccessControlMutableAB
         //_transferRole(role, sender, to);
     //}
 }
+/*
+contract ExternalAccessControl is AccessControlMutableABC,
+    //ReentrancyGuard,
+    iAccessControl
+{
+    using EnumerableSet for EnumerableSet.AddressSet;
+    using Address for address;
+    
+    using eventsAccessControl for bytes32;
+    
+    using logicConstraints for bool;
+    using addressConstraints for address;
+    
+    //using mixinAccessControl for address;
 
+    //bytes32 private constant _STORAGE_SLOT = keccak256();
+    
+    constructor(
+    )public
+        //ReentrancyGuard()
+        AccessControlMutableABC()
+    {
+    }
+    ///
+    ///read-only interface
+    ///
+    
+    /// @return {bool} `true` if `account` has been granted `role`
+    /// 
+    /// Requirements:
+    ///     -account can not be zero address
+    ///
+    function hasRole(
+        bytes32 role,
+        address account
+    )external view override returns(
+        bool
+    ){
+        //account.requireNotNull();
+        //return _roleAt(role).members.contains(account);
+        return _hasRole(role, account);
+    }
+    ///
+    /// @return {bool} `true` if AddressLogic.NULL has been granted `role` (meaning all accounts have that role), otherwise `false`
+    ///
+    function hasRoleAll(
+        bytes32 role
+    )external view returns(
+        bool
+    ){
+        return _hasRoleAll(role);
+    }
+    ///
+    /// @return {uint256} the number of accounts that have `role`,
+    /// can be used together with {getRoleMember} to enumerate all bearers of a role
+    ///
+    function getRoleMemberCount(
+        bytes32 role
+    )external view override returns(
+        uint256
+    ){
+        return _roleAt(role).members.length();
+    }
+    ///
+    /// @return {address} the account that have `role`, otherwise null
+    /// `index` must be a value between 0 and {getRoleMemberCount}, non-inclusive
+    /// 
+    /// NOTE:
+    ///     Role bearers are not sorted in any particular way,
+    ///     and their ordering may change at any point
+    /// 
+    /// WARNING:
+    ///     When using {getRoleMember} and {getRoleMemberCount},
+    ///     make sure you perform all queries on the same block
+    ///
+    /// for more information see:
+    ///     https://forum.openzeppelin.com/t/iterating-over-elements-on-enumerableset-in-openzeppelin-contracts/2296[forum post]
+    ///
+    function getRoleMember(
+        bytes32 role,
+        uint256 index
+    )external view override returns(
+        address
+    ){
+        return _roleAt(role).members.at(index);
+    }
+    //function sliceRoleMembers(
+        //bytes32 role,
+        //uint256 start,
+        //uint256 end
+    //)public view override returns(
+        //address
+    //){
+        //return _roleAt(role).members.at(index);
+    //}
+    ///
+    /// @return {bytes32} admin role that controls `role`
+    /// See {grantRole} and {revokeRole}
+    /// To change a role's admin, use {_setRoleAdmin}
+    ///
+    function getRoleAdmin(
+        bytes32 role
+    )external view override returns(
+        bytes32
+    ){
+        return _roleAt(role).adminRole;
+    }
+    ///
+    ///mutable interface
+    ///
+    
+    ///
+    /// @dev Grants `role` to `account`
+    /// emits a {RoleGranted} event
+    ///
+    /// Requirements:
+    ///     - the caller must have ``role``'s admin role
+    ///     - reverts if `account` has previously been granted `role`
+    ///
+    function grantRole(
+        bytes32 role,
+        address account
+    )external virtual override nonReentrant
+        //onlyDefaultAdminOrRoleAdmin
+    {
+        _requireHasAdminRole(role, _msgSender());
+        
+        _grantRole(role, account);
+    }
+    
+    ///
+    /// @dev Revokes `role` from `account`
+    /// emits a {RoleRevoked} event
+    ///
+    /// Requirements:
+    ///     - the caller must have ``role``'s admin role
+    ///     - reverts if `account` has not previously been granted `role`
+    ///
+    function revokeRole(
+        bytes32 role,
+        address account
+    )external virtual override nonReentrant
+    {
+        _requireHasAdminRole(role, _msgSender());
+        
+        _revokeRole(role, account);
+    }
+    ///
+    /// @dev Revokes `role` from the calling account
+    /// Roles are often managed via {grantRole} and {revokeRole},
+    /// this function's provides a mechanism for accounts to lose their privileges
+    /// if they are compromised (such as when a trusted device is misplaced)
+    /// Emits a {RoleRevoked} event
+    ///
+    /// Requirements:
+    ///     - the caller must be `account`
+    ///     - caller must have been previously granted Role, otherwise revert
+    ///
+    function renounceRole(
+        bytes32 role
+        //address account
+    )external virtual override nonReentrant
+    {
+        //account.requireEqual(
+            //_msgSender()
+            //"can only renounce roles for self"
+        //);
+
+        _revokeRole(role, _msgSender());
+    }
+    ///
+    /// @dev Admin forces transfer of `role` from address `from` to address `to`
+    /// emits a {RoleRevoked} event for `from` and {RoleGranted} event for `to`
+    ///
+    /// Requirements:
+    ///     - the caller must have `role`'s admin role or be default admin
+    ///     - `from` must not be null and currently have the role `role`
+    ///     - `to` must not be null and not have been assigned the role `role`
+    ///
+    /// NOTE:
+    ///     Be careful, default admin role can be transfered (only with the privallegaes it provides),
+    ///     this is useful along with transfering ownership via ERC173
+    ///     however, if default admin role is transfered, this will immediately prevent any further admin operations,
+    ///     thus it should be the last role transfered, if at all
+    ///
+    function transferRole(
+        bytes32 role,
+        address from,
+        address to
+    )external virtual override nonReentrant
+        //onlyDefaultAdminOrRoleAdmin(role)
+    {
+        _requireHasAdminRole(role, _msgSender());
+        
+        _transferRole(role, from, to);
+    }
+    /// 
+    /// @dev caller transfers their role `role` to address `to`
+    /// emits a {RoleRevoked} event for `from` and {RoleGranted} event for `to`
+    /// 
+    /// Requirements:
+    ///     - the caller must have role `role`, `role`'s admin or default admin
+    ///     - `to` must not be null and not have been assigned the role `role`
+    ///
+    //function callerTransferRole(
+        //bytes32 role,
+        //address to
+    //)public virtual override
+        ////onlyDefaultAdminOrRoleAdmin(role)
+    //{
+        //address sender = _msgSender();
+        //
+        ////_requireHasAdminRole(role, sender);
+        //
+        //_transferRole(role, sender, to);
+    //}
+}
+*/
+
+/*
+contract ExternalAccessControlBatched is ExternalAccessControl,
+    iAccessControlMutableBatched
+{   
+    constructor(
+    )internal
+        ExternalAccessControl()
+    {
+    }
+    ///
+    /// @dev Grants `role` to each account in `accounts`
+    /// emits multiple {RoleGranted} event
+    ///
+    /// Requirements:
+    ///     - the caller must have `role`'s admin role or be default admin
+    ///     - reverts if an account in `account` has previously been granted `role`
+    ///
+    function grantRole(
+        bytes32 role,
+        address[] memory accounts
+    )external virtual override nonReentrant
+        //onlyDefaultAdminOrRoleAdmin
+    {
+        _requireHasAdminRole(role, _msgSender());
+        
+        for(uint i; i < accounts.length; i++){
+            _grantRole(role, accounts[i]);
+       }
+    }
+    ///
+    /// @dev Revokes `role` from `account`
+    /// emits a {RoleRevoked} event
+    ///
+    /// Requirements:
+    ///     - the caller must have ``role``'s admin role
+    ///     - reverts if `account` has not previously been granted `role`
+    ///
+    function revokeRole(
+        bytes32 role,
+        address[] memory accounts
+    )external virtual override nonReentrant
+    {
+        _requireHasAdminRole(role, _msgSender());
+        
+        for(uint i; i < accounts.length; i++){
+            _revokeRole(role, accounts[i]);
+        }
+    }
+    ///
+    /// @dev Revokes `role` from the calling account
+    /// Roles are often managed via {grantRole} and {revokeRole},
+    /// this function's provides a mechanism for accounts to lose their privileges
+    /// if they are compromised (such as when a trusted device is misplaced)
+    /// Emits a {RoleRevoked} event
+    ///
+    /// Requirements:
+    ///     - the caller must be `account`
+    ///     - caller must have been previously granted Role, otherwise revert
+    ///
+    function renounceRoles(
+        bytes32[] calldata role
+    )external virtual override nonReentrant
+    {
+        //account.requireEqual(
+            //_msgSender()
+            //"can only renounce roles for self"
+        //);
+        address sender = _msgSender();
+        
+        for(uint i; i < accounts.length; i++){
+            _revokeRole(roles[i], sender);
+        }
+    }
+}
+*/
+/*
 abstract contract AccessControlBatched is AccessControl,
     iAccessControlBatched
 {
@@ -491,296 +785,4 @@ abstract contract AccessControlBatched is AccessControl,
         }
     }
 }
-
-
-contract ExternalAccessControl is AccessControlMutableABC,
-    //ReentrancyGuard,
-    iAccessControl
-{
-    using EnumerableSet for EnumerableSet.AddressSet;
-    using Address for address;
-    
-    using eventsAccessControl for bytes32;
-    
-    using logicConstraints for bool;
-    using addressConstraints for address;
-    
-    //using mixinAccessControl for address;
-
-    //bytes32 private constant _STORAGE_SLOT = keccak256();
-    
-    constructor(
-    )public
-        //ReentrancyGuard()
-        AccessControlMutableABC()
-    {
-    }
-    ///
-    ///read-only interface
-    ///
-    
-    /// @return {bool} `true` if `account` has been granted `role`
-    /// 
-    /// Requirements:
-    ///     -account can not be zero address
-    ///
-    function hasRole(
-        bytes32 role,
-        address account
-    )external view override returns(
-        bool
-    ){
-        //account.requireNotNull();
-        //return _roleAt(role).members.contains(account);
-        return _hasRole(role, account);
-    }
-    ///
-    /// @return {bool} `true` if AddressLogic.NULL has been granted `role` (meaning all accounts have that role), otherwise `false`
-    ///
-    function hasRoleAll(
-        byes32 role
-    )external view returns(
-        bool
-    ){
-        return _hasRoleAll(role);
-    }
-    ///
-    /// @return {uint256} the number of accounts that have `role`,
-    /// can be used together with {getRoleMember} to enumerate all bearers of a role
-    ///
-    function getRoleMemberCount(
-        bytes32 role
-    )external view override returns(
-        uint256
-    ){
-        return _roleAt(role).members.length();
-    }
-    ///
-    /// @return {address} the account that have `role`, otherwise null
-    /// `index` must be a value between 0 and {getRoleMemberCount}, non-inclusive
-    /// 
-    /// NOTE:
-    ///     Role bearers are not sorted in any particular way,
-    ///     and their ordering may change at any point
-    /// 
-    /// WARNING:
-    ///     When using {getRoleMember} and {getRoleMemberCount},
-    ///     make sure you perform all queries on the same block
-    ///
-    /// for more information see:
-    ///     https://forum.openzeppelin.com/t/iterating-over-elements-on-enumerableset-in-openzeppelin-contracts/2296[forum post]
-    ///
-    function getRoleMember(
-        bytes32 role,
-        uint256 index
-    )external view override returns(
-        address
-    ){
-        return _roleAt(role).members.at(index);
-    }
-    //function sliceRoleMembers(
-        //bytes32 role,
-        //uint256 start,
-        //uint256 end
-    //)public view override returns(
-        //address
-    //){
-        //return _roleAt(role).members.at(index);
-    //}
-    ///
-    /// @return {bytes32} admin role that controls `role`
-    /// See {grantRole} and {revokeRole}
-    /// To change a role's admin, use {_setRoleAdmin}
-    ///
-    function getRoleAdmin(
-        bytes32 role
-    )external view override returns(
-        bytes32
-    ){
-        return _roleAt(role).adminRole;
-    }
-    ///
-    ///mutable interface
-    ///
-    
-    ///
-    /// @dev Grants `role` to `account`
-    /// emits a {RoleGranted} event
-    ///
-    /// Requirements:
-    ///     - the caller must have ``role``'s admin role
-    ///     - reverts if `account` has previously been granted `role`
-    ///
-    function grantRole(
-        bytes32 role,
-        address account
-    )external virtual override nonReentrant
-        //onlyDefaultAdminOrRoleAdmin
-    {
-        _requireHasAdminRole(role, _msgSender());
-        
-        _grantRole(role, account);
-    }
-    
-    ///
-    /// @dev Revokes `role` from `account`
-    /// emits a {RoleRevoked} event
-    ///
-    /// Requirements:
-    ///     - the caller must have ``role``'s admin role
-    ///     - reverts if `account` has not previously been granted `role`
-    ///
-    function revokeRole(
-        bytes32 role,
-        address account
-    )external virtual override nonReentrant
-    {
-        _requireHasAdminRole(role, _msgSender());
-        
-        _revokeRole(role, account);
-    }
-    ///
-    /// @dev Revokes `role` from the calling account
-    /// Roles are often managed via {grantRole} and {revokeRole},
-    /// this function's provides a mechanism for accounts to lose their privileges
-    /// if they are compromised (such as when a trusted device is misplaced)
-    /// Emits a {RoleRevoked} event
-    ///
-    /// Requirements:
-    ///     - the caller must be `account`
-    ///     - caller must have been previously granted Role, otherwise revert
-    ///
-    function renounceRole(
-        bytes32 role
-        //address account
-    )external virtual override nonReentrant
-    {
-        //account.requireEqual(
-            //_msgSender()
-            //"can only renounce roles for self"
-        //);
-
-        _revokeRole(role, _msgSender());
-    }
-    ///
-    /// @dev Admin forces transfer of `role` from address `from` to address `to`
-    /// emits a {RoleRevoked} event for `from` and {RoleGranted} event for `to`
-    ///
-    /// Requirements:
-    ///     - the caller must have `role`'s admin role or be default admin
-    ///     - `from` must not be null and currently have the role `role`
-    ///     - `to` must not be null and not have been assigned the role `role`
-    ///
-    /// NOTE:
-    ///     Be careful, default admin role can be transfered (only with the privallegaes it provides),
-    ///     this is useful along with transfering ownership via ERC173
-    ///     however, if default admin role is transfered, this will immediately prevent any further admin operations,
-    ///     thus it should be the last role transfered, if at all
-    ///
-    function transferRole(
-        bytes32 role,
-        address from,
-        address to
-    )external virtual override nonReentrant
-        //onlyDefaultAdminOrRoleAdmin(role)
-    {
-        _requireHasAdminRole(role, _msgSender());
-        
-        _transferRole(role, from, to);
-    }
-    /// 
-    /// @dev caller transfers their role `role` to address `to`
-    /// emits a {RoleRevoked} event for `from` and {RoleGranted} event for `to`
-    /// 
-    /// Requirements:
-    ///     - the caller must have role `role`, `role`'s admin or default admin
-    ///     - `to` must not be null and not have been assigned the role `role`
-    ///
-    //function callerTransferRole(
-        //bytes32 role,
-        //address to
-    //)public virtual override
-        ////onlyDefaultAdminOrRoleAdmin(role)
-    //{
-        //address sender = _msgSender();
-        //
-        ////_requireHasAdminRole(role, sender);
-        //
-        //_transferRole(role, sender, to);
-    //}
-}
-
-
-contract ExternalAccessControlBatched is ExternalAccessControl,
-    iAccessControlMutableBatched
-{   
-    constructor(
-    )internal
-        ExternalAccessControl()
-    {
-    }
-    ///
-    /// @dev Grants `role` to each account in `accounts`
-    /// emits multiple {RoleGranted} event
-    ///
-    /// Requirements:
-    ///     - the caller must have `role`'s admin role or be default admin
-    ///     - reverts if an account in `account` has previously been granted `role`
-    ///
-    function grantRole(
-        bytes32 role,
-        address[] memory accounts
-    )external virtual override nonReentrant
-        //onlyDefaultAdminOrRoleAdmin
-    {
-        _requireHasAdminRole(role, _msgSender());
-        
-        for(uint i; i < accounts.length; i++){
-            _grantRole(role, accounts[i]);
-       }
-    }
-    ///
-    /// @dev Revokes `role` from `account`
-    /// emits a {RoleRevoked} event
-    ///
-    /// Requirements:
-    ///     - the caller must have ``role``'s admin role
-    ///     - reverts if `account` has not previously been granted `role`
-    ///
-    function revokeRole(
-        bytes32 role,
-        address[] memory accounts
-    )external virtual override nonReentrant
-    {
-        _requireHasAdminRole(role, _msgSender());
-        
-        for(uint i; i < accounts.length; i++){
-            _revokeRole(role, accounts[i]);
-        }
-    }
-    ///
-    /// @dev Revokes `role` from the calling account
-    /// Roles are often managed via {grantRole} and {revokeRole},
-    /// this function's provides a mechanism for accounts to lose their privileges
-    /// if they are compromised (such as when a trusted device is misplaced)
-    /// Emits a {RoleRevoked} event
-    ///
-    /// Requirements:
-    ///     - the caller must be `account`
-    ///     - caller must have been previously granted Role, otherwise revert
-    ///
-    function renounceRoles(
-        bytes32[] calldata role
-    )external virtual override nonReentrant
-    {
-        //account.requireEqual(
-            //_msgSender()
-            //"can only renounce roles for self"
-        //);
-        address sender = _msgSender();
-        
-        for(uint i; i < accounts.length; i++){
-            _revokeRole(roles[i], sender);
-        }
-    }
-}
+*/
