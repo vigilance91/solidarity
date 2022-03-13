@@ -5,7 +5,7 @@ pragma experimental ABIEncoderV2;
 ///
 /// @title Access Control Encoder Interface
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 9/12/2021, All Rights Reserved
-///
+/// @dev deployment cost: 586,593 gas
 ///
 ///read-only interface
 ///
