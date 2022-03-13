@@ -9,7 +9,7 @@ pragma experimental ABIEncoderV2;
 ///
 ///read-only interface
 ///
-interface iAccessControlView
+interface iEncoderAccessControlView
 {
     function hasRole(
         bytes32 role,
