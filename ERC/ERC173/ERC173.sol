@@ -145,6 +145,18 @@ abstract contract ERC173 is Context,
     ){
         return _storageSlotERC173.ownerPayable();
     }
+    function _transferOwnership(
+        address newOwner
+    )internal
+    {
+        newOwner.requireNotNull(
+            //_"transferOwnership"
+        );
+        //contract can not own itself
+        _requireNotThis(newOwner);
+        
+        _storageSlotERC173.transferOwnership(newOwner);
+    }
     ///
     /// @dev Leaves the contract without owner. It will not be possible to call
     /// `onlyOwner` functions anymore. Can only be called by the current owner.
@@ -167,12 +179,6 @@ abstract contract ERC173 is Context,
         address newOwner
     )external virtual override onlyOwner nonReentrant
     {
-        newOwner.requireNotNull(
-            //_"transferOwnership"
-        );
-        //contract can not own itself
-        _requireNotThis(newOwner);
-        
-        _storageSlotERC173.transferOwnership(newOwner);
+        _transferOwnership(newOwner);
     }
 }

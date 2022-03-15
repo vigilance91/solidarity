@@ -3,14 +3,15 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/frameworkERC165.sol";
+//import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/frameworkERC165.sol";
+import "https://github.com/vigilance91/solidarity/ERC/ERC173/frameworkERC173.sol";
 
 import "https://github.com/vigilance91/solidarity/contracts/ownership/ERC173/ERC173ReceiverConstraintsABC.sol";
 
 import "https://github.com/vigilance91/solidarity/contracts/ownership/safeERC173/frameworkSafeERC173.sol";
 ///
 /// @title ERC173 Owner Abstract Base Contract
-/// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 17/1/2021, All Rights Reserved
+/// @author Tyler R. Drury <vigilstudios.td@g       mail.com> (www.twitter.com/StudiosVigil) - copyright 17/1/2021, All Rights Reserved
 /// @dev not recommended for use, operations are not safe which means,
 /// the implementing contract makes no gaurentee ownership of an external contract is passed to a contract which lacks
 /// support for this interface
@@ -19,7 +20,7 @@ import "https://github.com/vigilance91/solidarity/contracts/ownership/safeERC173
 /// If the contract is intended to own other contracts and also is itself owned by another ERC173 compliant contract,
 /// please inherit from `SafeERC173OwnableOwner`
 ///
-abstract contract ERC173OwnerABC is ERC173ReceiverConstraintsABC
+abstract contract ERC173OwnerABC //is ERC173ReceiverConstraintsABC
 {
     using logicConstraints for bool;
     
@@ -28,12 +29,12 @@ abstract contract ERC173OwnerABC is ERC173ReceiverConstraintsABC
     using addressLogic for address;
     using addressConstraints for address;
     
-    using frameworkERC165 for address;
+    //using frameworkERC165 for address;
     using frameworkERC173 for address;
     
     constructor(
     )internal
-        ERC173ReceiverConstraintsABC()
+        //ERC173ReceiverConstraintsABC()
     {
     }
     /// @dev this contract supports ownership transfers to some other address
@@ -43,7 +44,7 @@ abstract contract ERC173OwnerABC is ERC173ReceiverConstraintsABC
     )internal
     {
         //_requireSupportsInterface(recipient);
-        address O = ownable.owner();
+        address O = iERC173(ownable).owner();
         
         O.requireNotNull();
         O.requireEqual(
@@ -55,13 +56,14 @@ abstract contract ERC173OwnerABC is ERC173ReceiverConstraintsABC
         //don't waste ether on redundant call
         address(this).requireNotEqualAndNotNull(newOwner);
        
-        address(this).transferOwnership(ownable, newOwner);
+        //address(this).transferOwnership(ownable, newOwner);
+        iERC173(ownable).transferOwnership(newOwner);
     }
     function _renounceOwnership(
         address ownable
     )internal
     {
-        address O = ownable.owner();
+        address O = iERC173(ownable).owner();
         
         O.requireNotNull();
         O.requireEqual(
@@ -69,7 +71,7 @@ abstract contract ERC173OwnerABC is ERC173ReceiverConstraintsABC
             //'invalid owner'
         );
         
-        address(this).renounceOwnership(ownable);
+        iERC173(ownable).renounceOwnership();
         
         //assert(ownable.owner().equal(addressLogic.NULL));
     }

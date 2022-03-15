@@ -3,28 +3,32 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/utils/ReentrancyGuard.sol";
+
 import "https://github.com/vigilance91/solidarity/contracts/ownership/safeERC173/frameworkSafeERC173.sol";
 
 import "https://github.com/vigilance91/solidarity/contracts/ownership/ERC173/owner/iERC173Owner.sol";
 import "https://github.com/vigilance91/solidarity/contracts/ownership/ERC173/owner/ERC173OwnerABC.sol";
 
-abstract contract ERC173Owner is ERC173OwnerABC,
+abstract contract ERC173Owner is //ReentrancyGuard,
+    ERC173OwnerABC,
     // ERC165
     iERC173Owner
 {
     using frameworkERC173 for address;
     
-    contract(
+    constructor(
     )internal
+        //ReentrancyGuard()
         ERC173OwnerABC()
     {
     }
     function externalOwner(
         address ownable
-    )public pure override returns(       //virtual override
+    )public view virtual override returns(       //virtual override
         address
     ){
-        return ownable.owner();
+        return iERC173(ownable).owner();
     }
     /// 
     /// @dev if this contract owns `ownable`, transfer ownership to `newOwner`
@@ -37,7 +41,7 @@ abstract contract ERC173Owner is ERC173OwnerABC,
     function externalTransferOwnership(
         address ownable,
         address newOwner
-    )external override onlyOwner nonReentrant
+    )external virtual override //nonReentrant
     {
         _transferOwnership(ownable, newOwner);
     }
@@ -47,7 +51,7 @@ abstract contract ERC173Owner is ERC173OwnerABC,
     /// 
     function externalRenounceOwnership(
         address ownable
-    )external override onlyOwner nonReentrant
+    )external virtual override //nonReentrant
     {
         _renounceOwnership(ownable);
     }

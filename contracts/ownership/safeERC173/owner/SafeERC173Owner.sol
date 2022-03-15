@@ -3,13 +3,18 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
+//import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/utils/ReentrancyGuard.sol";
+
 import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/frameworkERC165.sol";
 
 import "https://github.com/vigilance91/solidarity/ERC/ERC173/ERC173Ownable.sol";
 
 import "https://github.com/vigilance91/solidarity/contracts/ownership/ERC173/owner/ERC173Owner.sol";
+import "https://github.com/vigilance91/solidarity/contracts/ownership/ERC173/ERC173ReceiverConstraintsABC.sol";
 
 import "https://github.com/vigilance91/solidarity/contracts/ownership/safeERC173/frameworkSafeERC173.sol";
+
+import "https://github.com/vigilance91/solidarity/contracts/ownership/safeERC173/ownable/SafeERC173Ownable.sol";
 ///
 /// @title Safe ERC173 Owner Implementation
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 22/4/2021, All Rights Reserved
@@ -23,7 +28,9 @@ import "https://github.com/vigilance91/solidarity/contracts/ownership/safeERC173
 /// If the contract is intended to own other contracts and also is itself owned by another ERC173 compliant contract,
 /// please inherit from `SafeERC173OwnableOwner`
 ///
-abstract contract SafeERC173OwnerABC is ERC173Owner
+abstract contract SafeERC173OwnerABC is SafeERC173Ownable,
+    ERC173Owner
+    //ERC173ReceiverConstraintsABC
 {
     using logicConstraints for bool;
     
@@ -37,6 +44,7 @@ abstract contract SafeERC173OwnerABC is ERC173Owner
     
     constructor(
     )internal
+        SafeERC173Ownable()
         ERC173Owner()
     {
     }
@@ -47,7 +55,7 @@ abstract contract SafeERC173OwnerABC is ERC173Owner
     )internal
     {
         //_requireSupportsInterface(recipient);
-        address O = ownable.owner();
+        address O = iERC173(ownable).owner();
         
         O.requireNotNull();
         O.requireEqual(
@@ -69,7 +77,7 @@ abstract contract SafeERC173OwnerABC is ERC173Owner
         address ownable
     )internal
     {
-        address O = ownable.owner();
+        address O = iERC173(ownable).owner();
         
         O.requireNotNull();
         O.requireEqual(
@@ -83,99 +91,6 @@ abstract contract SafeERC173OwnerABC is ERC173Owner
         
         //assert(ownable.owner().equal(addressLogic.NULL));
     }
-}
-
-interface iSafeERC173Owner is iERC173Owner
-{
-    function externalOwner(
-        address ownable
-    )external pure returns(       //virtual override
-        address
-    );
-    //
-    //safe functions
-    //
-    function externalSafeTransferOwnership(
-        address ownable,
-        address newOwner
-    )external;
-    // 
-    // @dev this contract renounces ownership of `ownable`, only if this contract is `ownable`s owner,
-    // otherwise transaction will revert
-    // 
-    function externalSafeRenounceOwnership(
-        address ownable
-    )external;
-}
-
-abstract contract SafeERC173Owner is SafeERC173OwnerABC,
-    iSafeERC173Owner
-{
-    using frameworkSafeERC173 for address;
-    
-    bytes4 private constant _IID_SAFE_ERC173_OWNER = type(iSafeERC173Owner).interfaceId;
-    
-    contract(
-    )internal
-        SafeERC173OwnerABC()
-    {
-        _registerInterface(_IID_SAFE_ERC173_OWNER);  //type(iSafeERC173Owner).interfaceId);
-    }
-    function externalOwner(
-        address ownable
-    )public pure override returns(   //virtual override
-        address
-    ){
-        return ownable.owner();
-    }
-    /// 
-    /// @dev if this contract owns `ownable`, transfer ownership to `newOwner`,
-    /// only if `newOwner` is either a wallet or an implementer of iSafeERC173Owner
-    ///
-    /// Requirements:
-    ///     * `ownable` cannot be null, this contract nor this contract's owner
-    ///     * `newOwner` cannot be null and if a contract address, must implement iERC173Owner
-    ///     * `newOwner` cannot be this contract, prevent redundant transaction
-    ///
-    function externalSafeTransferOwnership(
-        address ownable,
-        address newOwner
-    )external override onlyOwner nonReentrant
-    {
-        _safeTransferOwnership(ownable, newOwner);
-    }
-    /// 
-    /// @dev this contract renounces ownership of `ownable`, only if this contract is `ownable`s owner,
-    /// otherwise transaction will revert
-    /// 
-    function externalSafeRenounceOwnership(
-        address ownable
-    )external override onlyOwner nonReentrant
-    {
-        _safeRenounceOwnership(ownable);
-    }
-}
-
-interface iSafeERC173OwnableOwner is iSafeERC173Ownable,
-    iSafeERC173Owner
-{
-}
-
-contract SafeERC173OwnableOwner is SafeERC173Ownable,
-    SafeERC173Owner,
-    iSafeERC173OwnableOwner
-{
-    //bytes4 public constant IID_SAFE_ERC173_OWNABLE = type(iSafeERC173Ownable).interfaceId;
-    bytes4 private constant _IID_SAFE_ERC173_OWNABLE_OWNER = type(iSafeERC173OwnableOwner).interfaceId;
-    
-    contract(
-    )public
-        SafeERC173Ownable()
-        SafeERC173Owner()
-    {
-        //_registerInterface(IID_SAFE_ERC173_OWNABLE);
-        _registerInterface(_IID_SAFE_ERC173_OWNABLE_OWNER);
-    }
     /// 
     /// @dev override for _safeTransferOwnership but exclusively transfers ownership of `ownable` contract address to this contract's owner,
     ///
@@ -185,13 +100,13 @@ contract SafeERC173OwnableOwner is SafeERC173Ownable,
     ///
     function _safeTransferOwnershipToThisOwner(
         address ownable
-    )internal
+    )internal //override
     {
         ownable.isContract().requireTrue(
             'ownable must be a contract'
         );
         
-        address O = ownable.owner();
+        address O = iERC173(ownable).owner();
         
         O.requireNotNull();
         O.requireEqual(
@@ -217,6 +132,105 @@ contract SafeERC173OwnableOwner is SafeERC173Ownable,
             //thisOwner
         //);
     }
+    /// 
+    /// @dev if this contract owns `ownable`, transfer ownership to `newOwner`
+    ///
+    /// Requirements:
+    ///     * `ownable` cannot be null, this contract nor this contract's owner
+    ///     * `newOwner` cannot be null and if a contract address
+    ///     * `newOwner` cannot be this contract, prevent redundant transaction
+    ///
+    function externalTransferOwnership(
+        address ownable,
+        address newOwner
+    )external virtual override nonReentrant
+    {
+        _transferOwnership(ownable, newOwner);
+    }
+    /// 
+    /// @dev this contract renounces ownership of `ownable`, only if this contract is `ownable`s owner,
+    /// otherwise transaction will revert
+    /// 
+    function externalRenounceOwnership(
+        address ownable
+    )external virtual override nonReentrant
+    {
+        _renounceOwnership(ownable);
+    }
+}
+
+interface iSafeERC173Owner is iERC173Owner
+{
+    //function externalOwner(
+        //address ownable
+    //)external view returns(       //virtual override
+        //address
+    //);
+    //
+    //safe functions
+    //
+    function externalSafeTransferOwnership(
+        address ownable,
+        address newOwner
+    )external;
+    // 
+    // @dev this contract renounces ownership of `ownable`, only if this contract is `ownable`s owner,
+    // otherwise transaction will revert
+    // 
+    function externalSafeRenounceOwnership(
+        address ownable
+    )external;
+}
+/// 
+/// @dev deployment cost: 2,167,653 
+/// 
+contract SafeERC173OwnableOwner is //ReentrancyGuard,
+    SafeERC173OwnerABC,
+    iSafeERC173Owner
+{
+    using frameworkSafeERC173 for address;
+    
+    bytes4 private constant _IID_SAFE_ERC173_OWNER = type(iSafeERC173Owner).interfaceId;
+    
+    constructor(
+    )public
+        SafeERC173OwnerABC()
+    {
+        //_registerInterface(_IID_SAFE_ERC173_OWNER);  //type(iSafeERC173Owner).interfaceId);
+    }
+    function externalOwner(
+        address ownable
+    )public view override(ERC173Owner, iERC173Owner) returns(   //virtual override
+        address
+    ){
+        return iERC173(ownable).owner();
+    }
+    /// 
+    /// @dev if this contract owns `ownable`, transfer ownership to `newOwner`,
+    /// only if `newOwner` is either a wallet or an implementer of iSafeERC173Owner
+    ///
+    /// Requirements:
+    ///     * `ownable` cannot be null, this contract nor this contract's owner
+    ///     * `newOwner` cannot be null and if a contract address, must implement iERC173Owner
+    ///     * `newOwner` cannot be this contract, prevent redundant transaction
+    ///
+    function externalSafeTransferOwnership(
+        address ownable,
+        address newOwner
+    )external override nonReentrant //onlyOwner
+    {
+        _safeTransferOwnership(ownable, newOwner);
+    }
+    /// 
+    /// @dev this contract renounces ownership of `ownable`, only if this contract is `ownable`s owner,
+    /// otherwise transaction will revert
+    /// 
+    function externalSafeRenounceOwnership(
+        address ownable
+    )external override nonReentrant //onlyOwner
+    {
+        _safeRenounceOwnership(ownable);
+    }
     // note: not safe, not recommended for use
     //function transferOwnershipToThisOwner(
         //address ownable
@@ -233,8 +247,36 @@ contract SafeERC173OwnableOwner is SafeERC173Ownable,
     ///
     function safeTransferOwnershipToThisOwner(
         address ownable
-    )external override onlyOwner nonReentrant
+    )external onlyOwner nonReentrant
     {
         _safeTransferOwnershipToThisOwner(ownable);
     }
 }
+
+//interface iSafeERC173OwnableOwner is iSafeERC173Ownable
+    //iSafeERC173Owner
+//{
+    //function safeTransferOwnershipToThisOwner(
+        //address ownable
+    //)external;
+//}
+
+/*
+contract SafeERC173OwnableOwner is SafeERC173Ownable,
+    SafeERC173Owner
+    //iSafeERC173OwnableOwner
+{
+    //bytes4 public constant IID_SAFE_ERC173_OWNABLE = type(iSafeERC173Ownable).interfaceId;
+    //bytes4 private constant _IID_SAFE_ERC173_OWNABLE_OWNER = type(iSafeERC173OwnableOwner).interfaceId;
+    
+    constructor(
+    )public
+        SafeERC173Ownable()
+        SafeERC173Owner()
+    {
+        //_registerInterface(IID_SAFE_ERC173_OWNABLE);
+        //_registerInterface(_IID_SAFE_ERC173_OWNABLE_OWNER);
+    }
+    
+}
+*/

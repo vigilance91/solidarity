@@ -51,7 +51,7 @@ abstract contract SafeERC173Ownable is ERC173Ownable,
         ERC173Ownable()
         ERC173ReceiverConstraintsABC()
     {
-        _registerInterface(type(iERC173Receiver).interfaceId);
+        //_registerInterface(type(iERC173Receiver).interfaceId);
         //_registerInterface(type(iSafeERC173Ownable).interfaceId);
     }
     //function _requireSupportsInterfaceSafeERC173(
@@ -64,29 +64,29 @@ abstract contract SafeERC173Ownable is ERC173Ownable,
     //}
     /// @dev this contract supports ownership transfers to some other address
     function _safeTransferOwnership(
-        address ownable,
         address newOwner
     )internal
     {
         //_requireSupportsInterfaceSafeERC173(recipient);
-        address O = ownable.owner();
-        
-        O.requireNotNull();
-        O.requireEqual(
-            address(this)
+        address O = owner();
+        address t = address(this);
+
+        O.requireNotEqualAndNotNull(
+            t
             //'invalid owner'
         );
         
         //revert transaction if this contract is already owner of ownable,
         //don't waste ether on redundant call
-        address(this).requireNotEqualAndNotNull(newOwner);
+        t.requireNotEqualAndNotNull(newOwner);
         
         _requireCanReceiveERC173(newOwner);
         
-        address(this).transferOwnership(ownable, newOwner);
+        _transferOwnership(newOwner);
         
-        _requireOnERC173Received(newOwner, address(this));
+        _requireOnERC173Received(O, newOwner);
     }
+    /*
     function _safeRenounceOwnership(
         address ownable
     )internal
@@ -113,7 +113,7 @@ abstract contract SafeERC173Ownable is ERC173Ownable,
     ///
     function _safeTransferOwnershipToThisOwner(
         address ownable
-    )internal
+    )internal virtual
     {
         ownable.isContract().requireTrue(
             'ownable must be a contract'
@@ -145,41 +145,5 @@ abstract contract SafeERC173Ownable is ERC173Ownable,
             //thisOwner
         //);
     }
-    /// 
-    /// @dev if this contract owns `ownable`, transfer ownership to newOwner
-    ///
-    /// Requirements:
-    ///     * `ownable` cannot be null, this contract nor this contract's owner
-    ///     * `newOwner` cannot be null and if a contract address, must implement iERC173Owner
-    ///     * `newOwner` cannot be this contract, prevent redundant transaction
-    ///
-    function externalSafeTransferOwnership(
-        address ownable,
-        address newOwner
-    )external onlyOwner nonReentrant
-    {
-        _safeTransferOwnership(ownable, newOwner);
-    }
-    /// @dev like _safeTransferOwnership but exclusively transfers ownership of `ownable` contract address to this contract's owner,
-    ///
-    /// Requirements:
-    ///     * this contract's owner must not be null, otherwise call _safeRenounceOwnership
-    ///     * `ownable` must not already be this contract's owner
-    ///
-    function safeTransferOwnershipToThisOwner(
-        address ownable
-    )external onlyOwner nonReentrant
-    {
-        _safeTransferOwnershipToThisOwner(ownable);
-    }
-    /// 
-    /// @dev this contract renounces ownership of `ownable`, only if this contract is `ownable`s owner,
-    /// otherwise transaction will revert
-    /// 
-    function externalSafeRenounceOwnership(
-        address ownable
-    )external onlyOwner nonReentrant
-    {
-        _safeRenounceOwnership(ownable);
-    }
+    */
 }

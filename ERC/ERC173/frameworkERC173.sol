@@ -8,14 +8,111 @@ import "https://github.com/vigilance91/solidarity/libraries/address/addressConst
 
 import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/frameworkERC165.sol";
 import "https://github.com/vigilance91/solidarity/ERC/ERC173/iERC173.sol";
+
+/*
+library frameworkERC173InterfaceSupport
+{
+    using frameworkERC165 for address;
+    
+    using logicConstraints for bool;
+    
+    //bytes4 internal constant IID_ERC173View = type(iERC173View).interfaceId;
+    //bytes4 internal constant IID_ERC173Mutable = type(iERC173Mutable).interfaceId;
+    bytes4 internal constant INTERFACE_ID = type(iERC173).interfaceId;
+    
+    string private constant _NAME = ' - frameworkERC173InterfaceSupport: ';
+    string private constant _ERR_STR_TARGET = ', target: ';
+    
+    string private constant _ERR_CALL_FAILED = string(
+        abi.encodePacked(
+            _NAME,
+            'external call failed',
+            _ERR_STR_TARGET
+        )
+    );
+    string private constant _ERR_ERC173_SUPPORTED = string(
+        abi.encodePacked(
+            _NAME,
+            'interface supported: iERC173',
+            _ERR_STR_TARGET
+        )
+    );
+    string private constant _ERR_ERC173_NOT_SUPPORTED = string(
+        abi.encodePacked(
+            _NAME,
+            'unsupported interface: iERC173',
+            _ERR_STR_TARGET
+        )
+    );
+    //
+    //read-only interface
+    //
+    function supportsInterface(
+        address target
+    )internal view returns(
+        bool ret
+    ){
+        return target.supportsInterface(INTERFACE_ID);
+    }
+    
+    function requireSupportsInterface(
+        address target
+    )internal view
+    {
+        supportsInterface(target).requireTrue(
+            string(
+                abi.encodePacked(
+                    _ERR_ERC173_NOT_SUPPORTED,
+                    target
+                )
+            )
+        );
+    }
+    function requireNotSupportsInterface(
+        address target
+    )internal view
+    {
+        supportsInterface(target).requireFalse(
+            string(
+                abi.encodePacked(
+                    _ERR_ERC173_SUPPORTED,
+                    target
+                )
+            )
+        );
+    }
+    //
+    //casting
+    //
+    function castERC173Ownable(
+        address ownable
+    )internal view returns(
+        iERC173
+    ){
+        requireSupportsInterface(ownable);
+        
+        return iERC173(ownable);
+    }
+    
+    function thisCastERC173Ownable(
+    )internal view returns(
+        iERC173
+    ){
+        return castERC173Ownable(
+            address(this)
+        );
+    }
+}
+*/
 ///
 /// @title Framework for ERC-173 Ownable Interface
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 26/3/2021, All Rights Reserved
 /// @dev verification of support for ERC-165 introspection is performed before each call
 ///
-library frameworkERC173
+library frameworkERC173 //library frameworkERC173View
 {
     using frameworkERC165 for address;
+    //using frameworkERC173InterfaceSupport for address;
     
     using logicConstraints for bool;
     using Address for address;
@@ -122,7 +219,7 @@ library frameworkERC173
     )internal view returns(
         address ret
     ){
-        //requireSupportsInterface(target);
+        //target.requireSupportsInterfaceERC173();
         
         (bool result, bytes memory data) = target.staticcall(
             _SIG_OWNER
@@ -148,7 +245,7 @@ library frameworkERC173
         address target
     )internal
     {
-        //requireSupportsInterface(target);
+        //target.requireSupportsInterfaceERC173();
         
         (bool result, ) = target.call(
             _SIG_RENOUNCE_OWNERSHIP
@@ -169,7 +266,7 @@ library frameworkERC173
         address newOwner
     )internal
     {
-        //requireSupportsInterface(target);
+        //target.requireSupportsInterfaceERC173();
         
         (bool result, ) = target.call(
             abi.encodeWithSignature(
@@ -188,3 +285,66 @@ library frameworkERC173
         );
     }
 }
+/*
+library frameworkERC173Delegate
+{
+    //using frameworkERC173InterfaceSupport for address;
+    //bytes4 internal constant INTERFACE_ID = type(iERC173Mutable).interfaceId;
+    
+    string private constant _NAME = ' - frameworkERC173Delegate: ';
+    string private constant _ERR_STR_TARGET = ', target: ';
+    
+    string private constant _ERR_CALL_FAILED = string(
+        abi.encodePacked(
+            _NAME,
+            'external call failed',
+            _ERR_STR_TARGET
+        )
+    );
+    /// note the contract which exectues this function MUST be the owner of the target contract,
+    /// otherwise this function will revert
+    function renounceOwnership(
+        address target
+    )internal
+    {
+        //target.requireSupportsInterfaceERC173();
+        
+        (bool result, ) = target.delegatecall(
+            frameworkERC173Mutable.SIG_RENOUNCE_OWNERSHIP
+        );
+        
+        result.requireTrue(
+            string(
+                abi.encodePacked(
+                    _ERR_CALL_FAILED,
+                    target
+                )
+            )
+        );
+    }
+    /// note the contract which exectues this function MUST be the owner of the target contract
+    function transferOwnership(
+        address target,
+        address newOwner
+    )internal
+    {
+        //target.requireSupportsInterfaceERC173();
+        
+        (bool result, ) = target.delegatecall(
+            abi.encodeWithSignature(
+                frameworkERC173Mutable.STUB_TRANSFER_OWNERSHIP,
+                newOwner
+            )
+        );
+        
+        result.requireTrue(
+            string(
+                abi.encodePacked(
+                    _ERR_CALL_FAILED,
+                    target
+                )
+            )
+        );
+    }
+}
+*/

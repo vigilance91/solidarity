@@ -12,7 +12,7 @@ interface iERC173Owner  //is iERC165
 {
     function externalOwner(
         address ownable
-    )external pure returns(
+    )external view returns(
         address
     );
     //
