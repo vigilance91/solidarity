@@ -72,6 +72,40 @@ abstract contract ERC20 is MutableSupplyTokenABC
     using eventsERC20 for address;
     
     using SafeMath for uint256;
+    
+    //using mixinERC20View for bytes32;
+    //using mixinERC20Mutable for bytes32;
+    
+    string private constant _NAME = ' - ERC20: ';
+    
+    string private constant _ERR_STR_SENDER = 'sender: ';
+    string private constant _ERR_STR_RECIPIENT = 'recipient: ';
+    
+    string private constant _ERR_STR_AMOUNT = 'amount: ';
+    
+    string private constant _ERR_STR_OWNER = 'owner: ';
+    string private constant _ERR_STR_SPENDER = 'spender: ';
+    
+    string internal constant _ERR_EXCEEDED_BALANCE = string(
+        abi.encodePacked(
+            _NAME,
+            'exceeded balance: '
+        )
+    );
+    
+    string internal constant _ERR_INSUFFICIENT_ALLOWANCE = string(
+        abi.encodePacked(
+            _NAME,
+            'insufficient allowance: '
+        )
+    );
+    
+    string internal constant _ERR_ALLOWANCE_OVERFLOW = string(
+        abi.encodePacked(
+            _NAME,
+            'allowance overflow: '
+        )
+    );
     ///
     /// @dev Set {name} and {symbol} of token, initializes {decimals} with a default value of 18
     ///
@@ -88,12 +122,55 @@ abstract contract ERC20 is MutableSupplyTokenABC
             18
         );
     }
-    function _mutableERC20Storage(
-    )private returns(
-        mixinERC20.ERC20Storage storage
-    ){
-        return mixinERC20.storageERC20();
-    }
+    
+    //function _initialize(
+        //bytes calldata data
+    //)internal virtual
+    //{
+        //(
+            //bytes32 typeHash,
+            //bytes32 argHash,
+            //uint8 decimals,
+            //bytes memory initData
+        //) = abi.decode(
+            //data,
+            //(bytes32, bytes32, uint8, bytes)
+        //);
+        
+        //typeHash.requireEqual(_INIT_TYPE_HASH);
+        //keccak256(abi.encodePacked(
+            //decimals,
+            //initData
+        //)).requireEqual(argHash);
+        
+        //mixinERC20.initialize(
+            //decimals
+        //);
+        
+        //super.initialize(
+            //initData
+            //
+            ////abi.encodePacked(
+                ////
+                ////keccak256(abi.encodePacked(
+                    ////initialSupply,
+                    ////name,
+                    ////symbol
+                ////)),
+                ////initialSupply,
+                ////name,
+                ////symbol
+            //)
+        //);
+    //}
+    
+    //function _dealloc(
+    //)internal virtual
+    //{
+        //super.dealloc();
+        //mixinERC20.dealloc();
+    //}
+    
     function _readOnlyERC20Storage(
     )private pure returns(
         mixinERC20.ERC20Storage storage
@@ -200,7 +277,18 @@ abstract contract ERC20 is MutableSupplyTokenABC
             spender,
             A.add(
                 addedValue
-                //"allowance overflow"
+                //string(
+                    //abi.encodePacked(
+                        //_ERR_ALLOWANCE_OVERFLOW,
+                        //A,
+                        //_ERR_STR_OWNER,
+                        //owner,
+                        //_ERR_STR_SPENDER,
+                        //spender,
+                        //_ERR_STR_AMOUNT,
+                        //addedValue
+                    //)
+                //)
             )
         );
         return true;
@@ -235,7 +323,19 @@ abstract contract ERC20 is MutableSupplyTokenABC
             spender,
             A.sub(
                 subtractedValue,
-                "allowance underflow"
+                //"allowance underflow"
+                string(
+                    abi.encodePacked(
+                        _ERR_INSUFFICIENT_ALLOWANCE,
+                        A,
+                        _ERR_STR_OWNER,
+                        owner,
+                        _ERR_STR_SPENDER,
+                        spender,
+                        _ERR_STR_AMOUNT,
+                        subtractedValue
+                    )
+                )
             )
         );
         
@@ -271,14 +371,14 @@ abstract contract ERC20 is MutableSupplyTokenABC
         //_emitTransfer(sender,recipient,amount)
     {
         sender.requireNotNull(
-            //"ERC20: transfer from the zero address"
+            //_ERR_STR_TRANSFER //"transfer from the zero address"
         );
         recipient.requireNotNull(
-            //"ERC20: transfer to the zero address"
+            //_ERR_STR_TRANSFER //"transfer to the zero address"
         );
         sender.requireNotEqual(
             recipient
-            //"ERC20: transfer from the zero address"
+            //_ERR_STR_TRANSFER //"sender cannot be recipient"
         );
         amount.requireGreaterThanZero();
         //balanceOf(sender).greaterThanOrEqual(amount);
@@ -300,7 +400,19 @@ abstract contract ERC20 is MutableSupplyTokenABC
             sender,
             _balanceOf(sender).sub(
                 amount,
-                "balance exceeded"
+                _ERR_EXCEEDED_BALANCE
+                //string(
+                    //abi.encodePacked(
+                        //_ERR_EXCEEDED_BALANCE,
+                        //BAL,
+                        //_ERR_STR_SENDER,
+                        //sender,
+                        //ERR_STR_RECIPIENT,
+                        //recipient,
+                        //_ERR_STR_AMOUNT,
+                        //amount
+                    //)
+                //)
             )
         );
         
@@ -353,7 +465,18 @@ abstract contract ERC20 is MutableSupplyTokenABC
             spender,
             A.sub(
                 amount,
-                "allowance exceeded"
+                string(
+                    abi.encodePacked(
+                        _ERR_INSUFFICIENT_ALLOWANCE,
+                        A,
+                        _ERR_STR_OWNER,
+                        owner,
+                        _ERR_STR_SPENDER,
+                        spender,
+                        _ERR_STR_AMOUNT,
+                        amount
+                    )
+                )
             )
         );
         
@@ -404,10 +527,10 @@ abstract contract ERC20 is MutableSupplyTokenABC
         //_emitTransfer(addressLogic.NULL,account,amount)
     {
         account.requireNotNull(
-            //"_mint"
+            //_ERR_STR_MINT
         );
         amount.requireGreaterThanZero(
-            //''
+            //_ERR_STR_MINT
         );
         
         //if(account.isContract()){
@@ -455,10 +578,10 @@ abstract contract ERC20 is MutableSupplyTokenABC
         //_requireNotThis(account);
         
         account.requireNotNull(
-            ////"_burn"
+            //_ERR_STR_BURN
         );
         amount.requireGreaterThanZero(
-            //''
+            //_ERR_STR_BURN
         );
         
         _beforeTokenTransfer(
@@ -474,7 +597,17 @@ abstract contract ERC20 is MutableSupplyTokenABC
             account,
             _balanceOf(account).sub(
                 amount,
-                "balance exceeded"
+                _ERR_EXCEEDED_BALANCE
+                //string(
+                    //abi.encodePacked(
+                        //_ERR_EXCEEDED_BALANCE,
+                        //sender,
+                        //_ERR_STR_BAL,
+                        //BAL,
+                        //_ERR_STR_TO,
+                        //sender
+                    //)
+                //)
             )
         );
         
@@ -497,13 +630,13 @@ abstract contract ERC20 is MutableSupplyTokenABC
         uint256 amount
     ){
         amount.requireGreaterThanZero(
-            //"ERC20: approve"
+            //_ERR_STR_APPROVE
         );
         owner.requireNotNull(
-            //"ERC20: approve from the zero address"
+            //_ERR_STR_APPROVE
         );
         spender.requireNotNull(
-            //"ERC20: approve to the zero address"
+            //_ERR_STR_APPROVE
         );
         owner.requireNotEqual(spender);
         
@@ -532,10 +665,10 @@ abstract contract ERC20 is MutableSupplyTokenABC
         //_requireNotThis(spender);
         //note: amount may be 0
         owner.requireNotNull(
-            //"approve from the zero address"
+            //_ERR_STR_APPROVE  //"from the zero address"
         );
         spender.requireNotNull(
-            //"approve to the zero address"
+            //_ERR_STR_APPROVE  //"approve to the zero address"
         );
         owner.requireNotEqual(spender);
         

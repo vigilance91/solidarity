@@ -28,6 +28,10 @@ abstract contract ERC20Token is EIP801Canary,
     )internal EIP801Canary()
         ERC20(name, symbol)
     {
+        //_registerInterface(type(iTokenIdentifier).interfaceId);
+        //_registerInterface(type(iTokenSupply).interfaceId);
+        //_registerInterface(type(iERC20View).interfaceId);
+        //_registerInterface(type(iERC20Mutable).interfaceId);
         _registerInterface(type(iERC20).interfaceId);
         //_registerInterface(type(iERC20Token).interfaceId);
     }
@@ -37,7 +41,7 @@ abstract contract ERC20Token is EIP801Canary,
         uint256
     ){
         return _balanceOf(account);
-    }   
+    }
     ///
     /// @dev See {mixinERC20.transfer}
     /// 

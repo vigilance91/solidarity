@@ -86,8 +86,7 @@ interface iERC20View is iTokenIdentifier
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 3/4/2021, All Rights Reserved
 ///
 interface iERC20 //is iERC20View,
-    //iERC20Mutable,
-    ////iTokenIdentifier
+    //iERC20Mutable
 {
     /// @return {uint256} amount of tokens in existence
     //function totalSupply(
@@ -158,3 +157,13 @@ interface iERC20 //is iERC20View,
         bool
     );
 }
+
+//interface is iERC20RevokableAllowance
+//{
+    //function revokeAllowance(
+        //address owner,
+        //address spender
+    //)external returns(
+        //bool
+    //);
+//}

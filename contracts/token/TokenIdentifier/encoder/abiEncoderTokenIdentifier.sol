@@ -15,6 +15,9 @@ library abiEncoderTokenIdentifier
     //
     bytes public constant SIG_NAME = abi.encodeWithSignature('name()');
     bytes public constant SIG_SYMBOL = abi.encodeWithSignature('symbol()');
+    //
+    ////string public constant _STUB_INITIALIZE = 'initialize(string,string)';
+    //string public constant _STUB_INITIALIZE_BYTES = 'initialize(bytes)';
     /* 
     /// @return {bytes} signature used for a call to a external address or proxy which support the TokenIdentifier interface
     /// 
@@ -33,5 +36,21 @@ library abiEncoderTokenIdentifier
     ){
         return SIG_SYMBOL;
     }
+    //function initialize(
+        //bytes calldata data
+    //)internal pure returns(
+        //bytes memory
+    //){
+        //return ;
+    //}
+    
+    //function initialize(
+        //string calldata name,
+        //string calldata symbol
+    //)internal pure returns(
+        //bytes memory
+    //){
+        //return ;
+    //}
     */
 }

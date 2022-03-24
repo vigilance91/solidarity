@@ -7,6 +7,9 @@ import "https://github.com/vigilance91/solidarity/contracts/token/ERC20/SafeERC2
 //import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/supplyCap/MutableSupplyCapABC.sol";
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/PausableAccessControl.sol";
 
+import "https://github.com/vigilance91/solidarity/ERC/token/ERC20/mixinERC20.sol";
+import "https://github.com/vigilance91/solidarity/ERC/token/ERC20/eventsERC20.sol";
+
 //interface iSafeERC20DelationMint is iERC20,
 // iPausableAccessControl
 //{
@@ -24,6 +27,8 @@ import "https://github.com/vigilance91/solidarity/contracts/accessControl/Pausab
 abstract contract SafeERC20DeflationMint is SafeERC20BurnableToken,
     PausableAccessControl
 {
+    using eventsERC20 for address;
+    
     using SafeMath for uint256;
 
     using addressLogic for address;
@@ -65,7 +70,21 @@ abstract contract SafeERC20DeflationMint is SafeERC20BurnableToken,
             'initial supply must be non-zero'
         );
         
-        _mint(sender, initialSupply);
+        //_mint(sender, initialSupply);
+        _increaseTotalSupply(initialSupply);
+        
+        mixinERC20.setBalanceOf(
+            sender,
+            _balanceOf(sender).add(
+                initialSupply
+                //'balance overflow'
+            )
+        );
+        
+        addressLogic.NULL.emitTransfer(
+            sender,
+            initialSupply
+        );
         
         //_registerInterface(type(iSafeERC20DeflationMint).interfaceId);
     }

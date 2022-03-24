@@ -31,9 +31,10 @@ library mixinERC20
         //string symbol;
     }
     
-    bytes32 internal constant STORAGE_SLOT = keccak256("ERC20.mixin.storage");
+    bytes32 internal constant STORAGE_SLOT = keccak256("solidarity.ERC-20.mixin.STORAGE_SLOT");
     
     function storageERC20(
+        //bytes32 slot
     )internal pure returns(
         ERC20Storage storage ret
     ){
@@ -47,18 +48,21 @@ library mixinERC20
     ///getters
     ///
     function balances(
+        //bytes32 slot
     )internal view returns(
         mapping(address=>uint256) storage
     ){
         return storageERC20().balances;
     }
     function allowances(
+        //bytes32 slot
     )internal view returns(
         mapping(address=>mapping(address=>uint256)) storage
     ){
         return storageERC20().allowances;
     }
     function balanceOf(
+        //bytes32 slot,
         address account
     )internal view returns(
         uint256
@@ -66,6 +70,7 @@ library mixinERC20
         return balances()[account];
     }
     function allowancesAt(
+        //bytes32 slot,
         address account
     )internal view returns(
         mapping(address=>uint256) storage
@@ -75,6 +80,7 @@ library mixinERC20
         return allowances()[account];
     }
     function allowanceFor(
+        //bytes32 slot,
         address account,
         address spender
     )internal view returns(
@@ -104,6 +110,7 @@ library mixinERC20
         //return storageERC20().totalSupply;
     //}
     function decimals(
+        //bytes32 slot
     )internal view returns(
         uint8
     ){
@@ -113,15 +120,21 @@ library mixinERC20
     ///setters
     ///
     function setBalanceOf(
+        //bytes32 slot,
         address account,
         uint256 newBalance
     )internal
     {
         //account.requireNotNull();
         
+        //newBalance.requireNotEqual(
+            //balances()[account]
+        //);
+        
         balances()[account] = newBalance;
     }
     function increaseBalanceOf(
+        //bytes32 slot,
         address account,
         uint256 amountBy
     )internal
@@ -135,6 +148,7 @@ library mixinERC20
         //return balanceOf(account);
     }
     function decreaseBalanceOf(
+        //bytes32 slot,
         address account,
         uint256 amountBy
     )internal
@@ -148,12 +162,17 @@ library mixinERC20
         //return balanceOf(account);
     }
     function setAllowanceFor(
+        //bytes32 slot,
         address owner,
         address spender,
         uint256 newAllowance
     )internal
     {
-        //account.requireNotNullAndNotEqual(spender);
+        //owner.requireNotNullAndNotEqual(spender);
+        
+        //mapping storage a = allowances()[owner];
+        
+        //a[spender].requireNotEqual(newAllowance);
         
         allowances()[owner][spender] = newAllowance;
     }
@@ -245,17 +264,21 @@ library mixinERC20
     }
     */
     function setDecimals(
+        //bytes32 slot,
         uint8 newDecimals
     )internal
     {
         storageERC20().decimals = newDecimals;
     }
     function initialize(
+        //bytes32 slot,
         //string memory newName,
         //string memory newSymbol,
         uint8 newDecimals
     )internal
     {
+        //_requireNotInitialized(slot);
+        
         //setName(newName);
         //setSymbol(newSymbol);
         //setTotalSupply(0);
@@ -263,4 +286,74 @@ library mixinERC20
         
         //setBalanceAt(msg.sender, 0);
     }
+    
+    //function reset(
+        //bytes32 slot
+    //)internal
+    //{
+        //_requireInitialized(slot);
+        //
+        //ERC20Storage storage cs = storageERC20(slot);
+        
+        //setName(newName);
+        //setSymbol(newSymbol);
+        //setTotalSupply(0);
+        //setDecimals(newDecimals);
+    //}
+    //function remove(
+        //bytes32 slot
+    //)internal
+    //{
+        //_requireInitialized();
+        //
+        //ERC20Storage storage s = storageERC20(slot);
+        //
+        //delete s.balances;
+        //delete s.allowances;
+        //
+        //delete s.decimals;
+    //}
+    
+    //transfer state from storage slot `from` to storage slot `to`,
+    //removing the previous state of storage slot `from`
+    //function transferStateERC20(
+        //bytes32 from,
+        //bytes32 to
+    //)internal
+    //{
+        //_requireInitialized(from);
+        
+        //initialize(to, storageERC20(from));
+        
+        //remove(from);
+    //}
+    
+    //transfer without removing the previous state at storage slot `from`
+    //function copyStateERC20(
+        //bytes32 from,
+        //bytes32 to
+    //)internal
+    //{
+        //_requireInitialized(from);
+        
+        //reset(to, storageERC20(from));
+    //}
+    
+    ////function swapStateERC20(
+        ////bytes32 lhs,
+        ////bytes32 rhs
+    ////)internal
+    ////{
+        //ERC20Storage storage sl = storageERC20(lhs);
+        //ERC20Storage storage sr = storageERC20(rhs);
+        
+        //reset(
+            //lhs,
+            //sr
+        //);
+        //reset(
+            //rhs,
+            //sl
+        //);
+    ////}
 }

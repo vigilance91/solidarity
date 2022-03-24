@@ -4,7 +4,7 @@ pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
 //todo change /StaticTokenSupply/ to /staticTokenSupply/
-import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/StaticTokenSupply/iStaticTokenSupply.sol";
+import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/staticTokenSupply/iStaticTokenSupply.sol";
 import "https://github.com/vigilance91/solidarity/contracts/token/TokenIdentifier/iTokenIdentifier.sol";
 
 //Ethereum Improvments Proposal: Smart Contract Interface for Licences[sic]: https://eips.ethereum.org/EIPS/eip-1753

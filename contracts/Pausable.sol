@@ -157,7 +157,7 @@ abstract contract Pausable
         
         _requirePaused();
     }
-    
+    /*
     /// @dev execute modified function only if contract is paused, then unpausing after execution
     modifier _unpauseAfter(
     ){
@@ -176,7 +176,7 @@ abstract contract Pausable
         
         _pause(_msgSender());
     }
-    
+    */
     /// @dev pause, must not already be paused
     function _pause(
         address sender

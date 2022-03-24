@@ -3,7 +3,7 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/StaticTokenSupply/StaticTokenSupplyABC.sol";
+import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/staticTokenSupply/StaticTokenSupplyABC.sol";
 ///
 /// @title Mutable Token Supply Abstract Base Contract
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 3/1/2021, All Rights Reserved

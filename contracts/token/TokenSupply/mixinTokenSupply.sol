@@ -5,6 +5,8 @@ pragma experimental ABIEncoderV2;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/math/SafeMath.sol";
 
+import "https://github.com/vigilance91/solidarity/libraries/bytes32/Bytes32Constraints.sol";
+
 import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256Constraints.sol";
 import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/eventsTokenSupply.sol";
 ///
@@ -18,16 +20,22 @@ library mixinTokenSupply
     using SafeMath for uint256;
     
     using uint256Constraints for uint256;
-    
+    using Bytes32Constraints for bytes32;
+
     using eventsTokenSupply for uint256;
     
     struct TokenSupplyStorage{
         uint256 totalSupply;
     }
     
-    bytes32 internal constant STORAGE_SLOT = keccak256("solidarity.tokenSupply.mixin.storage");
+    bytes32 internal constant STORAGE_SLOT = bytes32(uint256(
+        keccak256("solidarity.mixins.mixinTokenSupply.STORGE_SLOT")
+    ) - 1);
+    
+    bytes32 private constant _TOKEN_SUPPLY_TYPE_HASH = keccak256("solidarity.mixins.mixinTokenSupplyStorage(bytes32 typeHash,uint256 totalSupply)");
     
     function storageTokenSupply(
+        //bytes32 slot
     )internal pure returns(
         TokenSupplyStorage storage ret
     ){
@@ -37,6 +45,136 @@ library mixinTokenSupply
             ret_slot := position
         }
     }
+    //
+    //constraints
+    //
+    function _requireInitialized(
+        //bytes32 slot
+    )private view
+    {
+        storageTokenSupply().totalSupply.requireGreaterThanZero();
+    }
+    function _requireNotInitialized(
+        //bytes32 slot
+    )private view
+    {
+        storageTokenSupply().totalSupply.requireIsZero();
+    }
+    //
+    //encoding functions
+    //
+    function _encode(
+        uint256 tokenSupply
+    )private pure returns(
+        bytes memory
+    ){
+        return abi.encodePacked(
+            keccak256(
+                abi.encodePacked(
+                    _TOKEN_SUPPLY_TYPE_HASH,
+                    tokenSupply
+                )
+            ),
+            _TOKEN_SUPPLY_TYPE_HASH,
+            tokenSupply
+        );
+    }
+    function encodeTokenSupply(
+        uint256 totalSupply
+    )internal pure returns(
+        bytes memory
+    ){
+        return _encode(
+            totalSupply
+        );
+    }
+    
+    function encodeTokenSupplyStorage(
+        TokenSupplyStorage storage self
+    )internal view returns(
+        bytes memory
+    ){
+        return _encode(
+            self.totalSupply
+        );
+    }
+    function encodeTokenSupplyMemory(
+        TokenSupplyStorage memory self
+    )internal pure returns(
+        bytes memory
+    ){
+        return _encode(
+            self.totalSupply
+        );
+    }
+    //
+    //decoding functions
+    //
+    function decodeTokenSupply(
+        bytes memory data
+    )internal pure returns(
+        //uint256 chainId,
+        uint256 totalSupply
+    ){
+        bytes32 dataHash;
+        bytes32 typedHash;
+
+        (
+            dataHash,
+            typedHash,
+            //chainId,
+            totalSupply
+        ) = abi.decode(
+            data,
+            (bytes32, bytes32, uint256)
+        );
+        
+        typedHash.requireEqual(_TOKEN_SUPPLY_TYPE_HASH);
+        dataHash.requireEqual(
+            keccak256(
+                abi.encodePacked(
+                    _TOKEN_SUPPLY_TYPE_HASH,
+                    //_chainId(),
+                    totalSupply
+                )
+            )
+        );
+    }
+    /*
+    function decodeTokenSupplyExtra(
+        bytes memory data
+    )internal pure returns(
+        //uint256 chainId,
+        uint256 totalSupply,
+        bytes memory extraData
+    ){
+        bytes32 dataHash;
+        bytes32 typedHash;
+
+        (
+            dataHash,
+            typedHash,
+            //chainId,
+            totalSupply,
+            extraData
+        ) = abi.decode(
+            data,
+            (bytes32, bytes32, uint256,bytes)
+        );
+        
+        typedHash.requireEqual(_TOKEN_SUPPLY_TYPE_HASH);
+        dataHash.requireEqual(
+            keccak256(
+                abi.encodePacked(
+                    _TOKEN_SUPPLY_TYPE_HASH,
+                    //_chainId(),
+                    totalSupply
+                    //extranData
+                )
+            )
+        );
+    }
+    */
     ///
     ///getters
     ///
@@ -70,6 +208,8 @@ library mixinTokenSupply
         uint256 amountBy
     )internal
     {
+        //_requireInitialized();
+
         amountBy.requireGreaterThanZero();
         uint256 previousSupply = totalSupply();
         
@@ -89,6 +229,8 @@ library mixinTokenSupply
         uint256 amountBy
     )internal
     {
+        //_requireInitialized();
+
         amountBy.requireGreaterThanZero();
         
         uint256 previousSupply = totalSupply();
@@ -114,11 +256,54 @@ library mixinTokenSupply
         setTotalSupply(0);
         //storageTokenSupply().totalSupply = 0;
     }
+    function reset(
+        uint256 newSupply
+    )internal
+    {
+        _requireInitialized();
+        
+        totalSupply().requireNotEqual(newSupply);
+        
+        setTotalSupply(newSupply);
+    }
     function initialize(
         uint256 newSupply
     )internal
     {
         //newSupply().requireGreaterThanZero();
         setTotalSupply(newSupply);
+    }
+     function initializeBytes(
+        //bytes32 slot,
+        bytes memory data
+    )internal
+    {
+        _requireNotInitialized();
+
+        setTotalSupply(
+            decodeTokenSupply(data)
+        );
+    }
+    function initializeMemory(
+        //bytes32 slot,
+        TokenSupplyStorage memory tokenSupply
+    )internal
+    {
+        _requireNotInitialized();
+
+        //tokenId.totalSupply.requireGreaterThanZero();
+        
+        setTotalSupply(tokenSupply.totalSupply);
+    }
+
+    function dealloc(
+        //bytes32 slot
+    )internal
+    {
+        _requireInitialized();
+
+        TokenSupplyStorage storage s = storageTokenSupply();
+        
+        delete s.totalSupply;
     }
 }

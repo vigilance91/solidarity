@@ -34,7 +34,7 @@ abstract contract EIP1261 is MutableSupplyTokenABC
 
         bytes32[] public attributeNames;
 
-        mapping(address=>MemberData) public currentHolders;
+        mapping(address=>MemberData) public _currentHolders;
         mapping(address=>PendingRequest) public pendingRequests;
 
         address[] public allHolders;
@@ -42,13 +42,15 @@ abstract contract EIP1261 is MutableSupplyTokenABC
         uint public currentMemberCount;
     //}
 
-    event ApprovedMembership(address _to, uint[] attributeIndexes);
-    event RequestedMembership(address _to);
-    event Assigned(address _to, uint[] attributeIndexes);
-    event Revoked(address _to);
-    event Forfeited(address _to);
+    event ApprovedMembership(address to, uint[] attributeIndexes);
+    event RequestedMembership(address to);
+    //
+    event AssignedMembership(address to, uint[] attributeIndexes);
+    event RevokedMembership(address to);
+    event ForfeitedMembership(address to);
+    //
     event ModifiedAttributes(
-        address _to,
+        address to,
         uint attributeIndex,
         uint prevValueIndex,
         bytes32 prevValue,
@@ -57,8 +59,15 @@ abstract contract EIP1261 is MutableSupplyTokenABC
     );
 
     constructor(
+        //name,
+        //symbol,
+        //initialSupply
     )internal
-        //MutableSupplyTokenABC()
+        //MutableSupplyTokenABC(
+            //name,
+            //symbol,
+            //initialSupply
+        //)
     {
         //_registerInterface(0x83adfb2d); //Ownable
     }
@@ -79,7 +88,7 @@ abstract contract EIP1261 is MutableSupplyTokenABC
     ){
         require(account != address(0), "Zero address can't be a member");
         
-        return currentHolders[account].hasToken;
+        return _currentHolders[account].hasToken;
     }
 
     function _assign(
@@ -87,6 +96,7 @@ abstract contract EIP1261 is MutableSupplyTokenABC
         uint[] memory attributeIndexes
     )internal
     {
+        //account.requireNotNull("Can't assign to zero address");
         require(account != address(0), "Can't assign to zero address");
         require(
             attributeIndexes.length == attributeNames.length,
@@ -96,10 +106,10 @@ abstract contract EIP1261 is MutableSupplyTokenABC
         MemberData memory member;
         
         member.hasToken = true;
-        currentHolders[account] = member;
+        _currentHolders[account] = member;
         
         for(uint index; index < attributeIndexes.length; index++){
-            currentHolders[account].data.push(attributeIndexes[index]);
+            _currentHolders[account].data.push(attributeIndexes[index]);
         }
         
         allHolders.push(account);
@@ -110,8 +120,10 @@ abstract contract EIP1261 is MutableSupplyTokenABC
         address from
     )internal
     {
+        //from.requireNotNull("Can't revoke from zero address");
         require(from != address(0), "Can't revoke from zero address");
-        MemberData storage member = currentHolders[from];
+        
+        MemberData storage member = _currentHolders[from];
         
         member.hasToken = false;
         currentMemberCount -= 1;
@@ -119,9 +131,11 @@ abstract contract EIP1261 is MutableSupplyTokenABC
 }
 
 contract EIP1261MembershipVerificationToken is EIP1261
+    //iEIP1261
 {
     //using logicConstraints for bool;
     //using addressConstraints for address;
+    string private constant _NAME = ' EIP1261MembershipVerificationToken: ';
     
     constructor(
     )public
@@ -130,8 +144,8 @@ contract EIP1261MembershipVerificationToken is EIP1261
         //_registerInterface(0x912f7bb2); //iERC1261
     }
     function requestMembership(
-        uint[] memory attributeIndexes
-    )external payable
+        uint[] calldata attributeIndexes
+    )external payable   //virtual override nonReentrant
     {
         require(!isCurrentMember(msg.sender), "Already a member");
         require(
@@ -140,6 +154,7 @@ contract EIP1261MembershipVerificationToken is EIP1261
         );
         //Do some checks before assigning membership
         PendingRequest storage request = pendingRequests[msg.sender];
+        
         request.isPending = true;
         request.attributes = attributeIndexes;
         
@@ -147,17 +162,19 @@ contract EIP1261MembershipVerificationToken is EIP1261
     }
 
     function forfeitMembership(
-    )external payable isCurrentHolder
+    )external payable isCurrentHolder //override nonReentrant
     {
-        _revoke(msg.sender);
+        _revoke(msg.sender);    //_msgSender()
+        
         //sender.emitMembershipForfeited();
     }
 
     function approveRequest(
         address account
-    )external onlyOwner
+    )external onlyOwner //OrApprover    //override nonReentrant
     {
         PendingRequest storage request = pendingRequests[_user];
+        
         require(request.isPending, "Hasn't sent ether yet");
         
         _assign(_user, request.attributes);
@@ -167,7 +184,7 @@ contract EIP1261MembershipVerificationToken is EIP1261
 
     function discardRequest(
         address account
-    )external onlyOwner
+    )external onlyOwner  //OrApprover   //override nonReentrant
     {
         PendingRequest storage request = pendingRequests[_user];
         
@@ -179,9 +196,9 @@ contract EIP1261MembershipVerificationToken is EIP1261
 
     function assignTo(
         address account,
-        uint[] memory attributeIndexes
+        uint[] calldata attributeIndexes
     )external
-        onlyOwner
+        onlyOwner //OrAssigner  //override nonReentrant
     {
         _assign(account, attributeIndexes);
         //account.emitMembershipAssigned(attributeIndexes);
@@ -189,7 +206,7 @@ contract EIP1261MembershipVerificationToken is EIP1261
 
     function revokeFrom(
         address from
-    )external onlyOwner
+    )external onlyOwner  //OrAssigner   //override nonReentrant
     {
         _revoke(from);
         
@@ -198,8 +215,8 @@ contract EIP1261MembershipVerificationToken is EIP1261
 
     function addAttributeSet(
         bytes32 attributeName,
-        bytes32[] memory values
-    )external
+        bytes32[] calldata values
+    )external   //override nonReentrant
     {
         attributeNames.push(attributeName);
         
@@ -215,54 +232,54 @@ contract EIP1261MembershipVerificationToken is EIP1261
     }
 
     function modifyAttributeByIndex(
-        address _to,
-        uint _attributeIndex,
-        uint _modifiedValueIndex
-    )external onlyOwner
+        address to,
+        uint attributeIndex,
+        uint modifiedValueIndex
+    )external onlyOwner //orCurrentHolder override nonReentrant
     {
         // uint attributeIndex = getIndexOfAttribute(_attributeName);
         
-        //storage holder = currentHolders[_to];
+        //storage holder = _currentHolders[to];
         
         require(
-            currentHolders[_to].data.length > _attributeIndex,
+            _currentHolders[to].data.length > attributeIndex,
             "data doesn't exist for the user"
         );
         
-        //storage attributes = attributeValueCollection[_attributeIndex];
+        //storage attributes = attributeValueCollection[attributeIndex];
         
-        uint prevIndex = currentHolders[_to].data[_attributeIndex];
-        bytes32 prevValue = attributeValueCollection[_attributeIndex][prevIndex];
+        uint prevIndex = _currentHolders[to].data[attributeIndex];
+        bytes32 prevValue = attributeValueCollection[attributeIndex][prevIndex];
         
-        currentHolders[_to].data[_attributeIndex] = _modifiedValueIndex;
+        _currentHolders[to].data[attributeIndex] = modifiedValueIndex;
         
-        bytes32 modifiedValue = attributeValueCollection[_attributeIndex][_modifiedValueIndex];
+        bytes32 modifiedValue = attributeValueCollection[attributeIndex][modifiedValueIndex];
         
-        _to.emitModifiedAttributes(
-            _attributeIndex,
+        to.emitModifiedAttributes(
+            attributeIndex,
             prevIndex,
             prevValue,
-            _modifiedValueIndex,
+            modifiedValueIndex,
             modifiedValue
         );
     }
 
     function getAllMembers(
-    )external view returns(
+    )external view returns( //override
         address[] memory
     ){
         return allHolders;
     }
 
     function getCurrentMemberCount(
-    )external view returns(
+    )external view returns( //override
         uint
     ){
         return currentMemberCount;
     }
 
     function getAttributeNames(
-    )external view returns(
+    )external view returns( //override
         bytes32[] memory
     ){
         return attributeNames;
@@ -270,16 +287,17 @@ contract EIP1261MembershipVerificationToken is EIP1261
 
     function getAttributes(
         address account
-    )external view returns (
+    )external view returns( //override
         uint[] memory
     ){
         require(account != address(0), "Address cannot be zero");
-        return currentHolders[account].data;
+        
+        return _currentHolders[account].data;
     }
 
     function getAttributeExhaustiveCollection(
         uint index
-    )external view returns(
+    )external view returns( //override
         bytes32[] memory
     ){
         return attributeValueCollection[index];
@@ -288,14 +306,14 @@ contract EIP1261MembershipVerificationToken is EIP1261
     function getAttributeByIndex(
         address account,
         uint attributeIndex
-    )external view returns(
+    )external view returns( //override
         uint
     ){
         require(
-            currentHolders[account].data.length > attributeIndex,
+            _currentHolders[account].data.length > attributeIndex,
             "data doesn't exist for the user"
         );
         
-        return currentHolders[account].data[attributeIndex];
+        return _currentHolders[account].data[attributeIndex];
     }
 }

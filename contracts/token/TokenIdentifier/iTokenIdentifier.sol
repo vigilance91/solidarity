@@ -20,3 +20,8 @@ interface iTokenIdentifier
         string memory
     );
 }
+
+//interface iInitializableTokenIdentifier is iTokenIdentifier
+//{
+    //function initilaize(bytes calldata data) external;
+//}
