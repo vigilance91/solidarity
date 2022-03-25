@@ -126,6 +126,17 @@ abstract contract ERC173 is Context,
     {
         _requireNotOwner(address(this));
     }
+    modifier _onlyOwnerOrThis(
+    ){
+        address sender = _msgSender();
+
+        require(
+            sender == owner() || sender == address(this),
+            'sender can only be owner or self'
+        );
+        
+        _;
+    }
     //require this contract to own itself
     //function _requireOwnerSelf(
     //)internal view
@@ -157,11 +168,6 @@ abstract contract ERC173 is Context,
         
         _storageSlotERC173.transferOwnership(newOwner);
     }
-    function _renounceOwnership(
-    )internal
-    {
-        _storageSlotERC173.renounceOwnership();
-    }
     ///
     /// @dev Leaves the contract without owner. It will not be possible to call
     /// `onlyOwner` functions anymore. Can only be called by the current owner.
@@ -171,7 +177,7 @@ abstract contract ERC173 is Context,
     function renounceOwnership(
     )external virtual override onlyOwner nonReentrant
     {
-        _renounceOwnership();
+        _storageSlotERC173.renounceOwnership();
     }
     ///
     /// @dev Transfer ownership of this contract to a new address (`newOwner`),

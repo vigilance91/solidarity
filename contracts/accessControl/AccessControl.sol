@@ -266,7 +266,23 @@ abstract contract AccessControl is AccessControlABC,    //Context,
         
         _grantRole(role, account);
     }
-    
+    ///
+    /// @dev Grants `role` to all accounts
+    /// emits a {RoleGranted} event
+    ///
+    /// Requirements:
+    ///     - the caller must have ``role``'s admin role
+    ///     - reverts if the null address  has previously been granted `role`
+    ///
+    function grantRoleAll(
+        bytes32 role
+    )public virtual override
+        //onlyDefaultAdminOrRoleAdmin
+    {
+        _requireHasAdminRole(role, _msgSender());
+        
+        _grantRole(role, addressLogic.NULL);
+    }
     ///
     /// @dev Revokes `role` from `account`
     /// emits a {RoleRevoked} event
@@ -283,6 +299,22 @@ abstract contract AccessControl is AccessControlABC,    //Context,
         _requireHasAdminRole(role, _msgSender());
         
         _revokeRole(role, account);
+    }
+    ///
+    /// @dev Revokes `role` from All accounts
+    /// emits a {RoleRevoked} event
+    ///
+    /// Requirements:
+    ///     - the caller must have ``role``'s admin role
+    ///     - reverts if the null address has not previously been granted `role`
+    ///
+    function revokeRoleAll(
+        bytes32 role
+    )public virtual override
+    {
+        _requireHasAdminRole(role, _msgSender());
+        
+        _revokeRole(role, addressLogic.NULL);
     }
     ///
     /// @dev Revokes `role` from the calling account

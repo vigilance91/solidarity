@@ -4,7 +4,15 @@ pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/EIP/SingletonFactory/EIP2470.sol";
-import "https://github.com/vigilance91/solidarity/EIP/introspection/Canary/EIP801Canary.sol";
+//import "https://github.com/vigilance91/solidarity/EIP/introspection/Canary/EIP801Canary.sol";
+import "https://github.com/vigilance91/solidarity/contracts/ownership/safeERC173/owner/SafeERC173Owner.sol";
+
+//import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/ERC165.sol";
+//import "https://github.com/vigilance91/solidarity/ERC/ERC173/ERC173.sol";
+//import "https://github.com/vigilance91/solidarity/ERC/ERC173/eventsERC173.sol";
+
+//import "https://github.com/vigilance91/solidarity/ERC/ERC173/iERC173Ownable.sol";
+///
 ///
 /// @title EIP-2470 Singleton Factory Contract
 /// @notice Exposes CREATE2 (EIP-1014) to deploy bytecode on deterministic addresses based on initialization code and salt
@@ -15,7 +23,7 @@ import "https://github.com/vigilance91/solidarity/EIP/introspection/Canary/EIP80
     //iEIP801Canary
 //{
 //}
-contract EIP2470SingletonFactory is EIP801Canary,
+contract EIP2470SingletonFactory is SafeERC173OwnableOwner,  //EIP801Canary,
     EIP2470,
     iEIP2470
 {
@@ -23,7 +31,7 @@ contract EIP2470SingletonFactory is EIP801Canary,
     
     constructor(
     )public 
-        EIP801Canary()
+        SafeERC173OwnableOwner()    //EIP801Canary()
         EIP2470()
     {
         _registerInterface(type(iEIP2470).interfaceId);
@@ -33,7 +41,7 @@ contract EIP2470SingletonFactory is EIP801Canary,
     function deploy(
         bytes memory byteCode,
         bytes32 salt
-    )external onlyOwner virtual override returns(
+    )public _onlyOwnerOrThis virtual override returns(
         address
     ){
         return _deploy(byteCode, salt);
@@ -58,7 +66,7 @@ contract EIP2470SingletonFactory is EIP801Canary,
     function deployPayable(
         bytes memory byteCode,
         bytes32 salt
-    )external payable onlyOwner virtual override returns(
+    )external payable _onlyOwnerOrThis virtual override returns(
         address createdContract
     ){
         //byteCode.requireNotNull();

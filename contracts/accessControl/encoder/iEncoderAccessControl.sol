@@ -57,9 +57,21 @@ interface iEncoderAccessControlMutable
         bytes memory
     );
     
+    function grantRoleAll(
+        bytes32 role
+    )external pure returns(
+        bytes memory
+    );
+    
     function revokeRole(
         bytes32 role,
         address account
+    )external pure returns(
+        bytes memory
+    );
+    
+    function revokeRoleAll(
+        bytes32 role
     )external pure returns(
         bytes memory
     );

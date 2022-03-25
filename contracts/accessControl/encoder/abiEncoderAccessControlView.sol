@@ -10,8 +10,11 @@ pragma experimental ABIEncoderV2;
 library abiEncoderAccessControlView
 {
     string internal constant STUB_HAS_ROLE = 'hasRole(bytes32,address)';
+    string internal constant STUB_HAS_ROLE_ALL = 'hasRole(bytes32)';
+    //
     string internal constant STUB_GET_ROLE_MEMBER_COUNT = 'getRoleMemberCount(bytes32)';
     string internal constant STUB_GET_ROLE_MEMBER = 'getRoleMember(bytes32,uint256)';
+    //
     string internal constant STUB_GET_ROLE_ADMIN = 'getRoleAdmin(bytes32)';
     
     function hasRole(
@@ -26,6 +29,17 @@ library abiEncoderAccessControlView
             account
         );
     }
+    
+    //function hasRoleAll(
+        //bytes32 role
+    //)internal pure returns(
+        //bytes memory
+    //){
+        //return abi.encodeWithSignature(
+            //STUB_HAS_ROLE_ALL,
+            //role
+        //);
+    //}
     
     function getRoleMemberCount(
         bytes32 role

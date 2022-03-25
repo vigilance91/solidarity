@@ -15,3 +15,8 @@ interface iStaticTokenSupply
         uint256
     );
 }
+
+//interface iInitializableStaticTokenSupply
+//{
+    //function initilaize(bytes calldata data) external;
+//}

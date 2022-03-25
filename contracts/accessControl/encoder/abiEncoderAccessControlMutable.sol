@@ -11,7 +11,11 @@ library abiEncoderAccessControlMutable
 {
     //
     string internal constant STUB_GRANT_ROLE = 'grantRole(bytes32,address)';
+    string internal constant STUB_GRANT_ROLE_ALL = 'grantRoleAll(bytes32)';
+    //
     string internal constant STUB_REVOKE_ROLE = 'revokeRole(bytes32,address)';
+    string internal constant STUB_REVOKE_ROLE_ALL = 'revokeRoleAll(bytes32)';
+    //
     string internal constant STUB_RENOUNCE_ROLE = 'renounceRole(bytes32)';
     string internal constant STUB_TRANSFER_ROLE = 'transferRole(bytes32,address,address)';
     ///
@@ -30,6 +34,19 @@ library abiEncoderAccessControlMutable
         );
     }
     ///
+    /// @dev Encodes a transaction to grant `account` the role `role`
+    ///
+    function grantRoleAll(
+        bytes32 role
+    )internal pure returns(
+        bytes memory
+    ){
+        return abi.encodeWithSignature(
+            STUB_GRANT_ROLE_ALL,
+            role
+        );
+    }
+    ///
     /// @dev Encodes a transaction to revoke role `role from address `account`
     ///
     function revokeRole(
@@ -42,6 +59,19 @@ library abiEncoderAccessControlMutable
             STUB_REVOKE_ROLE,
             role,
             account
+        );
+    }
+    ///
+    /// @dev Encodes a transaction to grant `account` the role `role`
+    ///
+    function revokeRoleAll(
+        bytes32 role
+    )internal pure returns(
+        bytes memory
+    ){
+        return abi.encodeWithSignature(
+            STUB_REVOKE_ROLE_ALL,
+            role
         );
     }
     ///
