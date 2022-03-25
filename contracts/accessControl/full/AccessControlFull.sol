@@ -3,9 +3,8 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-//import "https://github.com/vigilance91/solidarity/contracts/accessControl/iAccessControlBatched.sol";
-//import "https://github.com/vigilance91/solidarity/contracts/accessControl/AccessControlViewBatchedABC.sol";
-import "./AccessControlViewFullABC.sol";
+//import "https://github.com/vigilance91/solidarity/contracts/accessControl/full/iAccessControlFull.sol";
+import "https://github.com/vigilance91/solidarity/contracts/accessControl/full/AccessControlViewFullABC.sol";
 ///
 /// @title Access Control Batched
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 19/4/2021, All Rights Reserved
@@ -24,9 +23,9 @@ contract AccessControlFull is AccessControlViewFullABC    //AccessControlMutable
     
     //using mixinAccessControl for address;
 
-    //bytes32 private constant _STORAGE_SLOT = keccak256();
-    //bytes4 internal constant _IID_ACCESS_CONTROL_MUTABLE_BATCHED = type(iAccessControlMutableBatched).interfaceId;
-    //bytes4 internal constant _IID_ACCESS_CONTROL_BATCHED = type(iAccessControlBatched).interfaceId;
+    bytes4 internal constant _IID_ACCESS_CONTROL_VIEW_FULL = type(iAccessControlViewFull).interfaceId;
+    bytes4 internal constant _IID_ACCESS_CONTROL_MUTABLE_FULL = type(iAccessControlMutableFull).interfaceId;
+    bytes4 internal constant _IID_ACCESS_CONTROL_FULL = type(iAccessControlFull).interfaceId;
     
     constructor(
     )internal

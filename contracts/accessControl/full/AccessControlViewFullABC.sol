@@ -3,7 +3,7 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/vigilance91/solidarity/contracts/accessControl/iAccessControlBatched.sol";
+import "https://github.com/vigilance91/solidarity/contracts/accessControl/full/iAccessControlFull.sol";
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/AccessControl.sol";
 ///
 /// @title Access Control Batched View Abstract Base Contract
