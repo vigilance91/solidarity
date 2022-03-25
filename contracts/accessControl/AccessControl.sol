@@ -5,7 +5,8 @@ pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/iAccessControl.sol";
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/AccessControlABC.sol";
-//import "https://github.com/vigilance91/solidarity/contracts/accessControl/AccessControlMutableABC.sol";
+
+import "https://github.com/vigilance91/solidarity/libraries/logicConstraints.sol";
 ///
 /// @title Access Control
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 19/4/2021, All Rights Reserved
@@ -15,7 +16,7 @@ import "https://github.com/vigilance91/solidarity/contracts/accessControl/Access
 /// 
 /// OpenZeppelin, respectfully, owns all rights to their original source in respects to its MIT license, however,
 /// Solidarity's version of AccessControl has been significantly rewritten from the ground up to not only increase readability but also
-/// reduces comment bloat, addes functionality, fixes some logic issues/potential bugs/invariants and reduce contract bytecode size
+/// reduce comment bloat, add functionality, fixe some logic issues/potential bugs/invariants and reduce contract bytecode size
 ///
 /// Additionally, this version leverages encapsulation techniques pioneered by Solidarity,
 /// including the use of Constraints, Mixins, Protocols and Frameworks to extend usability,
@@ -31,8 +32,8 @@ import "https://github.com/vigilance91/solidarity/contracts/accessControl/Access
 /// Vigilance does not profit from the use or distribution of this contract.
 /// 
 /// Further modification to this software is permitted,
-/// only in respects to the original terms specified by the MIT license and must cite the original author, OpenZeppelin,
-/// as well as Vigilance and maintain the appropriate copyright notice and license.
+/// only in respects to the terms specified by the MIT license and must cite the original author, OpenZeppelin,
+/// as well as Vigilance
 ///
 /// For more information please visit OpenZeppelin's documentation at:
 ///     https://docs.openzeppelin.com/contracts/3.x/
@@ -70,17 +71,18 @@ import "https://github.com/vigilance91/solidarity/contracts/accessControl/Access
 ///
 /// Each role has an associated admin which assigns or revokes roles dynamically via {grantRole} and {revokeRole}
 /// 
-/// `ROLE_DEFAULT_ADMIN` is the default admin role for all roles,
+/// `DEFAULT_ADMIN_ROLE` is the default admin role for all roles,
 /// only addresses with this role are able to grant or revoke other roles
 ///
 /// WARNING:
-///     `ROLE_DEFAULT_ADMIN` is also its own admin thus,
+///     `DEFAULT_ADMIN_ROLE` is also its own admin thus,
 ///     it has permission to grant and revoke this role
 ///     Extra precautions should be taken to secure accounts that have been granted it,
 ///     and is recommended that this role should only be assigned to a single address,
 ///     potentilly either the contract deployer or owner (if ERC-173 compaliant)
 ///
-abstract contract AccessControl is AccessControlABC,    //AccessControlMutableABC,
+///deployment gas cost: 989,585
+abstract contract AccessControl is AccessControlABC,    //Context,
     iAccessControl
 {
     using EnumerableSet for EnumerableSet.AddressSet;
@@ -132,9 +134,8 @@ abstract contract AccessControl is AccessControlABC,    //AccessControlMutableAB
     modifier onlyDefaultAdmin(
     )internal view
     {
-        _requireRoleHasMembers(ROLE_DEFAULT_ADMIN);
+        _requireRoleHasMembers(DEFAULT_ADMIN_ROLE);
         _requireIsDefaultAdmin(_msgSender());
-        
         _;
     }
     //modifier onlyDefaultAdminOrRoleAdmin(
@@ -187,16 +188,6 @@ abstract contract AccessControl is AccessControlABC,    //AccessControlMutableAB
         //account.requireNotNull();
         //return _roleAt(role).members.contains(account);
         return _hasRole(role, account);
-    }
-    ///
-    /// @return {bool} `true` if AddressLogic.NULL has been granted `role` (meaning all accounts have that role), otherwise `false`
-    ///
-    function hasRoleAll(
-        bytes32 role
-    )external view returns(
-        bool
-    ){
-        return _hasRoleAll(role);
     }
     ///
     /// @return {uint256} the number of accounts that have `role`,
@@ -275,26 +266,7 @@ abstract contract AccessControl is AccessControlABC,    //AccessControlMutableAB
         
         _grantRole(role, account);
     }
-    ///
-    /// @dev Grants `role` to each account in `accounts`
-    /// emits multiple {RoleGranted} event
-    ///
-    /// Requirements:
-    ///     - the caller must have `role`'s admin role or be default admin
-    ///     - reverts if an account in `account` has previously been granted `role`
-    ///
-    function grantRole(
-        bytes32 role,
-        address[] memory accounts
-    )public virtual //override
-        //onlyDefaultAdminOrRoleAdmin
-    {
-        _requireHasAdminRole(role, _msgSender());
-        
-        for(uint i; i < accounts.length; i++){
-            _grantRole(role, accounts[i]);
-        }
-    }
+    
     ///
     /// @dev Revokes `role` from `account`
     /// emits a {RoleRevoked} event
@@ -313,25 +285,6 @@ abstract contract AccessControl is AccessControlABC,    //AccessControlMutableAB
         _revokeRole(role, account);
     }
     ///
-    /// @dev Revokes `role` from `account`
-    /// emits a {RoleRevoked} event
-    ///
-    /// Requirements:
-    ///     - the caller must have ``role``'s admin role
-    ///     - reverts if `account` has not previously been granted `role`
-    ///
-    function revokeRole(
-        bytes32 role,
-        address[] memory accounts
-    )public virtual //override
-    {
-        _requireHasAdminRole(role, _msgSender());
-        
-        for(uint i; i < accounts.length; i++){
-            _revokeRole(role, accounts[i]);
-        }
-    }
-    ///
     /// @dev Revokes `role` from the calling account
     /// Roles are often managed via {grantRole} and {revokeRole},
     /// this function's provides a mechanism for accounts to lose their privileges
@@ -344,19 +297,13 @@ abstract contract AccessControl is AccessControlABC,    //AccessControlMutableAB
     ///
     function renounceRole(
         bytes32 role
-        //address account
     )public virtual override
     {
-        //account.requireEqual(
-            //_msgSender()
-            //"can only renounce roles for self"
-        //);
-
         _revokeRole(role, _msgSender());
     }
     ///
     /// @dev Admin forces transfer of `role` from address `from` to address `to`
-    /// emits a {RoleRevoked} event for `from` and {RoleGranted} event for `to`
+    /// emits a {RoleRevoked} even for `from` and {RoleGranted} event for `to`
     ///
     /// Requirements:
     ///     - the caller must have `role`'s admin role or be default admin
@@ -374,32 +321,12 @@ abstract contract AccessControl is AccessControlABC,    //AccessControlMutableAB
         address from,
         address to
     )public virtual override
-        //onlyDefaultAdminOrRoleAdmin(role)
+        //onlyDefaultAdminOrRoleAdmin
     {
         _requireHasAdminRole(role, _msgSender());
         
         _transferRole(role, from, to);
     }
-    /// 
-    /// @dev caller transfers their role `role` to address `to`
-    /// emits a {RoleRevoked} event for `from` and {RoleGranted} event for `to`
-    /// 
-    /// Requirements:
-    ///     - the caller must have role `role`, `role`'s admin or default admin
-    ///     - `to` must not be null and not have been assigned the role `role`
-    ///
-    //function callerTransferRole(
-        //bytes32 role,
-        //address to
-    //)public virtual override
-        ////onlyDefaultAdminOrRoleAdmin(role)
-    //{
-        //address sender = _msgSender();
-        //
-        ////_requireHasAdminRole(role, sender);
-        //
-        //_transferRole(role, sender, to);
-    //}
 }
 /*
 contract ExternalAccessControl is AccessControlMutableABC,
@@ -682,97 +609,6 @@ contract ExternalAccessControlBatched is ExternalAccessControl,
     function renounceRoles(
         bytes32[] calldata role
     )external virtual override nonReentrant
-    {
-        //account.requireEqual(
-            //_msgSender()
-            //"can only renounce roles for self"
-        //);
-        address sender = _msgSender();
-        
-        for(uint i; i < accounts.length; i++){
-            _revokeRole(roles[i], sender);
-        }
-    }
-}
-*/
-/*
-abstract contract AccessControlBatched is AccessControl,
-    iAccessControlBatched
-{
-    using EnumerableSet for EnumerableSet.AddressSet;
-    using Address for address;
-    
-    using eventsAccessControl for bytes32;
-    
-    using logicConstraints for bool;
-    using addressConstraints for address;
-    
-    constructor(
-    )internal
-        AccessControl()
-    {
-    }
-    ///
-    /// @return {bool} `true` if `account` has been granted `role`
-    /// 
-    /// Requirements:
-    ///     -account can not be zero address
-    ///
-    function hasRole(
-        bytes32 role,
-        address[] calldata accounts
-    )external view override returns(
-        bool[] memory
-    ){
-        return _hasRole(role, accounts);
-    }
-    ///
-    /// @return ret {bool[]} `true` for each corresponding `role` in `roles` if it has been granted to AddressLogic.NULL, otherwise `false`
-    ///
-    function hasRoleAll(
-        bytes32[] calldata roles
-    )external view returns(
-        bool[] memory ret
-    ){
-        ret = new bool[](roles.length);
-
-        for(uint i; i < roles.length; i++){
-            ret[i] = _hasRoleAll(roles[i]);
-        }
-    }
-    ///
-    /// @dev Revokes `role` from `account`
-    /// emits a {RoleRevoked} event
-    ///
-    /// Requirements:
-    ///     - the caller must have ``role``'s admin role
-    ///     - reverts if `account` has not previously been granted `role`
-    ///
-    function revokeRole(
-        bytes32 role,
-        address[] memory accounts
-    )public virtual override
-    {
-        _requireHasAdminRole(role, _msgSender());
-        
-        for(uint i; i < accounts.length; i++){
-            _revokeRole(role, accounts[i]);
-        }
-    }
-    ///
-    /// @dev Revokes `role` from the calling account
-    /// Roles are often managed via {grantRole} and {revokeRole},
-    /// this function's provides a mechanism for accounts to lose their privileges
-    /// if they are compromised (such as when a trusted device is misplaced)
-    /// Emits a {RoleRevoked} event
-    ///
-    /// Requirements:
-    ///     - the caller must be `account`
-    ///     - caller must have been previously granted Role, otherwise revert
-    ///
-    function renounceRoles(
-        bytes32[] calldata role
-    )external virtual override
     {
         //account.requireEqual(
             //_msgSender()

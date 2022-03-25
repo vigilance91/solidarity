@@ -5,7 +5,7 @@ pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/contracts/accessControl/iAccessControl.sol";
 
-interface iAccessControlViewBatched is iAccessControlView
+interface iAccessControlBatchedView
 {
     function hasRole(
         bytes32 role,
@@ -20,7 +20,7 @@ interface iAccessControlViewBatched is iAccessControlView
     )external view returns(
         bool[] memory
     );
-    function hasRoleAll(
+    function hasRolesAll(
         bytes32[] calldata roles
     )external view returns(
         bool[] memory
@@ -39,10 +39,29 @@ interface iAccessControlViewBatched is iAccessControlView
     );
 }
 ///
+/// @title Full Access Control View Interface
+/// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 19/4/2021, All Rights Reserved
+/// @dev batched and non-batched view interface for role-based access control mechanisms
+///
+interface iAccessControlFullView is iAccessControlView,
+    iAccessControlBatchedView
+{
+}
+///
 ///mutable interface
 ///
-interface iAccessControlMutableBatched is iAccessControlMutable
+interface iAccessControlBatchedMutable
 {
+    /// @dev grant all accounts each role in `roles`
+    function grantRolesAll(
+        bytes32[] calldata roles
+    )external;
+
+    function grantRoles(
+        bytes32[] calldata roles,
+        address[] calldata accounts
+    )external;
+    /*
     /// @dev grant role `role` to each address in `accounts`
     function grantRole(
         bytes32 role,
@@ -54,19 +73,8 @@ interface iAccessControlMutableBatched is iAccessControlMutable
         bytes32[] calldata roles,
         address account
     )external;
-    
-    /// @dev grant all accounts each role in `roles`
-    function grantRolesAll(
-        bytes32[] calldata roles
-    )external;
-    
-    
-    /// @dev for each `role` in `roles` revoke each from address `account`
-    function revokeRoles(
-        bytes32[] calldata role,
-        address account
-    )external;
-    
+    */
+    /*
     /// @dev revoke role `role` from each address in `accounts`
     function revokeRole(
         bytes32 role,
@@ -75,12 +83,22 @@ interface iAccessControlMutableBatched is iAccessControlMutable
     
     /// @dev revoke multiple roles to a single address
     function revokeRoles(
-        bytes32[] calldata role,
+        bytes32[] calldata roles,
         address account
     )external;
-    
+    */
     /// @dev revoke each role in `roles` from all accounts
     function revokeRolesAll(
+        bytes32[] calldata roles
+    )external;
+    /// @dev revoke each role in `roles` from all accounts
+    function revokeRoles(
+        bytes32[] calldata roles,
+        address[] calldata accounts
+    )external;
+
+    /// @dev caller renounces each role in `roles`
+    function renounceRoles(
         bytes32[] calldata roles
     )external;
     
@@ -92,18 +110,36 @@ interface iAccessControlMutableBatched is iAccessControlMutable
     //)external;
     
     /// @dev transfer multiple roles from address `from` to address `to`
-    //function transferRole(
-        //bytes32[] calldata roles,
-        //address from,
-        //address to
-    //)external;
+    function transferRoles(
+        bytes32[] calldata roles,
+        address from,
+        address to
+    )external;
+}
+///
+/// @title Full Access Control View Interface
+/// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 19/4/2021, All Rights Reserved
+/// @dev batched and non-batched view interface for role-based access control mechanisms
+///
+interface iAccessControlBatched is iAccessControlBatchedView,
+    iAccessControlBatchedMutable
+{
+}
+///
+/// @title Full Access Control Mutable Interface
+/// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 19/4/2021, All Rights Reserved
+/// @dev batched and non-batched mutable interface for role-based access control mechanisms
+///
+interface iAccessControlFullMutable is iAccessControlMutable,
+    iAccessControlBatchedMutable
+{
 }
 ///
 /// @title Access Control Batched Interface
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 19/4/2021, All Rights Reserved
 /// @dev internface for role-based access control mechanisms
 ///
-interface iAccessControlBatched is iAccessControlViewBatched,
-    iAccessControlMutableBatched
+interface iAccessControlFull is iAccessControlFullView,
+    iAccessControlFullMutable
 {
 }

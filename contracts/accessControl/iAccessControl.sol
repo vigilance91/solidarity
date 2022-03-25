@@ -14,6 +14,12 @@ interface iAccessControlView
         bool
     );
     
+    function hasRoleAll(
+        bytes32 role
+    )external view returns(
+        bool
+    );
+    
     function getRoleMemberCount(
         bytes32 role
     )external view returns(
@@ -51,9 +57,17 @@ interface iAccessControlMutable
         address account
     )external;
     
+    function grantRoleAll(
+        bytes32 role
+    )external;
+    
     function revokeRole(
         bytes32 role,
         address account
+    )external;
+    
+    function revokeRoleAll(
+        bytes32 role
     )external;
     
     function renounceRole(
