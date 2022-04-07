@@ -42,17 +42,19 @@ library mixinChainId
     //using bytesLogic for bytes;
     //using bytesConstraints for bytes;
     
-    internal uint256 constant _ETHEREUM = 1;
-    internal uint256 constant _BSC = 56;
-    internal uint256 constant _POLYGON = 137;
-    internal uint256 constant _FANTOM = 250;
-    internal uint256 constant _ARBITRUM = 42161;
-    internal uint256 constant _OPTIMISM = 10;
+    uint256 internal constant _ETHEREUM = 1;
+    uint256 internal constant _BSC = 56;
+    uint256 internal constant _POLYGON = 137;
+    uint256 internal constant _FANTOM = 250;
+    uint256 internal constant _ARBITRUM = 42161;
+    uint256 internal constant _OPTIMISM = 10;
     
     //internal uint256 constant _AVALANCHE = 0xa86a;
     //internal uint256 constant _HARMONY = 1666600000;
     ////internal uint256 constant _XDAI = 0x64;
-
+    //
+    //testnets
+    //
     struct ChainIdStorage{
         uint256 id;
         
@@ -63,7 +65,9 @@ library mixinChainId
         string idString;    //decimal string of chainId (used in combination with salting nonces and contract address hashes)
     }
     
-    bytes32 internal constant STORAGE_SLOT = keccak256("solidarity.mixin.ChainId.STORAGE_SLOT");
+    bytes32 internal constant STORAGE_SLOT = bytes32(uint256(
+        keccak256("solidarity.mixin.ChainId.STORAGE_SLOT")
+    ) - 1);
     
     bytes32 private constant _TYPED_HASH = keccak256(
         "ChainIdStorage(uint256 id,bytes32 rawHash,bytes32 idHash,bytes bytesPacked,string idString)"
@@ -72,7 +76,7 @@ library mixinChainId
     /// encoding / deconding
     /// 
     function encodeChainIdStorage(
-    )internal pure returns(
+    )internal view returns(
         bytes memory
     ){
         ChainIdStorage storage SCID = storageChainId();

@@ -7,6 +7,7 @@ import "https://github.com/vigilance91/solidarity/libraries/block/number/blockNu
 
 abstract contract BlockNumberConstraintsABC
 {
+    
     using blockNumberConstraints for uint;
     //using blockNumberMath for uint;
     //
@@ -22,60 +23,32 @@ abstract contract BlockNumberConstraintsABC
     {
     }
     ///  block.number > rhs
-    function _requireNowBlockGreaterThan(
+    function _requireBlockNumberGreaterThan(
         uint rhs
     )internal view
     {
-        rhs.requireNowBlockGreaterThan();
+        rhs.requireBlockNumberGreaterThan();
     }
     ///  block.number >= rhs
     function _requireNowBlockGreaterThanOrEqual(
         uint rhs
     )internal view
     {
-        rhs.requireNowBlockGreaterThanOrEqual();
+        rhs.requireBlockNumberGreaterThanOrEqual();
     }
     ///  block.number < rhs
-    function _requireNowBlockLessThan(
+    function _requireBlockNumberLessThan(
         uint rhs
     )internal view
     {
-        rhs.requireNowBlockLessThan();
+        rhs.requireBlockNumberLessThan();
     }
     ///  block.number <= rhs
-    function _requireNowBlockLessThanOrEqual(
+    function _requireBlockNumberLessThanOrEqual(
         uint rhs
     )internal view
     {
-        rhs.requireNowBlockLessThanOrEqual();
-    }
-    /// lhs > block.number
-    function _requireGreaterThanNowBlock(
-        uint lhs
-    )internal view
-    {
-        lhs.requireGreaterThanNowBlock();
-    }
-    /// lhs >= block.number
-    function _requireGreaterThanOrEqualToNowBlock(
-        uint lhs
-    )internal view
-    {
-        lhs.requireGreaterThanOrEqualToNowBlock();
-    }
-    /// lhs < block.number
-    function _requireLessThanNowBlock(
-        uint lhs
-    )internal view
-    {
-        lhs.requireLessThanNowBlock();
-    }
-    /// lhs <= block.number
-    function _requireLessThanOrEqualToNowBlock(
-        uint lhs
-    )internal view
-    {
-        lhs.requireLessThanOrEqualNowBlock();
+        rhs.requireBlockNumberLessThanOrEqual();
     }
     
     //function _requireSecondsUntil(

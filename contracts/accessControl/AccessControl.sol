@@ -190,6 +190,16 @@ abstract contract AccessControl is AccessControlABC,    //Context,
         return _hasRole(role, account);
     }
     ///
+    /// @return {bool} `true` if AddressLogic.NULL has been granted `role` (meaning all accounts have that role), otherwise `false`
+    ///
+    function hasRoleAll(
+        bytes32 role
+    )external view override returns(
+        bool
+    ){
+        return _hasRoleAll(role);
+    }
+    ///
     /// @return {uint256} the number of accounts that have `role`,
     /// can be used together with {getRoleMember} to enumerate all bearers of a role
     ///

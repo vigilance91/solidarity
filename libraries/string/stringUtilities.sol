@@ -182,7 +182,7 @@ library stringUtilities
         uint len;   //defaults to 0
         uint i = 0; //defaults to 0
         
-        bytes B = bytes(s);
+        bytes memory B = bytes(s);
         uint L = B.length;
         
         bytes1 b = 0x00;

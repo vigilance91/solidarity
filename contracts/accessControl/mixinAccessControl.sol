@@ -160,6 +160,12 @@ library mixinAccessControl
         grantRole(ROLE_DEFAULT_ADMIN, deployer);
         //grantRole(ROLE_DEFAULT_ADMIN, address(this));
     }
+    //function grantThisAdmin(
+        ////bytes32 slot
+    //)internal
+    //{
+        //grantRole(ROLE_DEFAULT_ADMIN, address(this));
+    //}
     function roleAt(
         bytes32 role
     )internal view returns(
