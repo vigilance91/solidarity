@@ -36,6 +36,13 @@ library mixinERC721
     using EnumerableSet for EnumerableSet.UintSet;
     using EnumerableMap for EnumerableMap.UintToAddressMap;
     
+    //bytes32 private constant _NAMESPACE_HASH = bytes32(uint256(
+        //keccak256("solidarity.mixin.")
+    //) - 1);
+    //_STORAGE_SLOT = _NAMESPACE_HASH ^ bytes32(uint256(
+        //keccak256("eip721.STORAGE_SLOT")
+    //) - 1);
+    
     bytes32 private constant STORAGE_SLOT = keccak256("solidarity.mixin.ERC-721.STORAGE_SLOT");
     
     struct ERC721Storage{
@@ -140,9 +147,9 @@ abstract contract ERC721 is EIP801Canary,   //ERC165, //Ownable OR Canary
         mapping(address=>mapping(address=>bool)) internal _operatorApprovals;
         //
         // Mapping from token ID to approved address
-        mapping (uint256=>address) internal _tokenApprovals;
+        mapping(uint256=>address) internal _tokenApprovals;
         // Optional mapping for token URIs
-        mapping (uint256=>string) internal _tokenURIs;
+        mapping(uint256=>string) internal _tokenURIs;
     //}
     //
     /*

@@ -30,6 +30,13 @@ abstract contract ERC721Token is ERC721
     string private constant _NAME = " ERC721Token: ";
     //string private constant _TOKEN_DOES_NOT_EXIST = _NAME.concatenate("token does not exist");
     
+    string private constant _ERR_NOT_OWNER_NOR_APPROVED = string(
+        abi.encodePacked(
+            _NAME,
+            "caller is not owner nor approved for all"
+        )
+    );
+    
     // Equals to `bytes4(keccak256("onERC721Received(address,address,uint256,bytes)"))`
     // which can be also obtained as `iERC721Receiver.onERC721Received.selector`
     bytes4 private constant _ERC721_RECEIVED = iERC721Receiver.onERC721Received.selector;   //0x150b7a02;
@@ -108,7 +115,7 @@ abstract contract ERC721Token is ERC721
         
         require(
             sender.equal(owner) || isApprovedForAll(owner, sender),
-            "approve caller is not owner, nor approved for all"
+            _ERR_NOT_OWNER_NOR_APPROVED
         );
 
         _approve(sender, to, tokenId);
@@ -124,7 +131,7 @@ abstract contract ERC721Token is ERC721
         
         require(
             sender.equal(owner) || isApprovedForAll(owner, sender),
-            "approve caller is not owner, nor approved for all"
+            _ERR_NOT_OWNER_NOR_APPROVED
         );
 
         _clearApproval(sender, tokenId);
@@ -168,7 +175,13 @@ abstract contract ERC721Token is ERC721
             _msgSender(),
             tokenId
         ).requireTrue(
-            "transferFrom caller is not owner, nor approved"
+            string(
+                abi.encdoePacked(
+                    _NAME,
+                    "transferFrom(address,address,uint256)",
+                    _ERR_NOT_OWNER_NOR_APPROVED
+                )
+            )
         );
 
         _transfer(

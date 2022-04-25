@@ -68,9 +68,10 @@ library mixinERC173
     //){
         //cid = chainId();
         
-        //return abi.encodePacked(
+        //return abi.encode(
+            //DEFAULT_DOMAIN_SEPARATOR,
             //keccak256(
-                //abi.encodePacked(
+                //abi.encode(
                     //_TYPE_HASH,
                     //cid,
                     //STORAGE_SLOT,
@@ -90,9 +91,10 @@ library mixinERC173
     )internal pure returns(
         bytes memory
     ){  
-        return abi.encodePacked(
+        return abi.encode(
+            //DOMAIN_SEPARATOR,
             keccak256(
-                abi.encodePacked(
+                abi.encode(
                     _TYPE_HASH,
                     chainId,
                     slot,
@@ -108,9 +110,11 @@ library mixinERC173
     function encodeERC173(
         bytes32 slot,
         uint256 chainId
+        //bool defaultDomain
     )internal pure returns(
         bytes memory
     ){
+        //return defaultDomain ? encodeDefaultERC173(
         return encodeERC173(
             chainId,
             slot,
@@ -118,6 +122,16 @@ library mixinERC173
         );
     }
     function encodeDefaultStorageERC173(
+    )internal pure returns(
+        bytes memory
+    ){
+        return encodeERC173(
+            uint256(0),
+            STORAGE_SLOT,
+            owner(STORAGE_SLOT)
+        );
+    }
+    function encodeThisChainStorageERC173(
     )internal pure returns(
         bytes memory
     ){
@@ -139,6 +153,7 @@ library mixinERC173
         bytes32 slot;
         
         (
+            //domainSeparator,
             dataHash,
             typeHash,
             chainid,
@@ -146,8 +161,21 @@ library mixinERC173
             owner
         ) = abi.decode(
             data,
-            (bytes32, bytes32, uint256, bytes32, address)
+            (
+                //bytes32,
+                bytes32,
+                bytes32,
+                uint256,
+                bytes32,
+                address
+            )
         );
+        
+        //require(
+            //domainSeparator ^ defaultDomain() == 0 ||
+            //domainSeparator ^ thisDomain() == 0,
+            //"invalid domain separator"
+        //);
         
         //mixinChainId.requireEqual(chainid);
         //typeHash.requireEqual(_TYPE_HASH);
@@ -177,8 +205,20 @@ library mixinERC173
             owner
         ) = abi.decode(
             data,
-            (bytes32, bytes32, uint256, bytes32, address)
+            (
+                //bytes32,
+                bytes32,
+                bytes32,
+                uint256,
+                bytes32,
+                address
+            )
         );
+        
+        //require(
+            //domainSeparator ^ defaultDomain() == 0,
+            //"invalid domain separator"
+        //);
         
         //slot.requireEqual(
             //STORAGE_SLOT
@@ -266,18 +306,18 @@ library mixinERC173
     ///
     function initialize(
         bytes32 slot,
-        address owner
+        address newOwner
     )internal
     {
         requireOwnerIsNull(slot);
         
-        storageERC173(slot).owner = owner;
+        storageERC173(slot).owner = newOwner;
     }
     function dealloc(
         bytes32 slot
     )internal
     {
-        //_requireInitialized(slot);
+        _requireInitialized(slot);
         
         delete storageERC173(slot).owner;
     }
@@ -321,82 +361,85 @@ library mixinERC173
         );
     }
     
-    //function _requireInitialized(
-        //bytes32 slot
-    //)internal view
-    //{
-        //storageERC173(slot).owner.requireNotNull(
+    function _requireInitialized(
+        bytes32 slot
+    )internal view
+    {
+        storageERC173(slot).owner.requireNotNull(
             //_ERR_OWNER_IS_NULL
-        //);
-    //}
+        );
+    }
     
-    //function _requireNotInitialized(
-        //bytes32 slot
-    //)internal view
-    //{
-        //storageERC173(slot).owner.requireNull(
+    function _requireNotInitialized(
+        bytes32 slot
+    )internal view
+    {
+        storageERC173(slot).owner.requireIsNull(
             //_ERR_OWNER_NOT_NULL
-        //);
-    //}
+        );
+    }
     
-    //transfer state from storage slot `from` to storage slot `to`,
-    //removing the previous state of storage slot `from`
-    //function transferStateERC173(
-        //bytes32 from,
-        //bytes32 to
-    //)internal
-    //{
-        //_requireInitialized(from);
-        ////_requireNotInitialized(to);
+    /// @dev transfer state from storage slot `from` to storage slot `to`,
+    /// removing the previous state of storage slot `from`
+    function transferStateERC173(
+        bytes32 from,
+        bytes32 to
+    )internal
+    {
+        _requireInitialized(from);
+        _requireNotInitialized(to);
         
-        //ERC173Storage storage s = storageERC173(from);
+        //ERC173Storage storage
+        address so = storageERC173(from).owner;
         
-        //s.owner.requireNotNull(
+        so.requireNotNull(
+            //_ERR_OWNER_IS_NULL
+        );
+        
+        transferOwnership(to, so);
+        
+        ////renounceOwnership(from);
+        dealloc(from);
+    }
+    
+    /// @dev transfer state from storage slot `from` to storage slot `to` without removing the previous state at storage slot `from`
+    function copyStateERC173(
+        bytes32 from,
+        bytes32 to
+    )internal
+    {
+        _requireInitialized(from);
+        //_requireNotInitialized(to);
+        
+        //ERC173Storage storage
+        address so = storageERC173(from).owner;
+        
+        //so.requireNotNull(
             //_ERR_OWNER_IS_NULL
         //);
         
-        //transferOwnership(to, s.owner);
-        
-        //renounceOwnership(from);
-        //dealloc(from);
-    //}
+        transferOwnership(to, so);
+    }
     
-    //transfer without removing the previous state at storage slot `from`
-    //function copyStateERC173(
-        //bytes32 from,
-        //bytes32 to
-    //)internal
-    //{
-        //_requireInitialized(from);
-        ////_requireNotInitialized(to);
+    /// @dev swap the state of storage slot `from` with storage slot `to`
+    function swapStateERC173(
+        bytes32 from,
+        bytes32 to
+    )internal
+    {
+        ERC173Storage storage sl = storageERC173(from);
+        address LO = sl.owner;
         
-        //ERC173Storage storage s = storageERC173(from);
+        ERC173Storage storage sr = storageERC173(to);
+        address RO = sr.owner;
         
-        //s.owner.requireNotNull(
-            //_ERR_OWNER_IS_NULL
-        //);
-        
-        //transferOwnership(to, s.owner);
-    //}
-    
-    ////function swapStateERC173(
-        ////bytes32 lhs,
-        ////bytes32 rhs
-    ////)internal
-    ////{
-        //ERC173Storage storage sl 
-        //address LO = storageERC173(lhs).owner;
-        
-        //ERC173Storage storage sr = 
-        //address RO = storageERC173(rhs).owner;
-        
-        //transferOwnership(
-            //lhs,
-            //RO
-        //);
-        //transferOwnership(
-            //rhs,
-            //LO
-        //);
-    ////}
+        transferOwnership(
+            from,
+            RO
+        );
+        transferOwnership(
+            to,
+            LO
+        );
+    }
 }

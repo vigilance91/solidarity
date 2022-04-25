@@ -3,279 +3,254 @@
 pragma solidity >=0.6.4 <0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/utils/Address.sol";
 import "https://github.com/vigilance91/solidarity/libraries/address/addressConstraints.sol";
 
 import "https://github.com/vigilance91/solidarity/ERC/introspection/ERC165/frameworkERC165.sol";
-import "https://github.com/vigilance91/solidarity/ERC/ERC173/iERC173.sol";
 
-/*
-library frameworkERC173InterfaceSupport
-{
-    using frameworkERC165 for address;
-    
-    using logicConstraints for bool;
-    
-    //bytes4 internal constant IID_ERC173View = type(iERC173View).interfaceId;
-    //bytes4 internal constant IID_ERC173Mutable = type(iERC173Mutable).interfaceId;
-    bytes4 internal constant INTERFACE_ID = type(iERC173).interfaceId;
-    
-    string private constant _NAME = ' - frameworkERC173InterfaceSupport: ';
-    string private constant _ERR_STR_TARGET = ', target: ';
-    
-    string private constant _ERR_CALL_FAILED = string(
-        abi.encodePacked(
-            _NAME,
-            'external call failed',
-            _ERR_STR_TARGET
-        )
-    );
-    string private constant _ERR_ERC173_SUPPORTED = string(
-        abi.encodePacked(
-            _NAME,
-            'interface supported: iERC173',
-            _ERR_STR_TARGET
-        )
-    );
-    string private constant _ERR_ERC173_NOT_SUPPORTED = string(
-        abi.encodePacked(
-            _NAME,
-            'unsupported interface: iERC173',
-            _ERR_STR_TARGET
-        )
-    );
-    //
-    //read-only interface
-    //
-    function supportsInterface(
-        address target
-    )internal view returns(
-        bool ret
-    ){
-        return target.supportsInterface(INTERFACE_ID);
-    }
-    
-    function requireSupportsInterface(
-        address target
-    )internal view
-    {
-        supportsInterface(target).requireTrue(
-            string(
-                abi.encodePacked(
-                    _ERR_ERC173_NOT_SUPPORTED,
-                    target
-                )
-            )
-        );
-    }
-    function requireNotSupportsInterface(
-        address target
-    )internal view
-    {
-        supportsInterface(target).requireFalse(
-            string(
-                abi.encodePacked(
-                    _ERR_ERC173_SUPPORTED,
-                    target
-                )
-            )
-        );
-    }
-    //
-    //casting
-    //
-    function castERC173Ownable(
-        address ownable
-    )internal view returns(
-        iERC173
-    ){
-        requireSupportsInterface(ownable);
-        
-        return iERC173(ownable);
-    }
-    
-    function thisCastERC173Ownable(
-    )internal view returns(
-        iERC173
-    ){
-        return castERC173Ownable(
-            address(this)
-        );
-    }
-}
-*/
+import "https://github.com/vigilance91/solidarity/contracts/ownership/ERC173/iERC173Receiver.sol";
+import "https://github.com/vigilance91/solidarity/ERC/ERC173/iERC173.sol";
 ///
-/// @title Framework for ERC-173 Ownable Interface
-/// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 26/3/2021, All Rights Reserved
-/// @dev verification of support for ERC-165 introspection is performed before each call
+/// @title framework for ERC173 Safe Transfer Introspection
+/// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 18/4/2021, All Rights Reserved
 ///
-library frameworkERC173 //library frameworkERC173View
+library frameworkSafeERC173
 {
-    using frameworkERC165 for address;
-    //using frameworkERC173InterfaceSupport for address;
-    
     using logicConstraints for bool;
+    using addressConstraints for address;
+    
     using Address for address;
     
-    bytes4 internal constant INTERFACE_ID = type(iERC173).interfaceId;
+    using frameworkERC165 for address;
     
-    string private constant _NAME = ' - frameworkERC173: ';
-    string private constant _ERR_STR_TARGET = ', target: ';
+    bytes private constant _ERC173_RECEIVE_SIGNATURE = abi.encodeWithSignature('canReceiveERC173()');
+    bytes private constant _ERC173_OWNER_SIGNATURE = abi.encodeWithSignature('owner()');
+    bytes private constant _ERC173_RENOUNCE_OWNERSHIP_SIGNATURE = abi.encodeWithSignature('renounceOwnership()');
     
+    bytes4 private constant _iERC173_ID = type(iERC173).interfaceId;
+    bytes4 private constant _iERC173_RECEIVER_ID = type(iERC173Receiver).interfaceId;
+    
+    bytes4 public constant _ERC173_RECEIVED = iERC173Receiver.onERC173Received.selector;
+    
+    string private constant _NAME = ' - frameworkSafeERC173: ';
+    string private constant _ERR_STATICCALL_FAILED = string(
+        abi.encodePacked(
+            _NAME,
+            'staticcall failed, target: '
+        )
+    );
     string private constant _ERR_CALL_FAILED = string(
         abi.encodePacked(
             _NAME,
-            'external call failed',
-            _ERR_STR_TARGET
+            'external call failed, target: '
         )
     );
-    string private constant _ERR_ERC173_SUPPORTED = string(
+
+    string private constant _ERR_IERC173_NOT_IMPLEMENTED = string(
         abi.encodePacked(
             _NAME,
-            'interface supported: iERC173',
-            _ERR_STR_TARGET
+            'contract does not implement iERC173, contract: '
         )
     );
-    string private constant _ERR_ERC173_NOT_SUPPORTED = string(
+
+    string private constant _ERR_IERC173_RECIEVER_NOT_IMPLEMENTED = string(
         abi.encodePacked(
             _NAME,
-            'unsupported interface: iERC173',
-            _ERR_STR_TARGET
+            'contract does not implement iERC173Receiver'
         )
     );
-    
-    //functions with no arguments can have their functions signautre cached, for efficiency and speed
-    bytes internal constant _SIG_OWNER = abi.encodeWithSignature(
-        'owner()'
-    );
-    bytes internal constant _SIG_RENOUNCE_OWNERSHIP = abi.encodeWithSignature(
-        'renounceOwnership()'
-    );
-    //
-    // functions which take arguments can ONLY have their function indetifier stub cached, for slight efficiency and speed increase
-    // this stub must still be encoded before being used with .call, .staticcall or .delegatecall
-    string internal constant _STUB_TRANSFER_OWNERSHIP = 'transferOwnership(address)';
-    //
-    //read-only interface
-    //
-    function supportsInterface(
+
+    /// @dev can target support ERC173 calls
+    function _requireSupportsInterfaceERC173(
+        address target
+    )private view
+    {
+        target.supportsInterface(_iERC173_ID).requireTrue(
+            string(
+                abi.encodePacked(
+                    _ERR_IERC173_NOT_IMPLEMENTED,
+                    target
+                )
+            )
+        );
+    }
+    /// @dev can target address accept ERC173 ownership transfers
+    function _requireSupportsInterfaceERC173Receiver(
+        address target
+    )private view
+    {
+        if(target.isContract()){
+            target.supportsInterface(_iERC173_RECEIVER_ID).requireTrue(
+                string(
+                    abi.encodePacked(
+                        _ERR_IERC173_RECIEVER_NOT_IMPLEMENTED,
+                        target
+                    )
+                )
+            );
+        }
+    }
+    /// @dev pre-check to determine if an address is capable of accepting ERC173 ownership transfers
+    function canReceiveERC173(
         address target
     )internal view returns(
         bool ret
     ){
-        return target.supportsInterface(INTERFACE_ID);
-    }
-    
-    function requireSupportsInterface(
-        address target
-    )internal view
-    {
-        supportsInterface(target).requireTrue(
-            string(
-                abi.encodePacked(
-                    _ERR_ERC173_NOT_SUPPORTED,
-                    target
-                )
-            )
+        target.requireNotNull(
         );
-    }
-    function requireNotSupportsInterface(
-        address target
-    )internal view
-    {
-        supportsInterface(target).requireFalse(
-            string(
-                abi.encodePacked(
-                    _ERR_ERC173_SUPPORTED,
-                    target
-                )
-            )
-        );
-    }
-    //
-    //casting
-    //
-    function castERC173Ownable(
-        address ownable
-    )internal view returns(
-        iERC173
-    ){
-        requireSupportsInterface(ownable);
         
-        return iERC173(ownable);
-    }
-    
-    function thisCastERC173Ownable(
-    )internal view returns(
-        iERC173
-    ){
-        return castERC173Ownable(
-            address(this)
+        if(!target.isContract()){
+            return true;
+        }
+        
+        _requireSupportsInterfaceERC173Receiver(target);
+        
+        (bool success, bytes memory result) = target.staticcall(
+            _ERC173_RECEIVE_SIGNATURE
         );
+        success.requireTrue(
+            string(
+                abi.encodePacked(
+                    _ERR_STATICCALL_FAILED,
+                    target
+                )
+            )
+        );
+        
+        (ret) = abi.decode(result, (bool));
     }
-    //
+    /// @dev post-check to determine if an address successfully accepted an ERC173 ownership transfer
+    function onERC173Received(
+        address recipient,
+        address from
+    )internal returns(
+        bool
+    ){
+        recipient.requireNotNull();
+        
+        if(!recipient.isContract()){
+            return true;
+        }
+        
+        _requireSupportsInterfaceERC173Receiver(recipient);
+        
+        (bool success, bytes memory result) = recipient.call(
+            abi.encodeWithSignature(
+                'onERC173Received(address)',
+                from
+            )
+        );
+        
+        success.requireTrue('onERC173Received: call failed');
+        
+        (bytes4 retval) = abi.decode(result, (bytes4));
+        
+        return (retval == _ERC173_RECEIVED);
+    }
+    /// 
+    /// @dev if address is an externally owned wallet address the null address is returned,
+    /// since a person in the real world owns the address, not a contract,
+    /// this behaviour is in line with ERC173's function owner(), which returns null if the address does not have an owner
+    /// 
     function owner(
         address target
     )internal view returns(
         address ret
     ){
-        //target.requireSupportsInterfaceERC173();
-        
-        (bool result, bytes memory data) = target.staticcall(
-            _SIG_OWNER
+        target.requireNotNull(
         );
+        //if address is an externally owned wallet address,
+        //returns NULL
+        if(!target.isContract()){
+            return addressLogic.NULL;
+        }
         
-        result.requireTrue(
+        _requireSupportsInterfaceERC173(target);
+        
+        (bool success, bytes memory result) = target.staticcall(
+            _ERC173_OWNER_SIGNATURE
+        );
+        success.requireTrue(
             string(
                 abi.encodePacked(
-                    _ERR_CALL_FAILED,
+                    _ERR_STATICCALL_FAILED,
                     target
                 )
             )
         );
         
-        (ret) = abi.decode(data, (address));
+        (ret) = abi.decode(result, (address));
     }
-    //
-    //mutable interface
-    //
-    /// note the contract which exectues this function MUST be the owner of the target contract,
-    /// otherwise this function will revert
-    function renounceOwnership(
-        address target
-    )internal
-    {
-        //target.requireSupportsInterfaceERC173();
-        
-        (bool result, ) = target.call(
-            _SIG_RENOUNCE_OWNERSHIP
-        );
-        
-        result.requireTrue(
-            string(
-                abi.encodePacked(
-                    _ERR_CALL_FAILED,
-                    target
-                )
-            )
-        );
-    }
-    /// note the contract which exectues this function MUST be the owner of the target contract
+    /// 
+    /// @dev the calling contract context transfers ownership of `target` to `newOwner`, only if the calling contract has ownership of `target`
+    ///
+    /// Requirements:
+    ///     * the contract (the calling context) which calls this library function must be the owner of target
+    ///     * `newOwner` cannot be null, call {revokeOwnership} to set owner to null
+    ///
     function transferOwnership(
+        //address currentOwner,
         address target,
         address newOwner
     )internal
     {
-        //target.requireSupportsInterfaceERC173();
+        address O = owner(target);
         
-        (bool result, ) = target.call(
+        //currentOwner.requireEqualAndNotNull(O);
+        O.requireNotEqualAndNotNull(newOwner);
+        //if address is an externally owned wallet address, ownership cannot be transfered
+        //target.isContract().requireTrue(
+            //'target must be a contract to transfer ownership'
+        //);
+        
+        _requireSupportsInterfaceERC173(target);
+        
+        canReceiveERC173(newOwner);
+        
+        (bool success, ) = target.call(
             abi.encodeWithSignature(
-                _STUB_TRANSFER_OWNERSHIP,   //'transferOwnership(address)',
+                'transferOwnership(address)',
                 newOwner
             )
         );
+        success.requireTrue(
+            string(
+                abi.encodePacked(
+                    _ERR_CALL_FAILED,
+                    target
+                )
+            )
+        );
         
-        result.requireTrue(
+        onERC173Received(newOwner, address(this));
+    }
+    /// 
+    /// @dev the calling contract context renounces ownership of target, if it has ownership
+    ///
+    /// Requirements:
+    ///    * the contract (the calling context) which calls this library function must be the owner of target
+    ///
+    function renounceOwnership(
+        address currentOwner,
+        address target
+    )internal
+    {
+        address O = owner(target);
+        
+        O.requireNotNull();
+        //O.requireEqualAndNotNull(currentOwner);
+        require(O == currentOwner, 'invalid owner');
+        //if address is an externally owned wallet address
+        target.isContract().requireTrue(
+            'target must be a contract'
+        );
+        
+        _requireSupportsInterfaceERC173(target);
+        
+        (bool success, ) = target.call(
+            _ERC173_RENOUNCE_OWNERSHIP_SIGNATURE
+        );
+        
+        success.requireTrue(
             string(
                 abi.encodePacked(
                     _ERR_CALL_FAILED,
@@ -285,66 +260,3 @@ library frameworkERC173 //library frameworkERC173View
         );
     }
 }
-/*
-library frameworkERC173Delegate
-{
-    //using frameworkERC173InterfaceSupport for address;
-    //bytes4 internal constant INTERFACE_ID = type(iERC173Mutable).interfaceId;
-    
-    string private constant _NAME = ' - frameworkERC173Delegate: ';
-    string private constant _ERR_STR_TARGET = ', target: ';
-    
-    string private constant _ERR_CALL_FAILED = string(
-        abi.encodePacked(
-            _NAME,
-            'external call failed',
-            _ERR_STR_TARGET
-        )
-    );
-    /// note the contract which exectues this function MUST be the owner of the target contract,
-    /// otherwise this function will revert
-    function renounceOwnership(
-        address target
-    )internal
-    {
-        //target.requireSupportsInterfaceERC173();
-        
-        (bool result, ) = target.delegatecall(
-            frameworkERC173Mutable.SIG_RENOUNCE_OWNERSHIP
-        );
-        
-        result.requireTrue(
-            string(
-                abi.encodePacked(
-                    _ERR_CALL_FAILED,
-                    target
-                )
-            )
-        );
-    }
-    /// note the contract which exectues this function MUST be the owner of the target contract
-    function transferOwnership(
-        address target,
-        address newOwner
-    )internal
-    {
-        //target.requireSupportsInterfaceERC173();
-        
-        (bool result, ) = target.delegatecall(
-            abi.encodeWithSignature(
-                frameworkERC173Mutable.STUB_TRANSFER_OWNERSHIP,
-                newOwner
-            )
-        );
-        
-        result.requireTrue(
-            string(
-                abi.encodePacked(
-                    _ERR_CALL_FAILED,
-                    target
-                )
-            )
-        );
-    }
-}
-*/
