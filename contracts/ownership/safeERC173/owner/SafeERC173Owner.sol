@@ -69,28 +69,29 @@ abstract contract SafeERC173OwnerABC is SafeERC173Ownable,
         
         _requireCanReceiveERC173(newOwner);
         
-        address(this).transferOwnership(ownable, newOwner);
+        //address(this).
+        _transferOwnership(ownable, newOwner);
         
         _requireOnERC173Received(newOwner, address(this));
     }
-    function _safeRenounceOwnership(
-        address ownable
-    )internal
-    {
-        address O = iERC173(ownable).owner();
-        
-        O.requireNotNull();
-        O.requireEqual(
-            address(this)
-            //'invalid owner'
-        );
-        
-        address(this).renounceOwnership(ownable);
-        
+    //function _safeRenounceOwnership(
+        //address ownable
+    //)internal
+    //{
+        //address O = iERC173(ownable).owner();
+        //
+        //O.requireNotNull();
+        //O.requireEqual(
+            //address(this)
+            ////'invalid owner'
+        //);
+        //
+        //address(this).renounceOwnership(ownable);
+        //
         //_requireOnERC173Received(addressLogic.NULL, address(this));
-        
-        //assert(ownable.owner().equal(addressLogic.NULL));
-    }
+        //        
+        ////assert(ownable.owner().equal(addressLogic.NULL));
+    //}
     /// 
     /// @dev override for _safeTransferOwnership but exclusively transfers ownership of `ownable` contract address to this contract's owner,
     ///
@@ -177,9 +178,9 @@ interface iSafeERC173Owner is iERC173Owner
     // @dev this contract renounces ownership of `ownable`, only if this contract is `ownable`s owner,
     // otherwise transaction will revert
     // 
-    function externalSafeRenounceOwnership(
-        address ownable
-    )external;
+    //function externalSafeRenounceOwnership(
+        //address ownable
+    //)external;
 }
 /// 
 /// @dev deployment cost: 2,167,653 
@@ -225,12 +226,12 @@ contract SafeERC173OwnableOwner is //ReentrancyGuard,
     /// @dev this contract renounces ownership of `ownable`, only if this contract is `ownable`s owner,
     /// otherwise transaction will revert
     /// 
-    function externalSafeRenounceOwnership(
-        address ownable
-    )external override nonReentrant //onlyOwner
-    {
-        _safeRenounceOwnership(ownable);
-    }
+    //function externalSafeRenounceOwnership(
+        //address ownable
+    //)external override nonReentrant //onlyOwner
+    //{
+        //_safeRenounceOwnership(ownable);
+    //}
     // note: not safe, not recommended for use
     //function transferOwnershipToThisOwner(
         //address ownable

@@ -13,6 +13,21 @@ import "https://github.com/vigilance91/solidarity/contracts/ownership/safeERC173
 
 //import "https://github.com/vigilance91/solidarity/ERC/ERC173/iERC173Ownable.sol";
 ///
+//contract EIP2470SingletonFactory
+//{
+    ////using eventsEIP2470 for address;
+    //
+    //constructor(
+    //)public 
+    //{
+    //}
+    //function deployedContracts(
+    //)public view override returns(
+        //address[] memory
+    //){
+        //return _deployedContracts;
+    //}
+//}
 ///
 /// @title EIP-2470 Singleton Factory Contract
 /// @notice Exposes CREATE2 (EIP-1014) to deploy bytecode on deterministic addresses based on initialization code and salt
@@ -45,6 +60,23 @@ contract EIP2470SingletonFactory is SafeERC173OwnableOwner,  //EIP801Canary,
         address
     ){
         return _deploy(byteCode, salt);
+    }
+    function deployedContracts(
+    )public view override returns(
+        address[] memory
+    ){
+        return _deployedContracts;
+    }
+}
+/*
+contract EIP2470PayableSingletonFactory is EIP2470SingletonFactory,
+    iEIP2470Payable
+{
+    constructor(
+    )public
+        EIP2470SingletonFactory()
+    {
+        _registerInterface(type(iEIP2470Payable).interfaceId);
     }
     ///
     /// @notice Deploys `byteCode` using `salt` for defining the deterministic address
@@ -103,10 +135,5 @@ contract EIP2470SingletonFactory is SafeERC173OwnableOwner,  //EIP801Canary,
             //);
         //}
     }
-    function deployedContracts(
-    )public view override returns(
-        address[] memory
-    ){
-        return _deployedContracts;
-    }
 }
+*/
