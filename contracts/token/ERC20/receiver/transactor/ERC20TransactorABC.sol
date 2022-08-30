@@ -5,9 +5,9 @@ pragma experimental ABIEncoderV2;
 
 import "https://github.com/vigilance91/solidarity/contracts/token/ERC20/erc20Receiver/ERC20ReceiverABC.sol";
 
-import "https://github.com/vigilance91/solidarity/contracts/token/ERC20/erc20Receiver/frameworkERC20Receiver.sol";
+import "https://github.com/vigilance91/solidarity/contracts/token/ERC20/receiver/frameworkERC20Receiver.sol";
 
-import "https://github.com/vigilance91/solidarity/contracts/token/ERC20/erc20Receiver/ERC20ReceiverConstraintsABC.sol";
+//import "https://github.com/vigilance91/solidarity/contracts/token/ERC20/receiver/ERC20ReceiverConstraintsABC.sol";
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/math/SafeMath.sol";
 
@@ -25,8 +25,8 @@ import "https://github.com/vigilance91/solidarity/libraries/unsigned/uint256Cons
 ///     This contract performs safe transfers of ERC20 tokens to contracts,
 ///     reverting if the recipient is a contract which does not implement iERC20Receiver
 ///
-abstract contract ERC20TransactorABC is ERC20ReceiverABC,
-    ERC20ReceiverConstraintsABC
+abstract contract ERC20TransactorABC is ERC20ReceiverABC
+    //ERC20ReceiverConstraintsABC
     //AllowanceABC
 {
     using SafeMath for uint256;
@@ -66,7 +66,7 @@ abstract contract ERC20TransactorABC is ERC20ReceiverABC,
         address erc20Token
     )internal
         ERC20ReceiverABC()
-        ERC20ReceiverConstraintsABC()
+        //ERC20ReceiverConstraintsABC()
         //AllowanceABC()
     {
         _token = erc20Token;
@@ -108,7 +108,7 @@ abstract contract ERC20TransactorABC is ERC20ReceiverABC,
     )public view returns(
         uint256
     ){
-        return token.balanceOf(_this());
+        return _token.balanceOf(_this());
     }
 }
 
