@@ -12,6 +12,7 @@ import "https://github.com/vigilance91/solidarity/contracts/token/ERC20/framewor
 ///
 abstract contract ERC20ReceiverConstraintsABC //is ContractConstraintsABC
 {
+    //using externalConstraints for bool;
     using logicConstraints for bool;
     //using addressConstraints for address;
     using frameworkSafeERC20 for address;
