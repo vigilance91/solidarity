@@ -207,9 +207,9 @@ abstract contract MultiChainIdConstraintsABC is ChainIdConstraintsABC
         //testnets
         //_supportedChains[CHAIN_IDS.ROPSTEN] = true;
         
-        uint256 CID;
+        uint256 cid;
         
-        for(uint i; i < whitelistedChainIds.lenght; i++){
+        for(uint i; i < whitelistedChainIds.length; i++){
             cid = whitelistedChainIds[i];
             
             if(!_supportedChains[cid]){
@@ -226,8 +226,9 @@ abstract contract MultiChainIdConstraintsABC is ChainIdConstraintsABC
     //}
     function _chainIdSupported(
         uint256 chainId
-    )internal view
-    {
+    )internal view returns(
+        bool
+    ){
         return _supportedChains[chainId];
     }
     

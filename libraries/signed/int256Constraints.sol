@@ -24,7 +24,7 @@ library int256Constraints
     //string private constant _ERR_STR_MAX = ', max: ';
     //string private constant _ERR_STR_MAX = ', value: ';
     
-    string private constant _ERR_NOT_EQUAL = string(
+    string private constant _ERR_EQUAL = string(
         abi.encodePacked(
             _NAME,
             '=='

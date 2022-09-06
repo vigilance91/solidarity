@@ -33,6 +33,7 @@ library EnumerableAnnouncementMap
     struct MapEntry {
         bytes32 _key;
         announcement.data _value;
+        //bytes32 domainSeparator;
     }
     // Storage of map keys and values
     struct Map {

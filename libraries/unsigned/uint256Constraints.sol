@@ -22,7 +22,7 @@ library uint256Constraints
     
     //string private constant _ERR_STR_MIN = ', min: ';
     //string private constant _ERR_STR_MAX = ', max: ';
-    //string private constant _ERR_STR_MAX = ', value: ';
+    //string private constant _ERR_STR_VALUE = ', value: ';
     
     string private constant _ERR_EQUAL = string(
         abi.encodePacked(

@@ -56,6 +56,38 @@ interface iEIP1129Mutable
         string memory reason
     )external;
 }
+
+/*
+interface iEIP1129ViewBatched
+{
+    ///get the author hash, post hash and post content for the post with postNumber
+    function readPosts(
+        uint256[] calldata postNumbers
+    )external view returns(
+        //mixinEIP1129.readPostData[] memory
+        bytes32[] memory authorHashes,
+        bytes32[] memory postHashes,
+        string[] memory memory posts
+    );
+}
+interface iEIP1129MutableBatched
+{
+    function postAnnouncement(
+        string[] calldata posts
+    )external;
+    
+    function editAnnouncement(
+        uint256[] calldata postNumbers,
+        string[] calldata memory newMessages,
+        string[] calldata memory reasons
+    )external;
+    
+    function removeAnnouncement(
+        uint256[] calldata postNumbers,
+        string[] calldata reasons
+    )external;
+}
+*/
 ///
 /// @title EIP1129 Announcements Interface
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 8/4/2021, All Rights Reserved

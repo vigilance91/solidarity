@@ -10,11 +10,11 @@ import "https://github.com/vigilance91/solidarity/contracts/accessControl/Pausab
 /// @author Tyler R. Drury <vigilstudios.td@gmail.com> (www.twitter.com/StudiosVigil) - copyright 2/5/2021, All Rights Reserved
 /// @dev ERC721 Token that can be minted or irreversibly burned (destroyed)
 ///
-abstract contract ERC721Mint is PausableAccessControl
+abstract contract ERC721Mint is PausableAccessControl,
     ERC721Token
 {
     using logicConstraints for bool;
-    using AddressConstraint for address;
+    using addressConstraints for address;
     
     using Counters for Counters.Counter;
     
@@ -23,16 +23,39 @@ abstract contract ERC721Mint is PausableAccessControl
     //Counters.Counter private _burnedTokenTracker;
     
     //string private constant _NAME = ' ERC721MintAUtoId: ';
-    bytes32 public constant ROLE_MINTER = keccak256("ERC-721.Mint.ROLE_MINTER");
-    bytes32 public constant ROLE_BURNER = keccak256("ERC-721.Mint.ROLE_BURNER");
+    bytes32 public constant ROLE_MINTER = keccak256("ERC-721.AccessControlMintAutoId.ROLE_MINTER");
+    bytes32 public constant ROLE_BURNER = keccak256("ERC-721.AccessControlMintAutoId.ROLE_BURNER");
     
+    string private constant _NAME = ' - ERC721MintAutoId: ';
+    
+    string private constant _ERR_TOKEN_DOES_NOT_EXIST = string(
+        abi.encodePacked(
+            _NAME,
+            'token does not exist, id: '
+        )
+    );
+    
+    string private constant _ERR_TOKEN_ALREADY_EXISTS = string(
+        abi.encodePacked(
+            _NAME,
+            'token already exists, id: '
+        )
+    );
+    
+    string private constant _ERR_IS_PAUSED = string(
+        abi.encodePacked(
+            _NAME,
+            "is paused"
+        )
+    );
     //string private _version;
     
     constructor(
         string memory name,
         string memory symbol,
         string memory baseURI
-        //string memory version
+        //uint256 majorVersion,
+        //uint256 minorVersion,
     )internal
         PausableAccessControl()
         ERC721Token(
@@ -42,8 +65,8 @@ abstract contract ERC721Mint is PausableAccessControl
     {
         address sender = _msgSender();
         
-        //_setRoleAdmin(ROLE_MINTER, ROLE_DEFAULT_ADMIN);
-        //_setRoleAdmin(ROLE_BURNER, ROLE_DEFAULT_ADMIN);
+        _setRoleAdmin(ROLE_MINTER, ROLE_DEFAULT_ADMIN);
+        _setRoleAdmin(ROLE_BURNER, ROLE_DEFAULT_ADMIN);
         
         _setupRole(ROLE_MINTER, sender);
         _setupRole(ROLE_BURNER, sender);
@@ -51,7 +74,7 @@ abstract contract ERC721Mint is PausableAccessControl
         _setBaseURI(baseURI);
     }
     /// 
-    ///@ dev NOTE:
+    /// @dev NOTE:
     ///     _exists() is  already called natively by _mint and _burn
     ///     this just serves as an additonal check to maintain consistent state
     ///     between the auto generated IDs which exist and the token IDs which have been burned
@@ -74,7 +97,12 @@ abstract contract ERC721Mint is PausableAccessControl
     )internal view
     {
         _tokenExists(tokenId).requireTrue(
-            'token does not exist'
+            string(
+                abi.encodePacked(
+                    _ERR_TOKEN_DOES_NOT_EXIST,
+                    tokenId
+                )
+            )
         );
     }
     function _requireDoesNotExist(
@@ -82,9 +110,46 @@ abstract contract ERC721Mint is PausableAccessControl
     )internal view
     {
         _tokenExists(tokenId).requireFalse(
-            'token already exists'
+            string(
+                abi.encodePacked(
+                    _ERR_TOKEN_ALREADY_EXISTS,
+                    tokenId
+                )
+            )
         );
     }
+    function _requireHasRoleMinter(
+        address account
+    )internal view
+    {
+        _hasRole(ROLE_MINTER, account).requireTrue(
+            string(
+                abi.encodePacked(
+                    _NAME,
+                    'address: ',
+                    account,
+                    ', does not have ROLE_MINTER'
+                )
+            )
+        );
+    }
+    
+    function _requireHasRoleBurner(
+        address account
+    )internal view
+    {
+        _hasRole(ROLE_BURNER, account).requireTrue(
+            string(
+                abi.encodePacked(
+                    _NAME,
+                    'address: ',
+                    account,
+                    ', does not have ROLE_BURNER'
+                )
+            )
+        );
+    }
+    
     function _mint(
         address to
     )internal
@@ -112,14 +177,38 @@ abstract contract ERC721Mint is PausableAccessControl
         //tokenId.requireGreaterThanZero();
         address sender = _msgSender();
         //solhint-disable-next-line max-line-length
-        hasRole(ROLE_MINTER, sender).requireTrue(
-            'ERC721MintAutoId.mint: caller must have minter role'
+        _requireHasRoleMinter(
+            sender
+            //'mint(): '
         );
         
         _mint(
             sender
         );
     }
+    //
+    // @dev mint `count` number of sequential tokens to the caller's address. See {ERC721._mint}
+    //
+    // Requirements:
+    //    - caller must have ROLE_MINTER or ROLE_DEFAULT_ADMIN assigned
+    //    - count must be less than the remaining tokens left to mint
+    //
+    //function mint(
+        //uint count
+    //)external virtual nonReentrant
+    //{
+        //address sender = _msgSender();
+        
+        //_requireHasRoleMinter(
+            //sender
+            //'mint(uint): '
+        //);
+        
+        //_mint(
+            //sender,
+            //count
+        //);
+    //}
     ///
     /// @dev convenience function to mint `tokenId`, then transfering ownership to address `to`,
     /// rather than having to make a seperate set of calls to {ERC721.approve} folowed by {ERC721.transferFrom}
@@ -140,12 +229,39 @@ abstract contract ERC721Mint is PausableAccessControl
     )external virtual nonReentrant
     {
         //solhint-disable-next-line max-line-length
-        hasRole(ROLE_MINTER, sender).requireTrue(
-            'ERC721MintAutoId.mint: caller must have minter role'
+        _requireHasRoleMinter(
+            _msgSender()
+            //'mint(address): '
         );
         
         _mint(to);
     }
+    //
+    // @dev convenience function to mint `count` number of tokens to address `to`,
+    // rather than having to make multiple calls to mint
+    // See {ERC721._mint}
+    //
+    // Requirements:
+    //    - caller must have ROLE_MINTER or ROLE_DEFAULT_ADMIN assigned
+    //
+    //function _mint(
+        //address to,
+        //uint count
+    //)internal
+    //{
+        //uint256 cap = supplyCap();
+        //uint256 remaining = cap.sub(
+            //_tokenIdTracker.current()
+        //);
+        
+        //remaining.requireGreaterThanZero();
+        //count.requireLessThanOrEqual(cap);
+        //count.requireLessThan(remaining);
+        
+        //for(uint i; i < count; i++){
+            //_mint(to);
+        //}
+    //}
     ///
     /// @dev Burns `tokenId` if caller either owns the token or,
     /// is approved by the owner as an operator
@@ -165,12 +281,21 @@ abstract contract ERC721Mint is PausableAccessControl
     {
         address sender = _msgSender();
         
-        hasRole(ROLE_BURNER, sender).requireTrue(
-            'ERC71MintAutoId.burn: caller must have burner role'
+        _requireHasRoleBurner(
+            sender
+            //'burn(tokenId): '
         );
         
         _isApprovedOrOwner(sender, tokenId).requireTrue(
-            "caller is not owner nor approved"
+            string(
+                abi.encodePacked(
+                    _NAME,
+                    'sender: ',
+                    sender,
+                    ', is not owner nor approved for token id: ',
+                    tokenId
+                )
+            )
         );
         
         _burn(tokenId);
@@ -190,17 +315,17 @@ abstract contract ERC721Mint is PausableAccessControl
     {
         require(
             !paused(),  //.requireFalse(
-            "mint is paused"
+            _ERR_IS_PAUSED
         );
         
         //from.requireNotEqual(to);
         
-        //if(from.equalsNull()){    // address(0)){
+        //if(from.isNull()){    // address(0)){
             //mint
             //require the tokenID to not already exist before being minted
             //_requireDoesNotExist(tokenId);
         //}
-        //else if(to.equalsNull()){   //== address(0)){
+        //else if(to.isNull()){   //== address(0)){
             //burn
             // require the token to exist before being burned
             //_requireExists(tokenId);

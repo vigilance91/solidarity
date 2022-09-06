@@ -10,7 +10,7 @@ import "https://github.com/vigilance91/solidarity/contracts/token/ERC721/mints/E
 import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/staticTokenSupply/StaticTokenSupplyABC.sol";
 import "https://github.com/vigilance91/solidarity/contracts/token/TokenSupply/supplyCap/StaticSupplyCapABC.sol";
 
-//interface iERC721AutoIdStaticSupplyToken is iERC721MintAutoIdABC
+//interface iERC721AutoIdStaticSupplyToken is iERC721MintAutoIdABC,
     //iEtherReceiver,
     //iStaticTokenSupplyABC,
     //iStaticSupplyCapABC

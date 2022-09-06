@@ -128,6 +128,13 @@ abstract contract AccessControlABC is Context
     ){
         return _readOnlyRoles()[role];
     }
+    function _isDefaultAdmin(
+        address account
+    )internal view returns(
+        bool
+    ){
+        return _hasRole(ROLE_DEFAULT_ADMIN, account);
+    }
     ///
     ///constraints
     ///
@@ -135,10 +142,10 @@ abstract contract AccessControlABC is Context
         address account
     )internal view
     {
-        _hasRole(ROLE_DEFAULT_ADMIN, account).requireTrue(
+        _isDefaultAdmin(account).requireTrue(
             string(
                 abi.encodePacked(
-                    _ERR_REQUIRE_ROLE_DEFAULT_ADMIN,     //_NAME.concatenate(_ERR_REQUIRE_ROLE_DEFAULT_ADMIN)
+                    _ERR_REQUIRE_ROLE_DEFAULT_ADMIN,
                     //_ERR_STR_ADDRESS,
                     account
                 )
@@ -149,10 +156,10 @@ abstract contract AccessControlABC is Context
         address account
     )internal view
     {
-        _hasRole(ROLE_DEFAULT_ADMIN, account).requireFalse(
+        _isDefaultAdmin(account).requireFalse(
             string(
                 abi.encodePacked(
-                    _ERR_REQUIRE_NOT_ROLE_DEFAULT_ADMIN, //_NAME.concatenate(_ERR_REQUIRE_NOT_ROLE_DEFAULT_ADMIN)
+                    _ERR_REQUIRE_NOT_ROLE_DEFAULT_ADMIN,
                     //_ERR_STR_ADDRESS,
                     account
                 )
@@ -167,7 +174,7 @@ abstract contract AccessControlABC is Context
         _hasRole(role, account).requireTrue(
             string(
                 abi.encodePacked(
-                    _ERR_REQUIRE_ROLE,   //_NAME.concatenate(_ERR_REQUIRE_ROLE)
+                    _ERR_REQUIRE_ROLE,
                     role
                     //_ERR_STR_ADDRESS,
                     //address
@@ -192,13 +199,94 @@ abstract contract AccessControlABC is Context
             )
         );
     }
+    
+    function _hasAdminRole(
+        bytes32 role,
+        address account
+    )internal view returns(
+        bool
+    ){
+        //(_hasRole(_roleAt(role).adminRole, account) || _isDefaultAdmin(account))
+        return _hasRole(
+            _roleAt(role).adminRole,
+            account
+        );
+    }
+    function _isDefaultAdminOrHasRole(
+        bytes32 role,
+        address account
+    )internal view returns(
+        bool
+    ){
+        return _isDefaultAdmin(account) || _hasRole(
+            role,
+            account
+        );
+    }
+    function _isDefaultAdminOrHasRoleAll(
+        bytes32 role,
+        address account
+    )internal view returns(
+        bool
+    ){
+        return _hasRoleAll(
+            role
+        ) || _isDefaultAdmin(account);
+    }
+    //function _isRoleAdminOrHasRoleAll(
+        //bytes32 role,
+        //address account
+    //)internal view returns(
+        //bool
+    //){
+        //return _hasRoleAll(
+            //role
+        //) || _isRoleAdmin(role, account);
+    //}
+    function _requireDefaultAdminOrRoleAdmin(
+        bytes32 role,
+        address account
+    )internal view
+    {
+        (
+            _isDefaultAdmin(account) ||
+            _hasAdminRole(
+                role,
+                account
+            )
+        ).requireTrue(
+            //
+        );
+    }
+    function _requireDefaultAdminOrRoleAdminOrRole(
+        bytes32 role,
+        address account
+    )internal view
+    {
+        (
+            _isDefaultAdmin(account) || 
+            _hasAdminRole(role, account) ||
+            _hasRole(role, account)
+        ).requireTrue(
+            //
+        );
+    }
+    function _requireDefaultAdminOrRole(
+        bytes32 role,
+        address account
+    )internal view
+    {
+        _isDefaultAdminOrHasRole(role, account).requireTrue(
+            //
+        );
+    }
     function _requireHasAdminRole(
         bytes32 role,
         address account
     )internal view
     {
         //(_hasRole(_roleAt(role).adminRole, account) || _isDefaultAdmin(account))
-        _hasRole(_roleAt(role).adminRole, account).requireTrue(
+        _hasAdminRole(role, account).requireTrue(
             //_ERR_"sender must be an admin")
         );
     }
@@ -208,7 +296,7 @@ abstract contract AccessControlABC is Context
     )internal view
     {
         //(!_hasRole(_roleAt(role).adminRole, account) && !_isDefaultAdmin(account))
-        _hasRole(_roleAt(role).adminRole, account).requireFalse(
+        _hasAdminRole(role, account).requireFalse(
             //_ERR_"sender must not be an admin")
         );
     }
@@ -307,7 +395,9 @@ abstract contract AccessControlABC is Context
     )internal view returns(
         bool
     ){
-        return _roleAt(role).members.contains(addressLogic.NULL);
+        return _roleAt(role).members.contains(
+            addressLogic.NULL
+        );
     }
     ///
     /// @return ret {bool[]} `true` for each corresponding`account in `accounts` has been granted `role`, otherwise false

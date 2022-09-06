@@ -94,7 +94,6 @@ contract Blacklist is MortalCanary,
             ret[i] = _isBanned(role, accounts[i]);
         }
     }
-    
     ///
     /// @return {uint256} the number of black-listed accounts,
     /// can be used together with {getRoleMember} to enumerate all banned accounts
